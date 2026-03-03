@@ -1,6 +1,15 @@
 import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowLeft, ArrowRight, BookOpen, GraduationCap, Trophy, Users } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  BellRing,
+  BookOpen,
+  GraduationCap,
+  Star,
+  Trophy,
+  Users,
+} from "lucide-react";
 import { Link } from "react-router-dom";
 
 const stats = [
@@ -9,6 +18,24 @@ const stats = [
   { label: "Board & Competitive Toppers", value: 380, suffix: "+", icon: Trophy },
   { label: "Expert Faculty Members", value: 65, suffix: "+", icon: GraduationCap },
 ];
+
+const noticeByClass = {
+  "Class 1-6": [
+    "📢 Admissions Open for Playgroup to Class 6 (Session 2026-27)",
+    "🎨 Activity Week for Classes 3-6 starts from Monday",
+    "👨‍👩‍👧 Parent Orientation Program this Sunday at 11:00 AM",
+  ],
+  "Class 7-10": [
+    "📝 Scholarship Test for Class 7-10 on 15th March",
+    "📚 New Foundation Batch for Class 9-10 starts next week",
+    "📊 Monthly Progress Meeting for Class 10 on Saturday",
+  ],
+  "Class 11-12/JEE-NEET": [
+    "🏆 Congratulations to our JEE Advanced Toppers",
+    "🧪 NEET Crash Revision Batch admissions now live",
+    "⏰ Board + Entrance Combined Test Series starts this month",
+  ],
+};
 
 const heroSlides = [
   {
@@ -32,12 +59,6 @@ const heroSlides = [
     image:
       "https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?auto=format&fit=crop&w=1800&q=80",
   },
-];
-
-const noticeItems = [
-  "📢 Admissions Open for Session 2026-27",
-  "🏆 Congratulations to our JEE Advanced Toppers",
-  "📝 Scholarship Test on 15th March - Register Now!",
 ];
 
 const toppers = [
@@ -89,6 +110,15 @@ const wings = [
   },
 ];
 
+const fadeUp = {
+  hidden: { opacity: 0, y: 24 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
+  },
+};
+
 const AnimatedCounter = ({ value, suffix }) => {
   const [count, setCount] = useState(0);
 
@@ -117,142 +147,310 @@ const AnimatedCounter = ({ value, suffix }) => {
 };
 
 const Home = () => {
-  const [activeTestimonial, setActiveTestimonial] = useState(0);
+  const noticeClasses = useMemo(() => Object.keys(noticeByClass), []);
+  const [activeNoticeClass, setActiveNoticeClass] = useState(noticeClasses[0]);
+  const [activeNotice, setActiveNotice] = useState(0);
   const [activeSlide, setActiveSlide] = useState(0);
-  const [isTickerPaused, setIsTickerPaused] = useState(false);
+  const [slideDirection, setSlideDirection] = useState(1);
+  const [activeTestimonial, setActiveTestimonial] = useState(0);
+
+  const activeNoticeList = noticeByClass[activeNoticeClass] ?? [];
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setActiveTestimonial((prev) => (prev + 1) % testimonials.length);
-    }, 5000);
-
-    return () => clearInterval(timer);
-  }, []);
+    setActiveNotice(0);
+  }, [activeNoticeClass]);
 
   useEffect(() => {
     const sliderTimer = setInterval(() => {
+      setSlideDirection(1);
       setActiveSlide((prev) => (prev + 1) % heroSlides.length);
     }, 5500);
 
     return () => clearInterval(sliderTimer);
   }, []);
 
-  const nextSlide = () => setActiveSlide((prev) => (prev + 1) % heroSlides.length);
-  const prevSlide = () => setActiveSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length);
+  useEffect(() => {
+    const testimonialTimer = setInterval(() => {
+      setActiveTestimonial((prev) => (prev + 1) % testimonials.length);
+    }, 5000);
+
+    return () => clearInterval(testimonialTimer);
+  }, []);
+
+  const nextSlide = () => {
+    setSlideDirection(1);
+    setActiveSlide((prev) => (prev + 1) % heroSlides.length);
+  };
+
+  const prevSlide = () => {
+    setSlideDirection(-1);
+    setActiveSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length);
+  };
+
+  const goToSlide = (index) => {
+    setSlideDirection(index > activeSlide ? 1 : -1);
+    setActiveSlide(index);
+  };
+
+  const slideVariants = {
+    enter: (direction) => ({
+      x: direction > 0 ? 90 : -90,
+      opacity: 0,
+      scale: 1.01,
+    }),
+    center: {
+      x: 0,
+      opacity: 1,
+      scale: 1,
+      transition: { duration: 0.72, ease: [0.22, 1, 0.36, 1] },
+    },
+    exit: (direction) => ({
+      x: direction > 0 ? -90 : 90,
+      opacity: 0,
+      scale: 1.01,
+      transition: { duration: 0.58, ease: [0.22, 1, 0.36, 1] },
+    }),
+  };
 
   const marqueeData = useMemo(() => [...toppers, ...toppers], []);
-  const tickerText = useMemo(() => `${noticeItems.join("   |   ")}   |   `, []);
 
   return (
     <div className="overflow-x-hidden">
-      <section className="border-y border-slate-700 bg-slate-900 text-white">
-        <div className="mx-auto flex w-full max-w-7xl items-center gap-3 px-4 py-2.5 sm:px-6 lg:px-8">
-          <span className="inline-flex shrink-0 items-center rounded-full bg-red-500/90 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white animate-pulse">
-            🔴 Live
-          </span>
-          <div className="relative flex-1 overflow-hidden">
-            <div
-              onMouseEnter={() => setIsTickerPaused(true)}
-              onMouseLeave={() => setIsTickerPaused(false)}
-              className={`flex w-max whitespace-nowrap text-sm font-medium text-slate-100 ${
-                isTickerPaused ? "[animation-play-state:paused]" : ""
-              } animate-[ticker_30s_linear_infinite]`}
+      <section className="mx-auto w-full max-w-7xl px-4 pb-8 pt-4 sm:px-6 lg:px-8">
+        <div className="grid gap-5 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
+          <div className="relative h-[300px] overflow-hidden rounded-3xl border border-emerald-100 shadow-xl shadow-emerald-900/15 sm:h-[380px] md:h-[520px]">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeSlide}
+                custom={slideDirection}
+                variants={slideVariants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                className="absolute inset-0"
+              >
+                <img
+                  src={heroSlides[activeSlide].image}
+                  alt={heroSlides[activeSlide].title}
+                  className="h-full w-full object-cover"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/35 to-transparent" />
+              </motion.div>
+            </AnimatePresence>
+
+            <div className="absolute inset-0 z-10 flex items-end px-4 pb-10 sm:px-8 md:items-center md:pb-0 lg:px-12">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={`slide-content-${activeSlide}`}
+                  initial={{ opacity: 0, y: 26 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -16 }}
+                  transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+                  className="max-w-3xl"
+                >
+                  <p className="inline-flex items-center rounded-full border border-white/30 bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white/90 backdrop-blur-md">
+                    Dynamic Campus, Hajipur
+                  </p>
+                  <h1 className="mt-3 text-2xl font-bold leading-tight text-white sm:text-3xl md:text-5xl">
+                    {heroSlides[activeSlide].title}
+                  </h1>
+                  <p className="mt-3 max-w-2xl text-xs leading-relaxed text-slate-100 sm:text-sm md:text-base">
+                    {heroSlides[activeSlide].subtitle}
+                  </p>
+                </motion.div>
+              </AnimatePresence>
+            </div>
+
+            <button
+              type="button"
+              onClick={prevSlide}
+              aria-label="Previous slide"
+              className="absolute left-5 top-1/2 z-20 hidden -translate-y-1/2 rounded-full border border-white/30 bg-black/30 p-2.5 text-white backdrop-blur-md transition hover:bg-black/50 md:inline-flex"
             >
-              <span className="pr-12">{tickerText}</span>
-              <span className="pr-12">{tickerText}</span>
+              <ArrowLeft size={18} />
+            </button>
+            <button
+              type="button"
+              onClick={nextSlide}
+              aria-label="Next slide"
+              className="absolute right-5 top-1/2 z-20 hidden -translate-y-1/2 rounded-full border border-white/30 bg-black/30 p-2.5 text-white backdrop-blur-md transition hover:bg-black/50 md:inline-flex"
+            >
+              <ArrowRight size={18} />
+            </button>
+
+            <div className="absolute bottom-4 left-1/2 z-20 flex -translate-x-1/2 gap-2">
+              {heroSlides.map((slide, idx) => (
+                <button
+                  key={slide.title}
+                  onClick={() => goToSlide(idx)}
+                  aria-label={`Go to slide ${idx + 1}`}
+                  className={`h-2.5 rounded-full transition-all ${
+                    activeSlide === idx ? "w-8 bg-white" : "w-2.5 bg-white/50 hover:bg-white/80"
+                  }`}
+                />
+              ))}
             </div>
           </div>
+
+          <motion.aside
+            initial={{ opacity: 0, y: 18 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+            className="flex min-h-[260px] flex-col overflow-hidden rounded-3xl border border-emerald-100 bg-white p-4 shadow-xl shadow-emerald-900/10 md:h-[520px]"
+          >
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex items-center gap-2">
+                <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700">
+                  <BellRing size={16} />
+                </span>
+                <div>
+                  <p className="text-sm font-semibold text-emerald-900">Notice Board</p>
+                  <p className="text-[11px] text-slate-500">Class-wise updates</p>
+                </div>
+              </div>
+              <span className="inline-flex items-center rounded-full bg-red-500/90 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white animate-pulse">
+                New
+              </span>
+            </div>
+
+            <div className="mt-4 flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:grid lg:grid-cols-1 lg:overflow-visible lg:pb-0">
+              {noticeClasses.map((item) => (
+                <button
+                  key={item}
+                  type="button"
+                  onClick={() => setActiveNoticeClass(item)}
+                  className={`shrink-0 rounded-xl px-3 py-2 text-left text-xs font-semibold transition lg:shrink ${
+                    activeNoticeClass === item
+                      ? "bg-emerald-600 text-white shadow-md shadow-emerald-900/20"
+                      : "bg-emerald-50 text-emerald-800 hover:bg-emerald-100"
+                  }`}
+                >
+                  {item}
+                </button>
+              ))}
+            </div>
+
+            <div className="mt-4 flex flex-1 flex-col rounded-2xl border border-emerald-100 bg-emerald-50/40 p-3 md:min-h-0">
+              <div className="mb-2 flex items-center justify-between text-[11px] font-medium text-slate-500">
+                <span>{activeNoticeClass}</span>
+                <span>
+                  {String(activeNotice + 1).padStart(2, "0")} / {String(activeNoticeList.length).padStart(2, "0")}
+                </span>
+              </div>
+
+              <div className="max-h-40 space-y-2 overflow-y-auto pr-1 [scrollbar-width:thin] [scrollbar-color:rgb(16_185_129)_transparent] md:min-h-0 md:flex-1 md:max-h-none [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-emerald-400 [&::-webkit-scrollbar-track]:bg-transparent">
+                {activeNoticeList.map((item, index) => (
+                  <button
+                    key={`${activeNoticeClass}-${index}`}
+                    type="button"
+                    onClick={() => setActiveNotice(index)}
+                    className={`w-full rounded-xl border px-3 py-2 text-left text-[11px] font-medium leading-relaxed transition sm:text-xs ${
+                      activeNotice === index
+                        ? "border-emerald-300 bg-white text-emerald-900 shadow-sm"
+                        : "border-transparent bg-emerald-100/60 text-slate-700 hover:bg-emerald-100"
+                    }`}
+                  >
+                    {item}
+                  </button>
+                ))}
+              </div>
+
+              <div className="mt-3 shrink-0 rounded-xl border border-emerald-100 bg-white px-3 py-2">
+                <p className="text-[11px] font-semibold uppercase tracking-wide text-emerald-700">Selected Notice</p>
+                <AnimatePresence mode="wait">
+                  <motion.p
+                    key={`${activeNoticeClass}-selected-${activeNotice}`}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                    className="mt-1 text-sm font-medium leading-relaxed text-slate-700"
+                  >
+                    {activeNoticeList[activeNotice]}
+                  </motion.p>
+                </AnimatePresence>
+              </div>
+            </div>
+
+            <div className="mt-4">
+              <Link
+                to="/notices"
+                className="inline-flex w-full items-center justify-center rounded-xl border border-emerald-200 bg-white px-4 py-2.5 text-sm font-semibold text-emerald-800 transition hover:bg-emerald-50"
+              >
+                Go to Notice Page
+              </Link>
+            </div>
+          </motion.aside>
         </div>
       </section>
 
-      <section className="mx-auto w-full max-w-7xl px-4 pb-10 pt-6 sm:px-6 lg:px-8 lg:pt-8">
-        <div className="relative h-[420px] overflow-hidden rounded-3xl border border-emerald-100 shadow-xl shadow-emerald-900/15 md:h-[520px]">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={activeSlide}
-              initial={{ opacity: 0, scale: 1.06 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 1.02 }}
-              transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
-              className="absolute inset-0"
+      <section className="relative mx-auto grid w-full max-w-7xl gap-8 px-4 pb-14 pt-4 sm:px-6 lg:grid-cols-2 lg:items-center lg:px-8 lg:pt-8">
+        <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }} className="relative z-10">
+          <span className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-white/90 px-4 py-2 text-xs font-semibold tracking-wide text-emerald-800 shadow-md shadow-emerald-900/10">
+            <Star size={14} className="text-yellow-500" />
+            Welcome to Dynamic Campus
+          </span>
+          <h2 className="mt-5 text-3xl font-bold leading-tight text-emerald-950 sm:text-4xl md:text-5xl">
+            Where Foundations Meet Future Excellence
+          </h2>
+          <p className="mt-4 max-w-xl text-sm leading-relaxed text-slate-600 sm:text-base md:text-lg">
+            From early childhood care to competitive exam mastery, Dynamic Campus empowers learners with
+            strong concepts, disciplined practice, and mentorship that drives measurable academic growth.
+          </p>
+
+          <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+            <Link
+              to="/contact"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-900/20 transition-all duration-300 hover:-translate-y-0.5 hover:bg-emerald-700 sm:w-auto"
             >
-              <img
-                src={heroSlides[activeSlide].image}
-                alt={heroSlides[activeSlide].title}
-                className="h-full w-full object-cover"
-                loading="lazy"
-              />
-              <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/50 to-black/30" />
-            </motion.div>
-          </AnimatePresence>
-
-          <div className="absolute inset-0 z-10 flex items-end px-5 pb-12 sm:px-8 md:items-center md:pb-0 lg:px-12">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={`content-${activeSlide}`}
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -16 }}
-                transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-                className="max-w-3xl"
-              >
-                <p className="inline-flex items-center rounded-full border border-white/30 bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white/90 backdrop-blur-md">
-                  Dynamic Campus, Hajipur
-                </p>
-                <h1 className="mt-4 text-3xl font-bold leading-tight text-white md:text-5xl">
-                  {heroSlides[activeSlide].title}
-                </h1>
-                <p className="mt-4 max-w-2xl text-sm leading-relaxed text-slate-100 md:text-base">
-                  {heroSlides[activeSlide].subtitle}
-                </p>
-                <div className="mt-7 flex flex-wrap gap-3">
-                  <Link
-                    to="/contact"
-                    className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-900/30 transition-all duration-300 hover:-translate-y-0.5 hover:bg-emerald-700"
-                  >
-                    Enquire Now <ArrowRight size={16} />
-                  </Link>
-                  <Link
-                    to="/academics"
-                    className="inline-flex items-center rounded-xl border border-white/40 bg-white/10 px-5 py-3 text-sm font-semibold text-white backdrop-blur-md transition hover:bg-white/20"
-                  >
-                    Explore Academics
-                  </Link>
-                </div>
-              </motion.div>
-            </AnimatePresence>
+              Book Campus Visit <ArrowRight size={16} />
+            </Link>
+            <Link
+              to="/academics"
+              className="inline-flex w-full items-center justify-center rounded-xl border border-emerald-200 bg-white px-5 py-3 text-sm font-semibold text-emerald-800 shadow-sm transition-all duration-300 hover:bg-emerald-50 sm:w-auto"
+            >
+              View Academic Programs
+            </Link>
           </div>
+        </motion.div>
 
-          <button
-            type="button"
-            onClick={prevSlide}
-            aria-label="Previous slide"
-            className="absolute left-3 top-1/2 z-20 -translate-y-1/2 rounded-full border border-white/30 bg-black/30 p-2.5 text-white backdrop-blur-md transition hover:bg-black/50 md:left-5"
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          className="relative"
+        >
+          <motion.div
+            animate={{ y: [0, -10, 0] }}
+            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+            className="relative overflow-hidden rounded-3xl border border-emerald-100 bg-white/90 p-6 shadow-xl shadow-emerald-900/10 backdrop-blur-md"
           >
-            <ArrowLeft size={18} />
-          </button>
-          <button
-            type="button"
-            onClick={nextSlide}
-            aria-label="Next slide"
-            className="absolute right-3 top-1/2 z-20 -translate-y-1/2 rounded-full border border-white/30 bg-black/30 p-2.5 text-white backdrop-blur-md transition hover:bg-black/50 md:right-5"
-          >
-            <ArrowRight size={18} />
-          </button>
-
-          <div className="absolute bottom-4 left-1/2 z-20 flex -translate-x-1/2 gap-2">
-            {heroSlides.map((slide, idx) => (
-              <button
-                key={slide.title}
-                onClick={() => setActiveSlide(idx)}
-                aria-label={`Go to slide ${idx + 1}`}
-                className={`h-2.5 rounded-full transition-all ${
-                  activeSlide === idx ? "w-8 bg-white" : "w-2.5 bg-white/50 hover:bg-white/80"
-                }`}
-              />
-            ))}
-          </div>
-        </div>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div className="rounded-2xl bg-gradient-to-br from-emerald-50 to-white p-4">
+                <p className="text-xs font-semibold uppercase tracking-wide text-emerald-700">School Wing</p>
+                <p className="mt-2 text-sm text-slate-600">Playgroup to Class 6 with joyful foundation learning.</p>
+              </div>
+              <div className="rounded-2xl bg-gradient-to-br from-yellow-50 to-white p-4">
+                <p className="text-xs font-semibold uppercase tracking-wide text-yellow-700">Coaching Wing</p>
+                <p className="mt-2 text-sm text-slate-600">Class 7–12, JEE/NEET focused academic rigor.</p>
+              </div>
+              <div className="rounded-2xl bg-gradient-to-br from-white to-emerald-50 p-4 sm:col-span-2">
+                <p className="text-xs font-semibold uppercase tracking-wide text-emerald-700">Result-Driven Culture</p>
+                <p className="mt-2 text-sm text-slate-600">
+                  Daily discipline, chapter-wise practice, and mentor-driven feedback loops for long-term success.
+                </p>
+              </div>
+            </div>
+          </motion.div>
+          <motion.div
+            animate={{ y: [0, 12, 0] }}
+            transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
+            className="pointer-events-none absolute -bottom-8 -right-4 h-28 w-28 rounded-full bg-emerald-200/50 blur-2xl"
+          />
+        </motion.div>
       </section>
 
       <section className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
@@ -398,17 +596,6 @@ const Home = () => {
           </div>
         </motion.div>
       </section>
-
-      <style>{`
-        @keyframes ticker {
-          0% {
-            transform: translateX(0%);
-          }
-          100% {
-            transform: translateX(-50%);
-          }
-        }
-      `}</style>
     </div>
   );
 };
