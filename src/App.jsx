@@ -3,7 +3,10 @@ import { motion } from "framer-motion";
 import { Route, Routes, useLocation } from "react-router-dom";
 import Footer from "./components/layout/Footer";
 import Navbar from "./components/layout/Navbar";
+import AcademicsPage from "./pages/AcademicsPage";
 import AboutPage from "./pages/AboutPage";
+import ContactPage from "./pages/ContactPage";
+import GalleryPage from "./pages/GalleryPage";
 import Home from "./pages/Home";
 import Toppers from "./pages/Toppers";
 
@@ -50,16 +53,13 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/toppers" element={<Toppers />} />
-          <Route
-            path="/academics"
-            element={<PagePlaceholder title="Academics" subtitle="Academics page scaffold ready." />}
-          />
-          <Route path="/gallery" element={<PagePlaceholder title="Gallery" subtitle="Gallery page scaffold ready." />} />
+          <Route path="/academics" element={<AcademicsPage />} />
+          <Route path="/gallery" element={<GalleryPage />} />
           <Route
             path="/notices"
             element={<PagePlaceholder title="Notice Board" subtitle="Notice Board page scaffold ready." />}
           />
-          <Route path="/contact" element={<PagePlaceholder title="Contact" subtitle="Contact page scaffold ready." />} />
+          <Route path="/contact" element={<ContactPage />} />
         </Routes>
       </main>
       <Footer />

@@ -41,7 +41,7 @@ const Navbar = () => {
         }`}
       >
         <Link to="/" className="group flex items-center gap-3">
-          <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-600 to-emerald-900 text-white shadow-lg shadow-emerald-900/30">
+          <span className="interactive-card flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-600 to-emerald-900 text-white shadow-lg shadow-emerald-900/30 group-hover:rotate-3">
             <School2 size={20} />
           </span>
           <div>
@@ -59,7 +59,7 @@ const Navbar = () => {
                 `rounded-xl px-4 py-2 text-sm font-medium transition-all duration-300 ${
                   isActive
                     ? "bg-emerald-600 text-white shadow-md shadow-emerald-900/20"
-                    : "text-slate-700 hover:bg-emerald-50 hover:text-emerald-800"
+                    : "text-slate-700 hover:-translate-y-0.5 hover:bg-emerald-50 hover:text-emerald-800 hover:shadow-md hover:shadow-emerald-900/10"
                 }`
               }
             >
@@ -71,7 +71,7 @@ const Navbar = () => {
         <div className="hidden lg:block">
           <Link
             to="/contact"
-            className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-emerald-700 hover:shadow-lg hover:shadow-emerald-900/20"
+            className="interactive-button inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700 hover:shadow-emerald-900/20"
           >
             Enquire Now <ChevronRight size={16} />
           </Link>
@@ -121,7 +121,7 @@ const Navbar = () => {
               ))}
               <Link
                 to="/contact"
-                className="mt-2 inline-flex w-full items-center justify-center rounded-xl bg-emerald-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700"
+                className="interactive-button mt-2 inline-flex w-full items-center justify-center rounded-xl bg-emerald-600 px-4 py-3 text-sm font-semibold text-white hover:bg-emerald-700"
               >
                 Enquire Now
               </Link>

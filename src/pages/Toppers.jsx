@@ -211,7 +211,7 @@ const Toppers = () => {
             whileInView="visible"
             viewport={{ once: true, amount: 0.25 }}
             transition={{ delay: index * 0.08 }}
-            className="rounded-3xl border border-emerald-100 bg-white p-6 shadow-xl shadow-emerald-900/10"
+            className="interactive-card rounded-3xl border border-emerald-100 bg-white p-6 shadow-xl shadow-emerald-900/10"
           >
             <div className="mb-4 flex items-center gap-2">
               <Star size={16} className="text-emerald-700" />
@@ -223,7 +223,7 @@ const Toppers = () => {
               {group.students.map((student, studentIndex) => (
                 <div
                   key={`${student.name}-${student.year}`}
-                  className={`rounded-2xl border p-4 transition-all ${
+                  className={`interactive-card rounded-2xl border p-4 ${
                     studentIndex < 3
                       ? "border-yellow-200 bg-gradient-to-r from-yellow-50 to-white shadow-md shadow-yellow-900/10"
                       : "border-emerald-100 bg-emerald-50/40"
@@ -288,7 +288,7 @@ const Toppers = () => {
               whileInView="visible"
               viewport={{ once: true, amount: 0.25 }}
               transition={{ delay: index * 0.08 }}
-              className="rounded-2xl border border-emerald-100 bg-emerald-50/40 p-5"
+              className="interactive-card rounded-2xl border border-emerald-100 bg-emerald-50/40 p-5"
             >
               <h3 className="text-lg font-semibold text-emerald-900">{achievement.title}</h3>
               <p className="mt-1 text-sm text-slate-600">{achievement.summary}</p>

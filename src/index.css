@@ -14,3 +14,17 @@ body {
     "Apple Color Emoji", "Segoe UI Emoji";
   background-color: rgb(248 250 252);
 }
+
+@layer components {
+  .interactive-card {
+    @apply transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-xl;
+  }
+
+  .interactive-button {
+    @apply transition-all duration-300 ease-out hover:-translate-y-0.5 hover:shadow-lg;
+  }
+
+  .interactive-link {
+    @apply transition-all duration-300 ease-out hover:translate-x-0.5;
+  }
+}

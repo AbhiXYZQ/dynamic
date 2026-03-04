@@ -403,13 +403,13 @@ const Home = () => {
           <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
             <Link
               to="/contact"
-              className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-900/20 transition-all duration-300 hover:-translate-y-0.5 hover:bg-emerald-700 sm:w-auto"
+              className="interactive-button inline-flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-900/20 hover:bg-emerald-700 sm:w-auto"
             >
               Book Campus Visit <ArrowRight size={16} />
             </Link>
             <Link
               to="/academics"
-              className="inline-flex w-full items-center justify-center rounded-xl border border-emerald-200 bg-white px-5 py-3 text-sm font-semibold text-emerald-800 shadow-sm transition-all duration-300 hover:bg-emerald-50 sm:w-auto"
+              className="interactive-button inline-flex w-full items-center justify-center rounded-xl border border-emerald-200 bg-white px-5 py-3 text-sm font-semibold text-emerald-800 shadow-sm hover:bg-emerald-50 sm:w-auto"
             >
               View Academic Programs
             </Link>
@@ -462,7 +462,7 @@ const Home = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.25 }}
               transition={{ duration: 0.65, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}
-              className="rounded-3xl border border-emerald-100 bg-white p-7 shadow-xl shadow-emerald-900/10"
+              className="interactive-card rounded-3xl border border-emerald-100 bg-white p-7 shadow-xl shadow-emerald-900/10"
             >
               <p className="text-sm font-semibold text-emerald-700">{wing.subtitle}</p>
               <h3 className="mt-1 text-2xl font-bold text-emerald-900">{wing.title}</h3>
@@ -475,7 +475,7 @@ const Home = () => {
                   </li>
                 ))}
               </ul>
-              <button className="mt-5 inline-flex items-center gap-2 rounded-xl bg-emerald-50 px-4 py-2 text-sm font-semibold text-emerald-800 transition hover:bg-emerald-100">
+              <button className="interactive-button mt-5 inline-flex items-center gap-2 rounded-xl bg-emerald-50 px-4 py-2 text-sm font-semibold text-emerald-800 hover:bg-emerald-100">
                 {wing.cta} <ArrowRight size={15} />
               </button>
             </motion.article>
@@ -501,7 +501,7 @@ const Home = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.3 }}
                 transition={{ duration: 0.5, delay: index * 0.08 }}
-                className="rounded-2xl border border-emerald-100 bg-emerald-50/40 p-4"
+                className="interactive-card rounded-2xl border border-emerald-100 bg-emerald-50/40 p-4"
               >
                 <item.icon size={18} className="text-emerald-700" />
                 <p className="mt-3 text-2xl font-bold text-emerald-900">
