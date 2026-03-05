@@ -1,13 +1,20 @@
 import { useEffect } from "react";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { Route, Routes, useLocation } from "react-router-dom";
 import Footer from "./components/layout/Footer";
 import Navbar from "./components/layout/Navbar";
+import AdminDashboard from "./pages/AdminDashboard";
 import AcademicsPage from "./pages/AcademicsPage";
 import AboutPage from "./pages/AboutPage";
 import ContactPage from "./pages/ContactPage";
+import DisclaimerPage from "./pages/DisclaimerPage";
 import GalleryPage from "./pages/GalleryPage";
+import GrievancePage from "./pages/GrievancePage";
 import Home from "./pages/Home";
+import LoginPage from "./pages/LoginPage";
+import NoticeBoard from "./pages/NoticeBoard";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import Terms from "./pages/Terms";
 import Toppers from "./pages/Toppers";
 
 const ScrollToTop = () => {
@@ -20,49 +27,72 @@ const ScrollToTop = () => {
   return null;
 };
 
-const pageVariants = {
-  hidden: { opacity: 0, y: 16 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] },
-  },
-};
-
-const PagePlaceholder = ({ title, subtitle }) => (
-  <motion.section
-    variants={pageVariants}
-    initial="hidden"
-    animate="visible"
-    className="mx-auto w-full max-w-7xl px-4 py-20 sm:px-6 lg:px-8"
-  >
-    <div className="rounded-3xl border border-emerald-100 bg-white p-10 shadow-xl shadow-emerald-900/10">
-      <h1 className="text-3xl font-bold text-emerald-900 md:text-4xl">{title}</h1>
-      <p className="mt-4 max-w-2xl text-slate-600">{subtitle}</p>
-    </div>
-  </motion.section>
-);
-
 const App = () => {
+  const location = useLocation();
+
+  const getPageShellTheme = (pathname) => {
+    if (pathname === "/") return { key: "home", bg: "bg-gradient-to-b from-emerald-50/40 via-slate-50 to-slate-50" };
+    if (pathname.startsWith("/about")) return { key: "about", bg: "bg-gradient-to-b from-indigo-50/55 via-slate-50 to-slate-50" };
+    if (pathname.startsWith("/academics")) return { key: "academics", bg: "bg-gradient-to-b from-cyan-50/50 via-slate-50 to-slate-50" };
+    if (pathname.startsWith("/gallery")) return { key: "gallery", bg: "bg-gradient-to-b from-violet-50/55 via-slate-50 to-slate-50" };
+    if (pathname.startsWith("/notices")) return { key: "notices", bg: "bg-gradient-to-b from-blue-50/55 via-slate-50 to-slate-50" };
+    if (pathname.startsWith("/contact")) return { key: "contact", bg: "bg-gradient-to-b from-sky-50/55 via-slate-50 to-slate-50" };
+    if (pathname.startsWith("/admin") || pathname.startsWith("/AdminDashboard")) {
+      return { key: "admin", bg: "bg-slate-50" };
+    }
+    if (pathname.startsWith("/login") || pathname.startsWith("/LoginPage")) {
+      return { key: "login", bg: "bg-gradient-to-b from-slate-900 via-blue-950 to-slate-950" };
+    }
+    if (pathname.startsWith("/privacy-policy")) return { key: "privacy", bg: "bg-gradient-to-b from-slate-100 via-slate-50 to-slate-50" };
+    if (pathname.startsWith("/terms") || pathname.startsWith("/terms-conditions")) {
+      return { key: "terms", bg: "bg-gradient-to-b from-slate-100 via-slate-50 to-slate-50" };
+    }
+    if (pathname.startsWith("/disclaimer")) return { key: "disclaimer", bg: "bg-gradient-to-b from-slate-100 via-slate-50 to-slate-50" };
+    if (pathname.startsWith("/grievance")) return { key: "grievance", bg: "bg-gradient-to-b from-slate-100 via-slate-50 to-slate-50" };
+    return { key: "default", bg: "bg-slate-50" };
+  };
+
+  const theme = getPageShellTheme(location.pathname);
+  const isAdminRoute = location.pathname.startsWith("/admin") || location.pathname.startsWith("/AdminDashboard");
+
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-800">
-      <ScrollToTop />
-      <Navbar />
-      <main>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/toppers" element={<Toppers />} />
-          <Route path="/academics" element={<AcademicsPage />} />
-          <Route path="/gallery" element={<GalleryPage />} />
-          <Route
-            path="/notices"
-            element={<PagePlaceholder title="Notice Board" subtitle="Notice Board page scaffold ready." />}
-          />
-          <Route path="/contact" element={<ContactPage />} />
-        </Routes>
-      </main>
-      <Footer />
+    <div className="relative min-h-screen overflow-x-hidden bg-slate-50 text-slate-800">
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={theme.key}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+          className={`pointer-events-none absolute inset-0 ${theme.bg}`}
+        />
+      </AnimatePresence>
+
+      <div className="relative z-10">
+        <ScrollToTop />
+        {!isAdminRoute && <Navbar />}
+        <main className={isAdminRoute ? "" : "pt-24 sm:pt-28"}>
+          <Routes>
+            <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/AdminDashboard" element={<AdminDashboard />} />
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/toppers" element={<Toppers />} />
+            <Route path="/academics" element={<AcademicsPage />} />
+            <Route path="/gallery" element={<GalleryPage />} />
+            <Route path="/notices" element={<NoticeBoard />} />
+            <Route path="/contact" element={<ContactPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/LoginPage" element={<LoginPage />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/terms" element={<Terms />} />
+            <Route path="/terms-conditions" element={<Terms />} />
+            <Route path="/disclaimer" element={<DisclaimerPage />} />
+            <Route path="/grievance" element={<GrievancePage />} />
+          </Routes>
+        </main>
+        {!isAdminRoute && <Footer />}
+      </div>
     </div>
   );
 };

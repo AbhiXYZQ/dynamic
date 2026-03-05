@@ -159,6 +159,15 @@ const facultyMembers = [
   },
 ];
 
+const directorProfile = {
+  name: "Dr. Tarkeshwar Thakur, Ph.D.",
+  role: "Director, Dynamic Campus",
+  image:
+    "https://images.unsplash.com/photo-1556157382-97eda2d62296?auto=format&fit=crop&w=1200&q=80",
+};
+
+const isValidExternalLink = (url) => typeof url === "string" && url.startsWith("http");
+
 const AboutPage = () => {
   return (
     <div className="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
@@ -199,10 +208,16 @@ const AboutPage = () => {
             transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
             className="overflow-hidden rounded-3xl border border-slate-200 bg-gradient-to-br from-slate-100 to-stone-100 p-4 shadow-lg shadow-slate-900/10"
           >
-            <div className="flex h-[350px] items-center justify-center rounded-2xl border-2 border-dashed border-slate-300 bg-white/70 text-center">
-              <div>
-                <p className="text-sm font-semibold text-slate-800">Director&apos;s Portrait</p>
-                <p className="mt-1 text-xs text-slate-500">Professional Image Placeholder</p>
+            <div className="relative h-[350px] overflow-hidden rounded-2xl">
+              <img
+                src={directorProfile.image}
+                alt={directorProfile.name}
+                loading="lazy"
+                className="h-full w-full object-cover"
+              />
+              <div className="absolute inset-x-4 bottom-4 rounded-2xl border border-white/30 bg-slate-900/45 p-3 text-white backdrop-blur-md">
+                <p className="text-sm font-semibold">{directorProfile.name}</p>
+                <p className="mt-0.5 text-xs text-slate-100">{directorProfile.role}</p>
               </div>
             </div>
           </motion.div>
@@ -412,13 +427,24 @@ const AboutPage = () => {
                     </div>
                     <div className="mt-auto pt-3">
                       <div className="flex items-center gap-2">
-                        <a
-                          href={teacher.linkedin}
-                          aria-label={`${teacher.name} LinkedIn`}
-                          className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/25 bg-white/10 transition hover:bg-white/25"
-                        >
-                          <Linkedin size={14} />
-                        </a>
+                        {isValidExternalLink(teacher.linkedin) ? (
+                          <a
+                            href={teacher.linkedin}
+                            target="_blank"
+                            rel="noreferrer"
+                            aria-label={`${teacher.name} LinkedIn`}
+                            className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/25 bg-white/10 transition hover:bg-white/25"
+                          >
+                            <Linkedin size={14} />
+                          </a>
+                        ) : (
+                          <span
+                            aria-label={`${teacher.name} LinkedIn unavailable`}
+                            className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/60"
+                          >
+                            <Linkedin size={14} />
+                          </span>
+                        )}
                         <a
                           href={`mailto:${teacher.email}`}
                           aria-label={`${teacher.name} Email`}

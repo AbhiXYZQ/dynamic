@@ -5,7 +5,10 @@ import {
   ArrowRight,
   BellRing,
   BookOpen,
+  Code2,
+  ExternalLink,
   GraduationCap,
+  Heart,
   Star,
   Trophy,
   Users,
@@ -217,6 +220,21 @@ const Home = () => {
   return (
     <div className="overflow-x-hidden">
       <section className="mx-auto w-full max-w-7xl px-4 pb-8 pt-4 sm:px-6 lg:px-8">
+        <div className="mb-4 rounded-2xl border border-amber-200 bg-gradient-to-r from-amber-50 via-yellow-50 to-amber-50 p-3 shadow-lg shadow-amber-900/10 sm:p-4">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <p className="text-xs font-semibold uppercase tracking-wide text-amber-800 sm:text-sm">
+              Under Construction: Some modules are being polished for final launch.
+            </p>
+            <a
+              href="https://nainix.me"
+              target="_blank"
+              rel="noreferrer"
+              className="interactive-button inline-flex items-center gap-2 rounded-full border border-slate-700 bg-slate-900 px-4 py-2 text-xs font-semibold text-slate-200 hover:border-emerald-400/70 hover:text-white"
+            >
+              Designed & Developed with <Heart size={13} className="text-rose-400" fill="currentColor" /> by Nainix
+            </a>
+          </div>
+        </div>
         <div className="grid gap-5 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
           <div className="relative h-[300px] overflow-hidden rounded-3xl border border-emerald-100 shadow-xl shadow-emerald-900/15 sm:h-[380px] md:h-[520px]">
             <AnimatePresence mode="wait">
@@ -386,6 +404,47 @@ const Home = () => {
         </div>
       </section>
 
+      <section className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.25 }}
+          transition={{ duration: 0.7 }}
+          className="rounded-3xl border border-yellow-200 bg-gradient-to-r from-yellow-50 to-white p-6 shadow-xl shadow-yellow-900/5"
+        >
+          <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+            <div className="flex items-center gap-2">
+              <Trophy size={18} className="text-yellow-600" />
+              <h2 className="text-xl font-bold text-yellow-800">Top Performers Spotlight</h2>
+            </div>
+            <Link
+              to="/toppers"
+              className="inline-flex items-center gap-2 rounded-xl border border-yellow-200 bg-white px-4 py-2 text-sm font-semibold text-yellow-800 transition hover:bg-yellow-100"
+            >
+              Learn More <ArrowRight size={15} />
+            </Link>
+          </div>
+
+          <div className="overflow-hidden rounded-2xl border border-yellow-100 bg-white">
+            <motion.div
+              className="flex w-max gap-3 p-3"
+              animate={{ x: ["0%", "-50%"] }}
+              transition={{ duration: 22, repeat: Infinity, ease: "linear" }}
+            >
+              {marqueeData.map((item, index) => (
+                <div
+                  key={`${item.name}-${index}`}
+                  className="min-w-[260px] rounded-xl border border-yellow-100 bg-yellow-50/60 px-4 py-3"
+                >
+                  <p className="text-sm font-semibold text-yellow-800">{item.name}</p>
+                  <p className="text-xs text-slate-600">{item.score}</p>
+                </div>
+              ))}
+            </motion.div>
+          </div>
+        </motion.div>
+      </section>
+
       <section className="relative mx-auto grid w-full max-w-7xl gap-8 px-4 pb-14 pt-4 sm:px-6 lg:grid-cols-2 lg:items-center lg:px-8 lg:pt-8">
         <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }} className="relative z-10">
           <span className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-white/90 px-4 py-2 text-xs font-semibold tracking-wide text-emerald-800 shadow-md shadow-emerald-900/10">
@@ -514,48 +573,36 @@ const Home = () => {
         </motion.div>
       </section>
 
-      <section className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+      <section className="mx-auto w-full max-w-7xl px-4 pb-12 pt-8 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.25 }}
-          transition={{ duration: 0.7 }}
-          className="rounded-3xl border border-yellow-200 bg-gradient-to-r from-yellow-50 to-white p-6 shadow-xl shadow-yellow-900/5"
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+          className="mb-8 rounded-3xl border border-slate-200 bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 p-6 text-white shadow-xl shadow-slate-900/20"
         >
-          <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-            <div className="flex items-center gap-2">
-              <Trophy size={18} className="text-yellow-600" />
-              <h2 className="text-xl font-bold text-yellow-800">Top Performers Spotlight</h2>
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <div>
+              <p className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-semibold tracking-wide text-slate-100">
+                <Code2 size={14} /> About Developer
+              </p>
+              <h3 className="mt-3 text-xl font-bold sm:text-2xl">Premium Experience Crafted by Nainix</h3>
+              <p className="mt-2 max-w-2xl text-sm text-slate-200">
+                Dynamic Campus platform is designed and developed by Abhishek Kumar with focus on premium UI,
+                high performance, and production-ready architecture.
+              </p>
             </div>
-            <Link
-              to="/toppers"
-              className="inline-flex items-center gap-2 rounded-xl border border-yellow-200 bg-white px-4 py-2 text-sm font-semibold text-yellow-800 transition hover:bg-yellow-100"
+            <a
+              href="https://nainix.me"
+              target="_blank"
+              rel="noreferrer"
+              className="interactive-button inline-flex items-center gap-2 rounded-xl bg-white px-4 py-2 text-sm font-semibold text-slate-900"
             >
-              Learn More <ArrowRight size={15} />
-            </Link>
-          </div>
-
-          <div className="overflow-hidden rounded-2xl border border-yellow-100 bg-white">
-            <motion.div
-              className="flex w-max gap-3 p-3"
-              animate={{ x: ["0%", "-50%"] }}
-              transition={{ duration: 22, repeat: Infinity, ease: "linear" }}
-            >
-              {marqueeData.map((item, index) => (
-                <div
-                  key={`${item.name}-${index}`}
-                  className="min-w-[260px] rounded-xl border border-yellow-100 bg-yellow-50/60 px-4 py-3"
-                >
-                  <p className="text-sm font-semibold text-yellow-800">{item.name}</p>
-                  <p className="text-xs text-slate-600">{item.score}</p>
-                </div>
-              ))}
-            </motion.div>
+              Visit Profile <ExternalLink size={15} />
+            </a>
           </div>
         </motion.div>
-      </section>
 
-      <section className="mx-auto w-full max-w-7xl px-4 pb-12 pt-8 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}

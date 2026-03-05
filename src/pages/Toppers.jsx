@@ -187,15 +187,15 @@ const Toppers = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-        className="rounded-3xl border border-yellow-200 bg-gradient-to-br from-yellow-50 via-white to-white p-8 shadow-xl shadow-yellow-900/10"
+        className="rounded-3xl border border-amber-300/50 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 p-8 shadow-2xl shadow-slate-900/40"
       >
         <div className="flex flex-wrap items-center gap-3">
-          <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-yellow-100 text-yellow-700">
+          <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-amber-300/60 bg-amber-200/10 text-amber-200">
             <Trophy size={18} />
           </span>
           <div>
-            <h1 className="text-3xl font-bold text-yellow-800 md:text-4xl">Board Top Performers</h1>
-            <p className="mt-1 text-sm text-slate-600">
+            <h1 className="text-3xl font-bold text-amber-100 md:text-4xl">Board Top Performers</h1>
+            <p className="mt-1 text-sm text-slate-300">
               Celebrating excellence in BSEB and CBSE Class 10 & Class 12 board examinations.
             </p>
           </div>
@@ -211,13 +211,13 @@ const Toppers = () => {
             whileInView="visible"
             viewport={{ once: true, amount: 0.25 }}
             transition={{ delay: index * 0.08 }}
-            className="interactive-card rounded-3xl border border-emerald-100 bg-white p-6 shadow-xl shadow-emerald-900/10"
+            className="interactive-card rounded-3xl border border-amber-300/40 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-6 shadow-xl shadow-slate-900/35"
           >
             <div className="mb-4 flex items-center gap-2">
-              <Star size={16} className="text-emerald-700" />
-              <h2 className="text-xl font-bold text-emerald-900">{group.title}</h2>
+              <Star size={16} className="text-amber-300" />
+              <h2 className="text-xl font-bold text-amber-100">{group.title}</h2>
             </div>
-            <p className="text-sm leading-relaxed text-slate-600">{group.description}</p>
+            <p className="text-sm leading-relaxed text-slate-300">{group.description}</p>
 
             <div className="mt-5 space-y-3">
               {group.students.map((student, studentIndex) => (
@@ -225,8 +225,8 @@ const Toppers = () => {
                   key={`${student.name}-${student.year}`}
                   className={`interactive-card rounded-2xl border p-4 ${
                     studentIndex < 3
-                      ? "border-yellow-200 bg-gradient-to-r from-yellow-50 to-white shadow-md shadow-yellow-900/10"
-                      : "border-emerald-100 bg-emerald-50/40"
+                      ? "border-amber-300/60 bg-gradient-to-r from-amber-200/20 to-yellow-200/10 shadow-md shadow-amber-600/20"
+                      : "border-slate-600/70 bg-slate-800/70"
                   }`}
                 >
                   <div className="flex items-start justify-between gap-3">
@@ -240,19 +240,19 @@ const Toppers = () => {
                         loading="lazy"
                       />
                       <div>
-                        <p className="text-sm font-semibold text-emerald-900">{student.name}</p>
-                        <p className="text-xs text-slate-600">{group.title}</p>
+                        <p className="text-sm font-semibold text-slate-100">{student.name}</p>
+                        <p className="text-xs text-slate-300">{group.title}</p>
                       </div>
                     </div>
                     <div className="text-right">
-                      <p className="text-sm font-bold text-emerald-900">{student.result}</p>
-                      <p className="text-xs text-slate-600">Board Score</p>
+                      <p className="text-sm font-bold text-amber-100">{student.result}</p>
+                      <p className="text-xs text-slate-300">Board Score</p>
                       {studentIndex < 3 && (
-                        <span className="mt-1 mr-1 inline-flex items-center gap-1 rounded-full bg-yellow-100 px-2.5 py-1 text-xs font-semibold text-yellow-800">
+                        <span className="mt-1 mr-1 inline-flex items-center gap-1 rounded-full border border-amber-300/60 bg-amber-200/20 px-2.5 py-1 text-xs font-semibold text-amber-100">
                           Rank #{studentIndex + 1}
                         </span>
                       )}
-                      <span className="mt-1 inline-flex items-center gap-1 rounded-full bg-white px-2.5 py-1 text-xs font-medium text-emerald-700">
+                      <span className="mt-1 inline-flex items-center gap-1 rounded-full border border-slate-500 bg-slate-900 px-2.5 py-1 text-xs font-medium text-slate-200">
                         <Medal size={12} /> {student.year}
                       </span>
                     </div>
@@ -269,13 +269,13 @@ const Toppers = () => {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.2 }}
         transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-        className="mt-10 rounded-3xl border border-emerald-100 bg-white p-7 shadow-xl shadow-emerald-900/10"
+        className="mt-10 rounded-3xl border border-amber-300/40 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-7 shadow-xl shadow-slate-900/35"
       >
         <div className="flex items-center gap-2">
-          <Star size={18} className="text-emerald-700" />
-          <h2 className="text-2xl font-bold text-emerald-900">Other Achievements</h2>
+          <Star size={18} className="text-amber-300" />
+          <h2 className="text-2xl font-bold text-amber-100">Other Achievements</h2>
         </div>
-        <p className="mt-2 text-sm text-slate-600">
+        <p className="mt-2 text-sm text-slate-300">
           Beyond board excellence, our learners continue to shine in competitive, cultural, and discipline-oriented milestones.
         </p>
 
@@ -288,14 +288,14 @@ const Toppers = () => {
               whileInView="visible"
               viewport={{ once: true, amount: 0.25 }}
               transition={{ delay: index * 0.08 }}
-              className="interactive-card rounded-2xl border border-emerald-100 bg-emerald-50/40 p-5"
+              className="interactive-card rounded-2xl border border-slate-600/70 bg-slate-800/70 p-5"
             >
-              <h3 className="text-lg font-semibold text-emerald-900">{achievement.title}</h3>
-              <p className="mt-1 text-sm text-slate-600">{achievement.summary}</p>
-              <ul className="mt-3 space-y-2 text-sm text-slate-700">
+              <h3 className="text-lg font-semibold text-amber-100">{achievement.title}</h3>
+              <p className="mt-1 text-sm text-slate-300">{achievement.summary}</p>
+              <ul className="mt-3 space-y-2 text-sm text-slate-200">
                 {achievement.highlights.map((item) => (
                   <li key={item} className="flex items-start gap-2">
-                    <span className="mt-1 h-2 w-2 rounded-full bg-emerald-500" />
+                    <span className="mt-1 h-2 w-2 rounded-full bg-amber-400" />
                     <span>{item}</span>
                   </li>
                 ))}

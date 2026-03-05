@@ -11,7 +11,6 @@ const galleryImages = [
     src: "https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?auto=format&fit=crop&w=1400&q=80",
     alt: "Modern campus building",
     title: "Flagship Campus Block",
-    heightClass: "h-[340px]",
   },
   {
     id: 2,
@@ -19,7 +18,6 @@ const galleryImages = [
     src: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1200&q=80",
     alt: "Students with medals",
     title: "National Merit Recognition",
-    heightClass: "h-[430px]",
   },
   {
     id: 3,
@@ -27,7 +25,6 @@ const galleryImages = [
     src: "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=1200&q=80",
     alt: "Classroom seminar session",
     title: "Interactive Seminar Day",
-    heightClass: "h-[300px]",
   },
   {
     id: 4,
@@ -35,7 +32,6 @@ const galleryImages = [
     src: "https://images.unsplash.com/photo-1519452575417-564c1401ecc0?auto=format&fit=crop&w=1200&q=80",
     alt: "Students on campus lawn",
     title: "Campus Life & Collaboration",
-    heightClass: "h-[470px]",
   },
   {
     id: 5,
@@ -43,7 +39,6 @@ const galleryImages = [
     src: "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=1200&q=80",
     alt: "Annual event audience",
     title: "Annual Celebration Moments",
-    heightClass: "h-[360px]",
   },
   {
     id: 6,
@@ -51,7 +46,6 @@ const galleryImages = [
     src: "https://images.unsplash.com/photo-1464207687429-7505649dae38?auto=format&fit=crop&w=1200&q=80",
     alt: "Award ceremony stage",
     title: "Topper Felicitation Ceremony",
-    heightClass: "h-[420px]",
   },
   {
     id: 7,
@@ -59,7 +53,6 @@ const galleryImages = [
     src: "https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=1200&q=80",
     alt: "Academic block corridor",
     title: "Premium Learning Infrastructure",
-    heightClass: "h-[320px]",
   },
   {
     id: 8,
@@ -67,7 +60,6 @@ const galleryImages = [
     src: "https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?auto=format&fit=crop&w=1200&q=80",
     alt: "Students performing on stage",
     title: "Cultural Showcase Highlights",
-    heightClass: "h-[450px]",
   },
   {
     id: 9,
@@ -75,7 +67,6 @@ const galleryImages = [
     src: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1200&q=80",
     alt: "Graduation success visual",
     title: "Massive Success Milestones",
-    heightClass: "h-[300px]",
   },
 ];
 
@@ -134,25 +125,66 @@ const GalleryPage = () => {
         ))}
       </div>
 
-      <motion.div layout className="mt-8 columns-1 gap-6 space-y-6 sm:columns-2 md:columns-3 lg:columns-4">
+      <motion.div layout className="mt-8 sm:hidden">
+        <div className="mb-3 flex items-center justify-between px-1">
+          <p className="text-sm font-semibold text-slate-700">Mobile Gallery View</p>
+          <p className="text-xs text-slate-500">Tap any photo to open</p>
+        </div>
+
+        <div className="space-y-4">
+          <AnimatePresence mode="popLayout">
+            {filteredImages.map((image) => (
+              <motion.button
+                key={`mobile-${image.id}`}
+                layout
+                initial={{ opacity: 0, scale: 0.92, y: 14 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.92, y: -10 }}
+                transition={{ duration: 0.3 }}
+                type="button"
+                onClick={() => setSelectedImage(image.id)}
+                className="group relative w-full overflow-hidden rounded-3xl border border-slate-200 bg-white text-left shadow-md shadow-slate-900/8"
+              >
+                <div className="relative overflow-hidden bg-slate-100">
+                  <img
+                    src={image.src}
+                    alt={image.alt}
+                    loading="lazy"
+                    className="h-auto w-full object-contain transition duration-700 group-hover:scale-105"
+                  />
+                </div>
+
+                <div className="absolute inset-x-3 bottom-3 rounded-2xl border border-white/30 bg-white/20 p-3 text-white backdrop-blur-md">
+                  <p className="text-sm font-semibold leading-snug">{image.title}</p>
+                  <p className="mt-0.5 text-xs text-white/90">{image.category}</p>
+                </div>
+              </motion.button>
+            ))}
+          </AnimatePresence>
+        </div>
+      </motion.div>
+
+      <motion.div layout className="mt-8 hidden grid-cols-2 gap-6 sm:grid md:grid-cols-3 lg:grid-cols-4">
         <AnimatePresence mode="popLayout">
           {filteredImages.map((image) => (
-            <motion.div
-              key={image.id}
+            <motion.button
+              key={`desktop-${image.id}`}
               layout
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.8 }}
               transition={{ duration: 0.3 }}
-              className="group relative mb-6 cursor-pointer break-inside-avoid overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-md shadow-slate-900/8"
+              type="button"
               onClick={() => setSelectedImage(image.id)}
+              aria-label={`Open ${image.title}`}
+              className="group relative overflow-hidden rounded-3xl border border-slate-200 bg-white text-left shadow-md shadow-slate-900/8"
             >
-              <div className={`overflow-hidden ${image.heightClass}`}>
+              <div className="relative aspect-[4/3] overflow-hidden bg-slate-100">
                 <img
                   src={image.src}
                   alt={image.alt}
                   loading="lazy"
-                  className="h-full w-full object-cover transition duration-700 group-hover:scale-110"
+                  className="h-full w-full object-contain transition duration-700 group-hover:scale-110"
                 />
               </div>
 
@@ -160,7 +192,7 @@ const GalleryPage = () => {
                 <p className="text-sm font-semibold">{image.title}</p>
                 <p className="mt-0.5 text-xs text-white/90">{image.category}</p>
               </div>
-            </motion.div>
+            </motion.button>
           ))}
         </AnimatePresence>
       </motion.div>
@@ -189,7 +221,7 @@ const GalleryPage = () => {
                 event.stopPropagation();
                 handlePrev();
               }}
-              className="interactive-button absolute left-4 top-1/2 inline-flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/30 bg-white/10 text-white hover:bg-white/20 sm:left-6"
+              className="interactive-button absolute left-4 top-1/2 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/30 bg-white/10 text-white hover:bg-white/20 sm:inline-flex sm:left-6"
             >
               <ChevronLeft className="h-5 w-5" />
             </button>
@@ -219,10 +251,33 @@ const GalleryPage = () => {
                 event.stopPropagation();
                 handleNext();
               }}
-              className="interactive-button absolute right-4 top-1/2 inline-flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/30 bg-white/10 text-white hover:bg-white/20 sm:right-6"
+              className="interactive-button absolute right-4 top-1/2 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/30 bg-white/10 text-white hover:bg-white/20 sm:inline-flex sm:right-6"
             >
               <ChevronRight className="h-5 w-5" />
             </button>
+
+            <div className="absolute inset-x-0 bottom-5 flex items-center justify-center gap-3 px-4 sm:hidden">
+              <button
+                type="button"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  handlePrev();
+                }}
+                className="interactive-button inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-4 py-2 text-sm font-semibold text-white"
+              >
+                <ChevronLeft className="h-4 w-4" /> Prev
+              </button>
+              <button
+                type="button"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  handleNext();
+                }}
+                className="interactive-button inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-4 py-2 text-sm font-semibold text-white"
+              >
+                Next <ChevronRight className="h-4 w-4" />
+              </button>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

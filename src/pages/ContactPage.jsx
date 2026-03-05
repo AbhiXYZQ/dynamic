@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 import {
   BadgeCheck,
@@ -18,11 +19,12 @@ import {
 const googleMapsLink =
   "https://www.google.com/maps/place/Dynamic+Coaching+Centre/@25.6889321,85.2268559,17z/data=!3m1!4b1!4m6!3m5!1s0x39ed5c2d3b4dc341:0x1d8aa75e8c262822!8m2!3d25.6889321!4d85.2294308!16s%2Fg%2F11f_q60bnn?entry=ttu&g_ep=EgoyMDI2MDMwMS4xIKXMDSoASAFQAw%3D%3D";
 const googleMapsEmbed = "https://www.google.com/maps?q=25.6889321,85.2294308&z=17&output=embed";
+const enquiryWhatsApp = "919876543210";
 
 const contactCards = [
   {
     title: "Address",
-    value: "Dynamic Coaching Centre, Hajipur, Vaishali, Bihar - 844101",
+    value: "Dynamic Coaching Centre / Dynamic Public School, Chaurasiya Chowk, Hajipur, Vaishali, Bihar",
     icon: MapPin,
   },
   {
@@ -53,7 +55,39 @@ const supportHighlights = [
   { title: "Quick Verification", detail: "Documents + batch planning support", icon: BadgeCheck },
 ];
 
+const isValidExternalLink = (url) => typeof url === "string" && url.startsWith("http");
+
 const ContactPage = () => {
+  const [formData, setFormData] = useState({
+    studentName: "",
+    parentName: "",
+    phoneNumber: "",
+    courseClass: "",
+    message: "",
+  });
+  const [showActions, setShowActions] = useState(false);
+
+  const handleChange = (event) => {
+    const { id, value } = event.target;
+    setFormData((prev) => ({ ...prev, [id]: value }));
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    if (!formData.studentName || !formData.parentName || !formData.phoneNumber || !formData.courseClass) {
+      return;
+    }
+
+    setShowActions(true);
+  };
+
+  const enquiryText = encodeURIComponent(
+    `Hello Dynamic Campus,\nStudent: ${formData.studentName}\nParent: ${formData.parentName}\nPhone: ${formData.phoneNumber}\nProgram: ${formData.courseClass}\nQuery: ${formData.message || "Not provided"}`
+  );
+  const whatsappUrl = `https://wa.me/${enquiryWhatsApp}?text=${enquiryText}`;
+  const mailtoUrl = `mailto:info@dynamiccampus.in?subject=New%20Admission%20Enquiry&body=${enquiryText}`;
+
   return (
     <section className="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
       <motion.div
@@ -156,7 +190,7 @@ const ContactPage = () => {
             </span>
           </div>
 
-          <form className="mt-5 space-y-4">
+          <form onSubmit={handleSubmit} className="mt-5 space-y-4">
             <div className="grid gap-4 md:grid-cols-2">
               <div>
                 <label htmlFor="studentName" className="mb-1.5 block text-sm font-medium text-slate-700">
@@ -166,8 +200,12 @@ const ContactPage = () => {
                   <User className="h-4 w-4 text-slate-400 transition group-focus-within:text-blue-600" />
                   <input
                     id="studentName"
+                    name="studentName"
                     type="text"
                     placeholder="Enter student name"
+                    value={formData.studentName}
+                    onChange={handleChange}
+                    required
                     className="w-full rounded-xl bg-transparent px-3 py-3 text-sm text-slate-800 outline-none"
                   />
                 </div>
@@ -181,8 +219,12 @@ const ContactPage = () => {
                   <Users className="h-4 w-4 text-slate-400 transition group-focus-within:text-blue-600" />
                   <input
                     id="parentName"
+                    name="parentName"
                     type="text"
                     placeholder="Enter parent name"
+                    value={formData.parentName}
+                    onChange={handleChange}
+                    required
                     className="w-full rounded-xl bg-transparent px-3 py-3 text-sm text-slate-800 outline-none"
                   />
                 </div>
@@ -198,8 +240,12 @@ const ContactPage = () => {
                   <Phone className="h-4 w-4 text-slate-400 transition group-focus-within:text-blue-600" />
                   <input
                     id="phoneNumber"
+                    name="phoneNumber"
                     type="tel"
                     placeholder="Enter phone number"
+                    value={formData.phoneNumber}
+                    onChange={handleChange}
+                    required
                     className="w-full rounded-xl bg-transparent px-3 py-3 text-sm text-slate-800 outline-none"
                   />
                 </div>
@@ -213,8 +259,11 @@ const ContactPage = () => {
                   <ListChecks className="h-4 w-4 text-slate-400 transition group-focus-within:text-blue-600" />
                   <select
                     id="courseClass"
+                    name="courseClass"
                     className="w-full rounded-xl bg-transparent px-3 py-3 text-sm text-slate-800 outline-none"
-                    defaultValue=""
+                    value={formData.courseClass}
+                    onChange={handleChange}
+                    required
                   >
                     <option value="" disabled>
                       Choose class/program
@@ -237,8 +286,11 @@ const ContactPage = () => {
                 <MessageSquare className="mt-3 h-4 w-4 text-slate-400 transition group-focus-within:text-blue-600" />
                 <textarea
                   id="message"
+                  name="message"
                   rows={4}
                   placeholder="Write your query..."
+                  value={formData.message}
+                  onChange={handleChange}
                   className="w-full rounded-xl bg-transparent px-3 py-3 text-sm text-slate-800 outline-none"
                 />
               </div>
@@ -254,6 +306,28 @@ const ContactPage = () => {
             >
               Submit Enquiry
             </button>
+
+            {showActions && (
+              <div className="space-y-3 rounded-xl border border-emerald-200 bg-emerald-50 p-4">
+                <p className="text-sm font-semibold text-emerald-800">Enquiry captured successfully. Continue on:</p>
+                <div className="flex flex-wrap gap-2">
+                  <a
+                    href={whatsappUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="interactive-button inline-flex items-center rounded-full bg-emerald-600 px-4 py-2 text-xs font-semibold text-white hover:bg-emerald-700"
+                  >
+                    WhatsApp
+                  </a>
+                  <a
+                    href={mailtoUrl}
+                    className="interactive-button inline-flex items-center rounded-full border border-emerald-300 bg-white px-4 py-2 text-xs font-semibold text-emerald-700 hover:bg-emerald-100"
+                  >
+                    Email
+                  </a>
+                </div>
+              </div>
+            )}
           </form>
         </motion.div>
       </div>
@@ -273,14 +347,26 @@ const ContactPage = () => {
 
           <div className="mt-5 flex flex-wrap gap-3">
             {socialLinks.map((item) => (
-              <a
-                key={item.label}
-                href={item.href}
-                className="interactive-button inline-flex items-center gap-2 rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:border-blue-300 hover:text-blue-700"
-              >
-                <item.icon className="h-4 w-4" />
-                {item.label}
-              </a>
+              isValidExternalLink(item.href) ? (
+                <a
+                  key={item.label}
+                  href={item.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="interactive-button inline-flex items-center gap-2 rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:border-blue-300 hover:text-blue-700"
+                >
+                  <item.icon className="h-4 w-4" />
+                  {item.label}
+                </a>
+              ) : (
+                <span
+                  key={item.label}
+                  className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-500"
+                >
+                  <item.icon className="h-4 w-4" />
+                  {item.label}
+                </span>
+              )
             ))}
           </div>
         </div>

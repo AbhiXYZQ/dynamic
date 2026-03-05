@@ -25,6 +25,13 @@ const quickLinks = [
   { label: "Contact", to: "/contact" },
 ];
 
+const legalLinks = [
+  { label: "Privacy Policy", to: "/privacy-policy" },
+  { label: "Terms & Conditions", to: "/terms" },
+  { label: "Disclaimer", to: "/disclaimer" },
+  { label: "Contact / Grievance", to: "/grievance" },
+];
+
 const academicLinks = [
   "Dynamic Public School (Playgroup to Class 6)",
   "Dynamic Coaching Centre (Class 7 to 12)",
@@ -41,9 +48,11 @@ const socials = [
 const devLinks = [
   { icon: Github, label: "GitHub", href: "https://github.com/AbhiXYZQ" },
   { icon: Mail, label: "Contact Developer", href: "mailto:abhixyzq@gmail.com" },
-  { icon: Globe, label: "Visit Nainix Dev", href: "https://nainix.me" },
+  { icon: Globe, label: "Visit Nainix", href: "https://nainix.me" },
   { icon: Linkedin, label: "LinkedIn /in/abhixyzq", href: "https://linkedin.com/in/abhixyzq" },
 ];
+
+const isValidExternalLink = (url) => typeof url === "string" && url.startsWith("http");
 
 const Footer = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -81,7 +90,7 @@ const Footer = () => {
                 </span>
                 <div>
                   <h3 className="text-base font-bold text-white">Dynamic Campus</h3>
-                  <p className="text-xs text-slate-400">Hajipur, Bihar</p>
+                  <p className="text-xs text-slate-400">Chaurasiya Chowk, Hajipur</p>
                 </div>
               </div>
               <p className="text-sm leading-relaxed text-slate-400">
@@ -90,14 +99,26 @@ const Footer = () => {
               </p>
               <div className="flex items-center gap-2">
                 {socials.map((item) => (
-                  <a
-                    key={item.label}
-                    href={item.href}
-                    aria-label={item.label}
-                    className="interactive-button rounded-xl border border-slate-700 bg-slate-900 p-2 text-slate-300 hover:border-emerald-400/70 hover:text-emerald-300"
-                  >
-                    <item.icon size={16} />
-                  </a>
+                  isValidExternalLink(item.href) ? (
+                    <a
+                      key={item.label}
+                      href={item.href}
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label={item.label}
+                      className="interactive-button rounded-xl border border-slate-700 bg-slate-900 p-2 text-slate-300 hover:border-emerald-400/70 hover:text-emerald-300"
+                    >
+                      <item.icon size={16} />
+                    </a>
+                  ) : (
+                    <span
+                      key={item.label}
+                      aria-label={`${item.label} unavailable`}
+                      className="rounded-xl border border-slate-800 bg-slate-900/50 p-2 text-slate-500"
+                    >
+                      <item.icon size={16} />
+                    </span>
+                  )
                 ))}
               </div>
             </div>
@@ -130,8 +151,8 @@ const Footer = () => {
               <h4 className="mb-4 text-sm font-semibold uppercase tracking-wide text-slate-100">Contact Info</h4>
               <ul className="space-y-3 text-sm text-slate-400">
                 <li className="flex items-start gap-2">
-                  <MapPin size={16} className="mt-0.5 text-emerald-400" />
-                  <span>Near Hajipur Junction, Hajipur, Vaishali, Bihar - 844101</span>
+                  <MapPin size={16} className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" />
+                  <span>Dynamic Coaching Centre / Dynamic Public School, Chaurasiya Chowk, Hajipur, Vaishali, Bihar</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <Phone size={16} className="text-emerald-400" />
@@ -149,16 +170,26 @@ const Footer = () => {
             </div>
           </motion.div>
 
-          <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-slate-800 pt-6 text-xs text-slate-500 md:flex-row">
-            <p>© {new Date().getFullYear()} Dynamic Campus. All rights reserved.</p>
+          <div className="mt-10 border-t border-slate-800 pt-6">
+            <div className="mb-4 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs text-slate-400 md:justify-start">
+              {legalLinks.map((link) => (
+                <Link key={link.to} to={link.to} className="interactive-link hover:text-emerald-300">
+                  {link.label}
+                </Link>
+              ))}
+            </div>
 
-            <button
-              type="button"
-              onClick={() => setIsOpen(true)}
-              className="interactive-button inline-flex items-center gap-2 rounded-full border border-slate-700 bg-slate-900 px-4 py-2 text-xs font-semibold text-slate-200 hover:border-emerald-400/70 hover:text-white"
-            >
-              Designed & Developed with <Heart size={13} className="text-rose-400" fill="currentColor" /> by Nainix Dev
-            </button>
+            <div className="flex flex-col items-center justify-between gap-4 text-xs text-slate-500 md:flex-row">
+              <p>© {new Date().getFullYear()} Dynamic Campus. All rights reserved.</p>
+
+              <button
+                type="button"
+                onClick={() => setIsOpen(true)}
+                className="interactive-button inline-flex items-center gap-2 rounded-full border border-slate-700 bg-slate-900 px-4 py-2 text-xs font-semibold text-slate-200 hover:border-emerald-400/70 hover:text-white"
+              >
+                Designed & Developed with <Heart size={13} className="text-rose-400" fill="currentColor" /> by Nainix
+              </button>
+            </div>
           </div>
         </div>
       </footer>
@@ -199,15 +230,19 @@ const Footer = () => {
                 </span>
 
                 <img
-                  src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=320&q=80"
+                  src="/images/developer_profile.jpg"
                   alt="Abhishek Kumar"
                   className="mt-4 h-24 w-24 rounded-full border-2 border-white/40 object-cover shadow-lg shadow-emerald-900/30"
                   loading="lazy"
+                  onError={(event) => {
+                    event.currentTarget.src =
+                      "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=320&q=80";
+                  }}
                 />
 
                 <h3 className="mt-4 text-2xl font-bold text-white">Abhishek Kumar</h3>
                 <p className="mt-1 text-sm font-medium text-emerald-200">
-                  Full Stack Developer & Founder at Nainix Dev
+                  Full Stack Developer & Founder at Nainix
                 </p>
                 <p className="mt-3 text-sm leading-relaxed text-slate-200">
                   Crafting premium, high-performance web applications and digital experiences.
