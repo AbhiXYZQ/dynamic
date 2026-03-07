@@ -10,31 +10,31 @@ const topperGroups = [
         name: "Ananya Sinha",
         result: "98.6%",
         year: "2025",
-        image: "https://i.pravatar.cc/240?img=32",
+        image: "/school-logo.png",
       },
       {
         name: "Satyam Raj",
         result: "97.9%",
         year: "2025",
-        image: "https://i.pravatar.cc/240?img=12",
+        image: "/school-logo.png",
       },
       {
         name: "Pooja Kumari",
         result: "97.3%",
-        year: "2024",
-        image: "https://i.pravatar.cc/240?img=47",
+        year: "2026",
+        image: "/school-logo.png",
       },
       {
         name: "Vivek Anand",
         result: "95.9%",
-        year: "2024",
-        image: "https://i.pravatar.cc/240?img=63",
+        year: "2026",
+        image: "/school-logo.png",
       },
       {
         name: "Komal Rani",
         result: "95.1%",
-        year: "2024",
-        image: "https://i.pravatar.cc/240?img=39",
+        year: "2026",
+        image: "/school-logo.png",
       },
     ],
   },
@@ -46,31 +46,31 @@ const topperGroups = [
         name: "Rohan Kumar",
         result: "96.8%",
         year: "2025",
-        image: "https://i.pravatar.cc/240?img=15",
+        image: "/school-logo.png",
       },
       {
         name: "Kajal Kumari",
         result: "97.1%",
-        year: "2024",
-        image: "https://i.pravatar.cc/240?img=29",
+        year: "2026",
+        image: "/school-logo.png",
       },
       {
         name: "Ayush Raj",
         result: "95.6%",
-        year: "2024",
-        image: "https://i.pravatar.cc/240?img=68",
+        year: "2026",
+        image: "/school-logo.png",
       },
       {
         name: "Nitesh Kumar",
         result: "95.0%",
-        year: "2024",
-        image: "https://i.pravatar.cc/240?img=11",
+        year: "2026",
+        image: "/school-logo.png",
       },
       {
         name: "Soni Mishra",
         result: "94.7%",
-        year: "2024",
-        image: "https://i.pravatar.cc/240?img=26",
+        year: "2026",
+        image: "/school-logo.png",
       },
     ],
   },
@@ -82,31 +82,31 @@ const topperGroups = [
         name: "Shreya Gupta",
         result: "97.4%",
         year: "2025",
-        image: "https://i.pravatar.cc/240?img=45",
+        image: "/school-logo.png",
       },
       {
         name: "Aman Verma",
         result: "96.6%",
         year: "2025",
-        image: "https://i.pravatar.cc/240?img=22",
+        image: "/school-logo.png",
       },
       {
         name: "Nidhi Singh",
         result: "95.8%",
-        year: "2024",
-        image: "https://i.pravatar.cc/240?img=5",
+        year: "2026",
+        image: "/school-logo.png",
       },
       {
         name: "Aarav Jain",
         result: "95.2%",
-        year: "2024",
-        image: "https://i.pravatar.cc/240?img=18",
+        year: "2026",
+        image: "/school-logo.png",
       },
       {
         name: "Riya Sharma",
         result: "94.8%",
-        year: "2024",
-        image: "https://i.pravatar.cc/240?img=52",
+        year: "2026",
+        image: "/school-logo.png",
       },
     ],
   },
@@ -118,31 +118,31 @@ const topperGroups = [
         name: "Aditya Raj",
         result: "95.9%",
         year: "2025",
-        image: "https://i.pravatar.cc/240?img=59",
+        image: "/school-logo.png",
       },
       {
         name: "Ritika Sharma",
         result: "95.3%",
-        year: "2024",
-        image: "https://i.pravatar.cc/240?img=43",
+        year: "2026",
+        image: "/school-logo.png",
       },
       {
         name: "Harshita Jha",
         result: "94.9%",
-        year: "2024",
-        image: "https://i.pravatar.cc/240?img=31",
+        year: "2026",
+        image: "/school-logo.png",
       },
       {
         name: "Mayank Sinha",
         result: "94.5%",
-        year: "2024",
-        image: "https://i.pravatar.cc/240?img=65",
+        year: "2026",
+        image: "/school-logo.png",
       },
       {
         name: "Sakshi Priya",
         result: "94.1%",
-        year: "2024",
-        image: "https://i.pravatar.cc/240?img=49",
+        year: "2026",
+        image: "/school-logo.png",
       },
     ],
   },
@@ -231,22 +231,24 @@ const Toppers = () => {
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-start gap-3">
-                      <img
-                        src={student.image}
-                        alt={student.name}
-                        className={`h-12 w-12 rounded-xl object-cover ring-2 ${
-                          studentIndex < 3 ? "ring-yellow-200" : "ring-white"
+                      <div
+                        aria-label="Updated Soon"
+                        className={`flex h-12 w-12 items-center justify-center rounded-xl text-xl font-extrabold ring-2 ${
+                          studentIndex < 3
+                            ? "bg-amber-100/20 text-amber-100 ring-yellow-200"
+                            : "bg-slate-700 text-slate-100 ring-white"
                         }`}
-                        loading="lazy"
-                      />
+                      >
+                        ?
+                      </div>
                       <div>
-                        <p className="text-sm font-semibold text-slate-100">{student.name}</p>
+                        <p className="text-sm font-semibold text-slate-100">Updated Soon</p>
                         <p className="text-xs text-slate-300">{group.title}</p>
                       </div>
                     </div>
                     <div className="text-right">
-                      <p className="text-sm font-bold text-amber-100">{student.result}</p>
-                      <p className="text-xs text-slate-300">Board Score</p>
+                      <p className="text-sm font-bold text-amber-100">?</p>
+                      <p className="text-xs text-slate-300">Score Pending</p>
                       {studentIndex < 3 && (
                         <span className="mt-1 mr-1 inline-flex items-center gap-1 rounded-full border border-amber-300/60 bg-amber-200/20 px-2.5 py-1 text-xs font-semibold text-amber-100">
                           Rank #{studentIndex + 1}

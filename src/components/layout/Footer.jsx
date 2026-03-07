@@ -10,7 +10,6 @@ import {
   Mail,
   MapPin,
   Phone,
-  School2,
   X,
   Youtube,
 } from "lucide-react";
@@ -35,8 +34,8 @@ const legalLinks = [
 const academicLinks = [
   "Dynamic Public School (Playgroup to Class 6)",
   "Dynamic Coaching Centre (Class 7 to 12)",
-  "JEE Foundation & Advanced Batches",
-  "NEET Focused Medical Entrance Programs",
+  "Foundation & Scholarship Batches",
+  "Board Excellence & Career Guidance Programs",
 ];
 
 const socials = [
@@ -85,8 +84,8 @@ const Footer = () => {
           >
             <div className="space-y-4">
               <div className="flex items-center gap-3">
-                <span className="interactive-card flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-800 text-white shadow-lg shadow-emerald-900/30">
-                  <School2 size={20} />
+                <span className="interactive-card flex h-11 w-11 items-center justify-center overflow-hidden rounded-2xl border border-white/25 bg-white shadow-lg shadow-emerald-900/30">
+                  <img src="/school-logo.png" alt="Dynamic Campus logo" className="h-full w-full object-cover" loading="eager" />
                 </span>
                 <div>
                   <h3 className="text-base font-bold text-white">Dynamic Campus</h3>

@@ -60,7 +60,7 @@ const admissionSeedData = [
     phone: "9090909090",
     aadharNo: "9981 2457 6635",
     address: "Anand Vihar, Hajipur, Vaishali, Bihar",
-    classOrCourse: "JEE Foundation",
+    classOrCourse: "Board Foundation",
   },
   {
     id: "ADM-2002",
@@ -73,7 +73,7 @@ const admissionSeedData = [
     phone: "9012345678",
     aadharNo: "6621 4432 5548",
     address: "Jadhua, Hajipur, Vaishali, Bihar",
-    classOrCourse: "NEET Target",
+    classOrCourse: "Board Target",
   },
 ];
 
@@ -227,7 +227,7 @@ const AddAdmissionModal = ({ isOpen, onClose, onSave, formData, setFormData, isE
                   value={formData.classOrCourse}
                   onChange={(event) => setFormData((prev) => ({ ...prev, classOrCourse: event.target.value }))}
                   className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-800 outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
-                  placeholder="Class 10 / JEE / NEET"
+                  placeholder="Class 10 / Board Foundation"
                 />
               </div>
 

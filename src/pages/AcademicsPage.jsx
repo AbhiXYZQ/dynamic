@@ -48,7 +48,7 @@ const coachingBatches = [
   },
   {
     title: "Target (11-12)",
-    focus: "Boards + JEE/NEET",
+    focus: "Boards + Foundation",
     detail: "Integrated preparation with time-bound test practice.",
   },
   {
@@ -69,7 +69,7 @@ const highlightsByTab = {
   ],
   coaching: [
     "Class 7-12 + Competitive",
-    "Boards + JEE/NEET integration",
+    "Boards + Foundation integration",
     "Performance analytics",
     "Mentor-led improvement cycles",
   ],
@@ -128,7 +128,7 @@ const AcademicsPage = () => {
           </p>
           <h1 className={`mt-3 text-3xl font-bold tracking-tight sm:text-4xl ${accents.heading}`}>Academic Excellence</h1>
           <p className="mt-2 text-sm text-slate-600 sm:text-base">
-            From Playgroup Foundation to JEE/NEET Success
+            From Playgroup Foundation to Board Success
           </p>
         </div>
 

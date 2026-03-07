@@ -272,7 +272,7 @@ const ContactPage = () => {
                     <option value="class-1-6">Class 1 - 6</option>
                     <option value="class-7-10">Class 7 - 10 (Foundation)</option>
                     <option value="class-11-12">Class 11 - 12 (Boards + Entrance)</option>
-                    <option value="dropper-batch">Droppers Batch (JEE/NEET)</option>
+                    <option value="dropper-batch">Droppers Batch (Board Improvement)</option>
                   </select>
                 </div>
               </div>

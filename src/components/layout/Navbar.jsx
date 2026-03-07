@@ -11,7 +11,6 @@ import {
   LogIn,
   Menu,
   Phone,
-  School2,
   Trophy,
   X,
 } from "lucide-react";
@@ -182,10 +181,8 @@ const Navbar = () => {
         </AnimatePresence>
 
         <Link to="/" className="group relative z-10 flex items-center gap-3">
-          <span
-            className={`interactive-card flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br text-white shadow-lg group-hover:rotate-3 ${theme.logoGradient} ${theme.logoShadow}`}
-          >
-            <School2 size={20} />
+          <span className="interactive-card flex h-11 w-11 items-center justify-center overflow-hidden rounded-2xl border border-white/40 bg-white shadow-lg">
+            <img src="/school-logo.png" alt="Dynamic Campus logo" className="h-full w-full object-cover" loading="eager" />
           </span>
           <div>
             <p className={`text-sm font-semibold tracking-wide md:text-base ${theme.brandText}`}>Dynamic Campus</p>

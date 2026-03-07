@@ -34,7 +34,7 @@ const notices = [
   },
   {
     id: 4,
-    title: "JEE/NEET Weekly Test Paper - Set 07",
+    title: "Board Weekly Test Paper - Set 07",
     date: "2026-03-05",
     category: "Downloads",
     description: "Download this week’s practice paper and answer key for rank improvement review.",
@@ -73,7 +73,7 @@ const notices = [
     title: "Physics Formula Handbook PDF",
     date: "2026-02-20",
     category: "Downloads",
-    description: "Chapter-wise quick revision formula handbook for class 11-12 and JEE aspirants.",
+    description: "Chapter-wise quick revision formula handbook for Class 11-12 board aspirants.",
     isNew: false,
     downloadLink: "#",
   },

@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Route, Routes, useLocation } from "react-router-dom";
 import Footer from "./components/layout/Footer";
 import Navbar from "./components/layout/Navbar";
+import SeoManager from "./components/seo/SeoManager";
 import AdminDashboard from "./pages/AdminDashboard";
 import AcademicsPage from "./pages/AcademicsPage";
 import AboutPage from "./pages/AboutPage";
@@ -70,6 +71,7 @@ const App = () => {
 
       <div className="relative z-10">
         <ScrollToTop />
+        <SeoManager />
         {!isAdminRoute && <Navbar />}
         <main className={isAdminRoute ? "" : "pt-24 sm:pt-28"}>
           <Routes>

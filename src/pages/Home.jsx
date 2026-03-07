@@ -5,8 +5,6 @@ import {
   ArrowRight,
   BellRing,
   BookOpen,
-  Code2,
-  ExternalLink,
   GraduationCap,
   Heart,
   Star,
@@ -33,10 +31,10 @@ const noticeByClass = {
     "📚 New Foundation Batch for Class 9-10 starts next week",
     "📊 Monthly Progress Meeting for Class 10 on Saturday",
   ],
-  "Class 11-12/JEE-NEET": [
-    "🏆 Congratulations to our JEE Advanced Toppers",
-    "🧪 NEET Crash Revision Batch admissions now live",
-    "⏰ Board + Entrance Combined Test Series starts this month",
+  "Class 11-12 (Boards)": [
+    "🏆 Congratulations to our Class 12 Board Toppers",
+    "🧪 Senior Board Revision Batch admissions now live",
+    "⏰ Board Focused Combined Test Series starts this month",
   ],
 };
 
@@ -45,22 +43,19 @@ const heroSlides = [
     title: "Dynamic Public School - Nurturing the Future",
     subtitle:
       "A joyful and caring learning space where young minds build confidence, values, and strong academic foundations.",
-    image:
-      "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=1800&q=80",
+    image: "/school-logo.png",
   },
   {
     title: "Dynamic Coaching Centre - Rank Makers of Bihar",
     subtitle:
       "Structured classes, personalized mentorship, and data-driven practice that transforms effort into top ranks.",
-    image:
-      "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1800&q=80",
+    image: "/school-logo.png",
   },
   {
     title: "State-of-the-Art Infrastructure",
     subtitle:
       "Smart classrooms, hi-tech labs, and a focused campus ecosystem designed for modern, result-oriented education.",
-    image:
-      "https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?auto=format&fit=crop&w=1800&q=80",
+    image: "/school-logo.png",
   },
 ];
 
@@ -82,7 +77,7 @@ const testimonials = [
   },
   {
     name: "Rahul Singh",
-    role: "Student, NEET Batch",
+    role: "Student, Senior Board Batch",
     quote:
       "The test-series analysis and mentor feedback gave me a structured plan. I improved consistently and gained real exam confidence.",
   },
@@ -105,10 +100,10 @@ const wings = [
   },
   {
     title: "Dynamic Coaching Centre",
-    subtitle: "Class 7 to 12, JEE / NEET",
+    subtitle: "Class 7 to 12, Board & Foundation",
     description:
       "Result-oriented academics with a competitive ecosystem, chapter-wise testing, doubt solving clinics, and focused mentorship for board and entrance exams.",
-    points: ["Regular tests and analytics", "Dedicated JEE / NEET modules", "Performance tracking with mentorship"],
+    points: ["Regular tests and analytics", "Dedicated board-focused modules", "Performance tracking with mentorship"],
     cta: "Explore Coaching Wing",
   },
 ];
@@ -494,7 +489,7 @@ const Home = () => {
               </div>
               <div className="rounded-2xl bg-gradient-to-br from-yellow-50 to-white p-4">
                 <p className="text-xs font-semibold uppercase tracking-wide text-yellow-700">Coaching Wing</p>
-                <p className="mt-2 text-sm text-slate-600">Class 7–12, JEE/NEET focused academic rigor.</p>
+                <p className="mt-2 text-sm text-slate-600">Class 7–12, board and foundation focused academic rigor.</p>
               </div>
               <div className="rounded-2xl bg-gradient-to-br from-white to-emerald-50 p-4 sm:col-span-2">
                 <p className="text-xs font-semibold uppercase tracking-wide text-emerald-700">Result-Driven Culture</p>
@@ -574,35 +569,6 @@ const Home = () => {
       </section>
 
       <section className="mx-auto w-full max-w-7xl px-4 pb-12 pt-8 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
-          className="mb-8 rounded-3xl border border-slate-200 bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 p-6 text-white shadow-xl shadow-slate-900/20"
-        >
-          <div className="flex flex-wrap items-center justify-between gap-4">
-            <div>
-              <p className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-semibold tracking-wide text-slate-100">
-                <Code2 size={14} /> About Developer
-              </p>
-              <h3 className="mt-3 text-xl font-bold sm:text-2xl">Premium Experience Crafted by Nainix</h3>
-              <p className="mt-2 max-w-2xl text-sm text-slate-200">
-                Dynamic Campus platform is designed and developed by Abhishek Kumar with focus on premium UI,
-                high performance, and production-ready architecture.
-              </p>
-            </div>
-            <a
-              href="https://nainix.me"
-              target="_blank"
-              rel="noreferrer"
-              className="interactive-button inline-flex items-center gap-2 rounded-xl bg-white px-4 py-2 text-sm font-semibold text-slate-900"
-            >
-              Visit Profile <ExternalLink size={15} />
-            </a>
-          </div>
-        </motion.div>
-
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}

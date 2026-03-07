@@ -69,7 +69,7 @@ const legacyItems = [
     year: "2026",
     title: "Dual-Wing Excellence at Scale",
     description:
-      "Today, Dynamic Campus stands strong with school and coaching integration driving board + JEE/NEET success.",
+      "Today, Dynamic Campus stands strong with school and coaching integration driving board and foundation success.",
   },
 ];
 
@@ -100,19 +100,17 @@ const facultyMembers = [
   {
     name: "Aarav Singh",
     tagline: "B.Tech IIT Kanpur | 10+ Yrs Exp",
-    subjects: ["⚛️ Physics", "📘 JEE Mechanics"],
-    image:
-      "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=1200&q=80",
+    subjects: ["⚛️ Physics", "📘 Applied Mechanics"],
+    image: "/school-logo.png",
     quote: "Consistency beats intensity when guided with the right strategy.",
     linkedin: "#",
     email: "aarav.singh@dynamiccampus.edu",
   },
   {
     name: "Dr. Nisha Verma",
-    tagline: "MBBS, MD | NEET Biology Mentor",
-    subjects: ["🧬 Biology", "📝 NEET Strategy"],
-    image:
-      "https://images.unsplash.com/photo-1580894732444-8ecded7900cd?auto=format&fit=crop&w=1200&q=80",
+    tagline: "MBBS, MD | Senior Biology Mentor",
+    subjects: ["🧬 Biology", "📝 Exam Strategy"],
+    image: "/school-logo.png",
     quote: "Understand life, and Biology becomes beautifully logical.",
     linkedin: "#",
     email: "nisha.verma@dynamiccampus.edu",
@@ -121,18 +119,16 @@ const facultyMembers = [
     name: "Ritika Sinha",
     tagline: "M.A. English | 9+ Yrs Classroom Excellence",
     subjects: ["📚 English", "🗣️ Communication"],
-    image:
-      "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=900&q=80",
+    image: "/school-logo.png",
     quote: "Language is confidence in action—inside and outside exams.",
     linkedin: "#",
     email: "ritika.sinha@dynamiccampus.edu",
   },
   {
     name: "Kunal Raj",
-    tagline: "M.Sc. Chemistry | 11+ Yrs Boards + NEET",
+    tagline: "M.Sc. Chemistry | 11+ Yrs Board Excellence",
     subjects: ["🧪 Chemistry", "📊 Test Analysis"],
-    image:
-      "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=900&q=80",
+    image: "/school-logo.png",
     quote: "Smart revision and error logs can transform your final score.",
     linkedin: "#",
     email: "kunal.raj@dynamiccampus.edu",
@@ -141,8 +137,7 @@ const facultyMembers = [
     name: "Pooja Mehta",
     tagline: "M.Ed. | 8+ Yrs Foundation Pedagogy",
     subjects: ["✏️ Maths Foundation", "🎯 NTSE Basics"],
-    image:
-      "https://images.unsplash.com/photo-1580894908361-967195033215?auto=format&fit=crop&w=1200&q=80",
+    image: "/school-logo.png",
     quote: "Strong basics in middle school create top performers later.",
     linkedin: "#",
     email: "pooja.mehta@dynamiccampus.edu",
@@ -151,8 +146,7 @@ const facultyMembers = [
     name: "Aditya Prakash",
     tagline: "B.Tech NIT | 7+ Yrs Quant Mentorship",
     subjects: ["➗ Mathematics", "🧠 Problem Solving"],
-    image:
-      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=1200&q=80",
+    image: "/school-logo.png",
     quote: "Great ranks come from daily precision, not last-minute pressure.",
     linkedin: "#",
     email: "aditya.prakash@dynamiccampus.edu",
@@ -162,8 +156,7 @@ const facultyMembers = [
 const directorProfile = {
   name: "Dr. Tarkeshwar Thakur, Ph.D.",
   role: "Director, Dynamic Campus",
-  image:
-    "https://images.unsplash.com/photo-1556157382-97eda2d62296?auto=format&fit=crop&w=1200&q=80",
+  image: "/school-logo.png",
 };
 
 const isValidExternalLink = (url) => typeof url === "string" && url.startsWith("http");

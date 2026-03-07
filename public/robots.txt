@@ -1,7 +1,9 @@
 User-agent: *
 Allow: /
 Disallow: /admin
+Disallow: /AdminDashboard
 Disallow: /student
+Disallow: /login
 Disallow: /LoginPage
 
 Sitemap: https://dynamiccampus.in/sitemap.xml
