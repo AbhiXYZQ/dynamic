@@ -6,12 +6,12 @@ import {
   BellRing,
   BookOpen,
   GraduationCap,
-  Heart,
   Star,
   Trophy,
   Users,
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { spotlightToppers } from "../data/topperData";
 
 const stats = [
   { label: "Years of Academic Legacy", value: 27, suffix: "+", icon: BookOpen },
@@ -43,29 +43,20 @@ const heroSlides = [
     title: "Dynamic Public School - Nurturing the Future",
     subtitle:
       "A joyful and caring learning space where young minds build confidence, values, and strong academic foundations.",
-    image: "/school-logo.png",
+    image: "/images/dynamic_school-logo.jpeg",
   },
   {
     title: "Dynamic Coaching Centre - Rank Makers of Bihar",
     subtitle:
       "Structured classes, personalized mentorship, and data-driven practice that transforms effort into top ranks.",
-    image: "/school-logo.png",
+    image: "/images/dynamic_coaching-logo.jpeg",
   },
   {
     title: "State-of-the-Art Infrastructure",
     subtitle:
       "Smart classrooms, hi-tech labs, and a focused campus ecosystem designed for modern, result-oriented education.",
-    image: "/school-logo.png",
+    image: "/images/dynamic_school-logo.jpeg",
   },
-];
-
-const toppers = [
-  { name: "Ananya Sinha", score: "98.6% - BSEB Class 10" },
-  { name: "Rohan Kumar", score: "96.8% - BSEB Class 12" },
-  { name: "Shreya Gupta", score: "97.4% - CBSE Class 10" },
-  { name: "Aditya Raj", score: "95.9% - CBSE Class 12" },
-  { name: "Kajal Kumari", score: "97.1% - BSEB Class 12" },
-  { name: "Aman Verma", score: "96.6% - CBSE Class 10" },
 ];
 
 const testimonials = [
@@ -91,7 +82,9 @@ const testimonials = [
 
 const wings = [
   {
+    key: "school",
     title: "Dynamic Public School",
+    logo: "/images/dynamic_school-logo.jpeg",
     subtitle: "Playgroup to Class 6",
     description:
       "A joyful foundation with activity-based learning, life skills, values, communication building, and strong conceptual clarity from the early years.",
@@ -99,7 +92,9 @@ const wings = [
     cta: "Explore School Wing",
   },
   {
+    key: "coaching",
     title: "Dynamic Coaching Centre",
+    logo: "/images/dynamic_coaching-logo.jpeg",
     subtitle: "Class 7 to 12, Board & Foundation",
     description:
       "Result-oriented academics with a competitive ecosystem, chapter-wise testing, doubt solving clinics, and focused mentorship for board and entrance exams.",
@@ -210,26 +205,11 @@ const Home = () => {
     }),
   };
 
-  const marqueeData = useMemo(() => [...toppers, ...toppers], []);
+  const marqueeData = useMemo(() => [...spotlightToppers, ...spotlightToppers], []);
 
   return (
     <div className="overflow-x-hidden">
       <section className="mx-auto w-full max-w-7xl px-4 pb-8 pt-4 sm:px-6 lg:px-8">
-        <div className="mb-4 rounded-2xl border border-amber-200 bg-gradient-to-r from-amber-50 via-yellow-50 to-amber-50 p-3 shadow-lg shadow-amber-900/10 sm:p-4">
-          <div className="flex flex-wrap items-center justify-between gap-2">
-            <p className="text-xs font-semibold uppercase tracking-wide text-amber-800 sm:text-sm">
-              Under Construction: Some modules are being polished for final launch.
-            </p>
-            <a
-              href="https://nainix.me"
-              target="_blank"
-              rel="noreferrer"
-              className="interactive-button inline-flex items-center gap-2 rounded-full border border-slate-700 bg-slate-900 px-4 py-2 text-xs font-semibold text-slate-200 hover:border-emerald-400/70 hover:text-white"
-            >
-              Designed & Developed with <Heart size={13} className="text-rose-400" fill="currentColor" /> by Nainix
-            </a>
-          </div>
-        </div>
         <div className="grid gap-5 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
           <div className="relative h-[300px] overflow-hidden rounded-3xl border border-emerald-100 shadow-xl shadow-emerald-900/15 sm:h-[380px] md:h-[520px]">
             <AnimatePresence mode="wait">
@@ -400,6 +380,42 @@ const Home = () => {
       </section>
 
       <section className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+        <div className="grid gap-6 lg:grid-cols-2">
+          {wings.map((wing, index) => (
+            <motion.article
+              key={wing.title}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.25 }}
+              transition={{ duration: 0.65, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}
+              className="interactive-card rounded-3xl border border-emerald-100 bg-white p-7 shadow-xl shadow-emerald-900/10"
+            >
+              <div className="mb-3 inline-flex h-12 w-12 items-center justify-center overflow-hidden rounded-2xl border border-emerald-100 bg-white shadow-sm">
+                <img src={wing.logo} alt={`${wing.title} logo`} className="h-full w-full object-cover" loading="lazy" />
+              </div>
+              <p className="text-sm font-semibold text-emerald-700">{wing.subtitle}</p>
+              <h3 className="mt-1 text-2xl font-bold text-emerald-900">{wing.title}</h3>
+              <p className="mt-3 text-sm leading-relaxed text-slate-600">{wing.description}</p>
+              <ul className="mt-4 space-y-2 text-sm text-slate-700">
+                {wing.points.map((item) => (
+                  <li key={item} className="flex items-start gap-2">
+                    <span className="mt-1 h-2 w-2 rounded-full bg-emerald-500" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+              <Link
+                to={`/academics?wing=${wing.key}`}
+                className="interactive-button mt-5 inline-flex items-center gap-2 rounded-xl bg-emerald-50 px-4 py-2 text-sm font-semibold text-emerald-800 hover:bg-emerald-100"
+              >
+                {wing.cta} <ArrowRight size={15} />
+              </Link>
+            </motion.article>
+          ))}
+        </div>
+      </section>
+
+      <section className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -424,7 +440,7 @@ const Home = () => {
             <motion.div
               className="flex w-max gap-3 p-3"
               animate={{ x: ["0%", "-50%"] }}
-              transition={{ duration: 22, repeat: Infinity, ease: "linear" }}
+              transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
             >
               {marqueeData.map((item, index) => (
                 <div
@@ -505,36 +521,6 @@ const Home = () => {
             className="pointer-events-none absolute -bottom-8 -right-4 h-28 w-28 rounded-full bg-emerald-200/50 blur-2xl"
           />
         </motion.div>
-      </section>
-
-      <section className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-        <div className="grid gap-6 lg:grid-cols-2">
-          {wings.map((wing, index) => (
-            <motion.article
-              key={wing.title}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.25 }}
-              transition={{ duration: 0.65, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}
-              className="interactive-card rounded-3xl border border-emerald-100 bg-white p-7 shadow-xl shadow-emerald-900/10"
-            >
-              <p className="text-sm font-semibold text-emerald-700">{wing.subtitle}</p>
-              <h3 className="mt-1 text-2xl font-bold text-emerald-900">{wing.title}</h3>
-              <p className="mt-3 text-sm leading-relaxed text-slate-600">{wing.description}</p>
-              <ul className="mt-4 space-y-2 text-sm text-slate-700">
-                {wing.points.map((item) => (
-                  <li key={item} className="flex items-start gap-2">
-                    <span className="mt-1 h-2 w-2 rounded-full bg-emerald-500" />
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-              <button className="interactive-button mt-5 inline-flex items-center gap-2 rounded-xl bg-emerald-50 px-4 py-2 text-sm font-semibold text-emerald-800 hover:bg-emerald-100">
-                {wing.cta} <ArrowRight size={15} />
-              </button>
-            </motion.article>
-          ))}
-        </div>
       </section>
 
       <section className="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 lg:px-8">

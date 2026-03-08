@@ -101,7 +101,8 @@ const facultyMembers = [
     name: "Aarav Singh",
     tagline: "B.Tech IIT Kanpur | 10+ Yrs Exp",
     subjects: ["⚛️ Physics", "📘 Applied Mechanics"],
-    image: "/school-logo.png",
+    image: "/images/dynamic_coaching-logo.jpeg",
+    team: "coaching",
     quote: "Consistency beats intensity when guided with the right strategy.",
     linkedin: "#",
     email: "aarav.singh@dynamiccampus.edu",
@@ -110,7 +111,8 @@ const facultyMembers = [
     name: "Dr. Nisha Verma",
     tagline: "MBBS, MD | Senior Biology Mentor",
     subjects: ["🧬 Biology", "📝 Exam Strategy"],
-    image: "/school-logo.png",
+    image: "/images/dynamic_coaching-logo.jpeg",
+    team: "coaching",
     quote: "Understand life, and Biology becomes beautifully logical.",
     linkedin: "#",
     email: "nisha.verma@dynamiccampus.edu",
@@ -119,7 +121,8 @@ const facultyMembers = [
     name: "Ritika Sinha",
     tagline: "M.A. English | 9+ Yrs Classroom Excellence",
     subjects: ["📚 English", "🗣️ Communication"],
-    image: "/school-logo.png",
+    image: "/images/dynamic_school-logo.jpeg",
+    team: "school",
     quote: "Language is confidence in action—inside and outside exams.",
     linkedin: "#",
     email: "ritika.sinha@dynamiccampus.edu",
@@ -128,7 +131,8 @@ const facultyMembers = [
     name: "Kunal Raj",
     tagline: "M.Sc. Chemistry | 11+ Yrs Board Excellence",
     subjects: ["🧪 Chemistry", "📊 Test Analysis"],
-    image: "/school-logo.png",
+    image: "/images/dynamic_coaching-logo.jpeg",
+    team: "coaching",
     quote: "Smart revision and error logs can transform your final score.",
     linkedin: "#",
     email: "kunal.raj@dynamiccampus.edu",
@@ -137,7 +141,8 @@ const facultyMembers = [
     name: "Pooja Mehta",
     tagline: "M.Ed. | 8+ Yrs Foundation Pedagogy",
     subjects: ["✏️ Maths Foundation", "🎯 NTSE Basics"],
-    image: "/school-logo.png",
+    image: "/images/dynamic_school-logo.jpeg",
+    team: "school",
     quote: "Strong basics in middle school create top performers later.",
     linkedin: "#",
     email: "pooja.mehta@dynamiccampus.edu",
@@ -146,17 +151,21 @@ const facultyMembers = [
     name: "Aditya Prakash",
     tagline: "B.Tech NIT | 7+ Yrs Quant Mentorship",
     subjects: ["➗ Mathematics", "🧠 Problem Solving"],
-    image: "/school-logo.png",
+    image: "/images/dynamic_coaching-logo.jpeg",
+    team: "coaching",
     quote: "Great ranks come from daily precision, not last-minute pressure.",
     linkedin: "#",
     email: "aditya.prakash@dynamiccampus.edu",
   },
 ];
 
+const schoolFacultyMembers = facultyMembers.filter((member) => member.team === "school");
+const coachingFacultyMembers = facultyMembers.filter((member) => member.team === "coaching");
+
 const directorProfile = {
   name: "Dr. Tarkeshwar Thakur, Ph.D.",
   role: "Director, Dynamic Campus",
-  image: "/school-logo.png",
+  image: "/images/director_coaching.jpeg",
 };
 
 const isValidExternalLink = (url) => typeof url === "string" && url.startsWith("http");
@@ -342,117 +351,126 @@ const AboutPage = () => {
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         >
           <h2 className="text-3xl font-bold text-slate-800">Learn from the Best</h2>
-          <p className="mt-2 max-w-3xl text-sm text-slate-600">Our highly qualified and experienced educators.</p>
+          <p className="mt-2 max-w-3xl text-sm text-slate-600">Dedicated teacher teams for Public School and Coaching Centre.</p>
         </motion.div>
 
-        <div className="mt-6 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-          {facultyMembers.map((teacher, index) => (
-            <motion.article
-              key={teacher.name}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.55, delay: index * 0.06, ease: [0.22, 1, 0.36, 1] }}
-              className="group overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-lg shadow-slate-900/5"
-              style={{ perspective: 1200 }}
-              animate="rest"
-              whileHover="hover"
-            >
-              <motion.div
-                variants={{
-                  rest: { rotateY: 0 },
-                  hover: { rotateY: 180 },
-                }}
-                transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-                className="relative"
-                style={{ transformStyle: "preserve-3d" }}
-              >
-                <div style={{ backfaceVisibility: "hidden" }}>
-                  <div className="relative h-44 overflow-hidden sm:h-48">
-                    <motion.img
-                      src={teacher.image}
-                      alt={teacher.name}
-                      loading="lazy"
-                      className="h-full w-full object-cover"
-                      whileHover={{ scale: 1.06 }}
-                      transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                    />
+        {[{ key: "school", title: "Dynamic Public School Team", members: schoolFacultyMembers }, { key: "coaching", title: "Dynamic Coaching Centre Team", members: coachingFacultyMembers }].map(
+          (teamBlock) => (
+            <div key={teamBlock.key} className="mt-6">
+              <div className="mb-3 inline-flex rounded-full border border-indigo-200 bg-indigo-50 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-indigo-700">
+                {teamBlock.title}
+              </div>
+              <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+                {teamBlock.members.map((teacher, index) => (
+                  <motion.article
+                    key={`${teamBlock.key}-${teacher.name}`}
+                    initial={{ opacity: 0, y: 24 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, amount: 0.2 }}
+                    transition={{ duration: 0.55, delay: index * 0.06, ease: [0.22, 1, 0.36, 1] }}
+                    className="group overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-lg shadow-slate-900/5"
+                    style={{ perspective: 1200 }}
+                    animate="rest"
+                    whileHover="hover"
+                  >
                     <motion.div
-                      initial={{ y: 42, opacity: 0 }}
-                      whileHover={{ y: 0, opacity: 1 }}
-                      transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                      className="pointer-events-none absolute inset-x-3 bottom-3 hidden rounded-2xl border border-white/30 bg-slate-900/45 p-3 text-white backdrop-blur-md md:block"
+                      variants={{
+                        rest: { rotateY: 0 },
+                        hover: { rotateY: 180 },
+                      }}
+                      transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+                      className="relative"
+                      style={{ transformStyle: "preserve-3d" }}
                     >
-                      <p className="text-xs leading-relaxed">“{teacher.quote}”</p>
-                    </motion.div>
-                  </div>
-
-                  <div className="p-4">
-                    <h3 className="text-lg font-bold text-slate-800">{teacher.name}</h3>
-                    <p className="mt-1 text-sm text-slate-500">{teacher.tagline}</p>
-                    <div className="mt-3 flex flex-wrap gap-2">
-                      {teacher.subjects.map((subject) => (
-                        <span
-                          key={subject}
-                          className="rounded-full bg-indigo-100 px-3 py-1 text-xs font-semibold text-indigo-700"
-                        >
-                          {subject}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                <div
-                  className="absolute inset-0 rounded-3xl bg-gradient-to-br from-indigo-900 via-slate-900 to-indigo-950 p-4 text-white"
-                  style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
-                >
-                  <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-white/20 bg-white/10 p-3 backdrop-blur-md">
-                    <p className="text-sm font-semibold text-indigo-100">{teacher.name}</p>
-                    <p className="mt-1 text-[11px] text-slate-200">{teacher.tagline}</p>
-                    <p className="mt-3 text-xs leading-relaxed text-slate-100">“{teacher.quote}”</p>
-                    <div className="mt-3 flex flex-wrap gap-1.5">
-                      {teacher.subjects.map((subject) => (
-                        <span key={subject} className="rounded-full bg-white/15 px-2 py-1 text-[10px] font-semibold text-indigo-100">
-                          {subject}
-                        </span>
-                      ))}
-                    </div>
-                    <div className="mt-auto pt-3">
-                      <div className="flex items-center gap-2">
-                        {isValidExternalLink(teacher.linkedin) ? (
-                          <a
-                            href={teacher.linkedin}
-                            target="_blank"
-                            rel="noreferrer"
-                            aria-label={`${teacher.name} LinkedIn`}
-                            className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/25 bg-white/10 transition hover:bg-white/25"
+                      <div style={{ backfaceVisibility: "hidden" }}>
+                        <div className="relative h-44 overflow-hidden sm:h-48">
+                          <motion.img
+                            src={teacher.image}
+                            alt={teacher.name}
+                            loading="lazy"
+                            className="h-full w-full object-cover"
+                            whileHover={{ scale: 1.06 }}
+                            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                          />
+                          <motion.div
+                            initial={{ y: 42, opacity: 0 }}
+                            whileHover={{ y: 0, opacity: 1 }}
+                            transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                            className="pointer-events-none absolute inset-x-3 bottom-3 hidden rounded-2xl border border-white/30 bg-slate-900/45 p-3 text-white backdrop-blur-md md:block"
                           >
-                            <Linkedin size={14} />
-                          </a>
-                        ) : (
-                          <span
-                            aria-label={`${teacher.name} LinkedIn unavailable`}
-                            className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/60"
-                          >
-                            <Linkedin size={14} />
-                          </span>
-                        )}
-                        <a
-                          href={`mailto:${teacher.email}`}
-                          aria-label={`${teacher.name} Email`}
-                          className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/25 bg-white/10 transition hover:bg-white/25"
-                        >
-                          <Mail size={14} />
-                        </a>
+                            <p className="text-xs leading-relaxed">“{teacher.quote}”</p>
+                          </motion.div>
+                        </div>
+
+                        <div className="p-4">
+                          <h3 className="text-lg font-bold text-slate-800">{teacher.name}</h3>
+                          <p className="mt-1 text-sm text-slate-500">{teacher.tagline}</p>
+                          <div className="mt-3 flex flex-wrap gap-2">
+                            {teacher.subjects.map((subject) => (
+                              <span
+                                key={subject}
+                                className="rounded-full bg-indigo-100 px-3 py-1 text-xs font-semibold text-indigo-700"
+                              >
+                                {subject}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            </motion.article>
-          ))}
-        </div>
+
+                      <div
+                        className="absolute inset-0 rounded-3xl bg-gradient-to-br from-indigo-900 via-slate-900 to-indigo-950 p-4 text-white"
+                        style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
+                      >
+                        <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-white/20 bg-white/10 p-3 backdrop-blur-md">
+                          <p className="text-sm font-semibold text-indigo-100">{teacher.name}</p>
+                          <p className="mt-1 text-[11px] text-slate-200">{teacher.tagline}</p>
+                          <p className="mt-3 text-xs leading-relaxed text-slate-100">“{teacher.quote}”</p>
+                          <div className="mt-3 flex flex-wrap gap-1.5">
+                            {teacher.subjects.map((subject) => (
+                              <span key={subject} className="rounded-full bg-white/15 px-2 py-1 text-[10px] font-semibold text-indigo-100">
+                                {subject}
+                              </span>
+                            ))}
+                          </div>
+                          <div className="mt-auto pt-3">
+                            <div className="flex items-center gap-2">
+                              {isValidExternalLink(teacher.linkedin) ? (
+                                <a
+                                  href={teacher.linkedin}
+                                  target="_blank"
+                                  rel="noreferrer"
+                                  aria-label={`${teacher.name} LinkedIn`}
+                                  className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/25 bg-white/10 transition hover:bg-white/25"
+                                >
+                                  <Linkedin size={14} />
+                                </a>
+                              ) : (
+                                <span
+                                  aria-label={`${teacher.name} LinkedIn unavailable`}
+                                  className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/60"
+                                >
+                                  <Linkedin size={14} />
+                                </span>
+                              )}
+                              <a
+                                href={`mailto:${teacher.email}`}
+                                aria-label={`${teacher.name} Email`}
+                                className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/25 bg-white/10 transition hover:bg-white/25"
+                              >
+                                <Mail size={14} />
+                              </a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </motion.div>
+                  </motion.article>
+                ))}
+              </div>
+            </div>
+          )
+        )}
       </section>
 
       <section className="mt-10">

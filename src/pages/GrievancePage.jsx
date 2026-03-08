@@ -32,7 +32,7 @@ const GrievancePage = () => {
           </div>
           <div className="flex items-center gap-2 rounded-xl border border-slate-200 p-3">
             <Phone className="h-4 w-4 text-slate-700" />
-            <a href="tel:+919876543210" className="hover:text-blue-700">+91 98765 43210</a>
+            <a href="tel:+919630020827" className="hover:text-blue-700">+91 96300 20827</a>
           </div>
           <div className="flex items-center gap-2 rounded-xl border border-slate-200 p-3">
             <Mail className="h-4 w-4 text-slate-700" />

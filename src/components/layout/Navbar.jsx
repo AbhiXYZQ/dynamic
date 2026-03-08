@@ -182,7 +182,7 @@ const Navbar = () => {
 
         <Link to="/" className="group relative z-10 flex items-center gap-3">
           <span className="interactive-card flex h-11 w-11 items-center justify-center overflow-hidden rounded-2xl border border-white/40 bg-white shadow-lg">
-            <img src="/school-logo.png" alt="Dynamic Campus logo" className="h-full w-full object-cover" loading="eager" />
+            <img src="/images/dynamic_school-logo.jpeg" alt="Dynamic Campus logo" className="h-full w-full object-cover" loading="eager" />
           </span>
           <div>
             <p className={`text-sm font-semibold tracking-wide md:text-base ${theme.brandText}`}>Dynamic Campus</p>

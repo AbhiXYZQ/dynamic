@@ -19,7 +19,9 @@ import {
 const googleMapsLink =
   "https://www.google.com/maps/place/Dynamic+Coaching+Centre/@25.6889321,85.2268559,17z/data=!3m1!4b1!4m6!3m5!1s0x39ed5c2d3b4dc341:0x1d8aa75e8c262822!8m2!3d25.6889321!4d85.2294308!16s%2Fg%2F11f_q60bnn?entry=ttu&g_ep=EgoyMDI2MDMwMS4xIKXMDSoASAFQAw%3D%3D";
 const googleMapsEmbed = "https://www.google.com/maps?q=25.6889321,85.2294308&z=17&output=embed";
-const enquiryWhatsApp = "919876543210";
+const enquiryWhatsApp = "919630020827";
+const enquiryEmail = "dynamichjp@gmail.com";
+const enquiryApiUrl = `https://formsubmit.co/ajax/${enquiryEmail}`;
 
 const contactCards = [
   {
@@ -29,17 +31,17 @@ const contactCards = [
   },
   {
     title: "Phone (School)",
-    value: "+91 98765 43210",
+    value: "+91 96300 20827",
     icon: Phone,
   },
   {
     title: "Phone (Coaching)",
-    value: "+91 91234 56789",
+    value: "+91 96300 20827",
     icon: Phone,
   },
   {
     title: "Email",
-    value: "info@dynamiccampus.in",
+    value: enquiryEmail,
     icon: Mail,
   },
 ];
@@ -66,27 +68,59 @@ const ContactPage = () => {
     message: "",
   });
   const [showActions, setShowActions] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState({ type: "", message: "" });
 
   const handleChange = (event) => {
     const { id, value } = event.target;
     setFormData((prev) => ({ ...prev, [id]: value }));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     if (!formData.studentName || !formData.parentName || !formData.phoneNumber || !formData.courseClass) {
       return;
     }
 
-    setShowActions(true);
+    try {
+      setIsSubmitting(true);
+      setSubmitStatus({ type: "", message: "" });
+
+      const response = await fetch(enquiryApiUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          _subject: "New Admission Enquiry - Dynamic Campus",
+          studentName: formData.studentName,
+          parentName: formData.parentName,
+          phoneNumber: formData.phoneNumber,
+          courseClass: formData.courseClass,
+          message: formData.message || "Not provided",
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Unable to submit enquiry right now.");
+      }
+
+      setShowActions(true);
+      setSubmitStatus({ type: "success", message: "Enquiry sent successfully to our admission team." });
+    } catch (error) {
+      setSubmitStatus({ type: "error", message: "Submission failed. Please try again or use WhatsApp/Email below." });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const enquiryText = encodeURIComponent(
     `Hello Dynamic Campus,\nStudent: ${formData.studentName}\nParent: ${formData.parentName}\nPhone: ${formData.phoneNumber}\nProgram: ${formData.courseClass}\nQuery: ${formData.message || "Not provided"}`
   );
   const whatsappUrl = `https://wa.me/${enquiryWhatsApp}?text=${enquiryText}`;
-  const mailtoUrl = `mailto:info@dynamiccampus.in?subject=New%20Admission%20Enquiry&body=${enquiryText}`;
+  const mailtoUrl = `mailto:${enquiryEmail}?subject=New%20Admission%20Enquiry&body=${enquiryText}`;
 
   return (
     <section className="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
@@ -302,10 +336,23 @@ const ContactPage = () => {
 
             <button
               type="submit"
+              disabled={isSubmitting}
               className="inline-flex w-full items-center justify-center rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition-transform duration-200 hover:scale-[1.02] hover:bg-blue-700 active:scale-95"
             >
-              Submit Enquiry
+              {isSubmitting ? "Sending..." : "Submit Enquiry"}
             </button>
+
+            {submitStatus.message && (
+              <div
+                className={`rounded-xl border px-4 py-2.5 text-xs font-medium ${
+                  submitStatus.type === "success"
+                    ? "border-emerald-200 bg-emerald-50 text-emerald-700"
+                    : "border-rose-200 bg-rose-50 text-rose-700"
+                }`}
+              >
+                {submitStatus.message}
+              </div>
+            )}
 
             {showActions && (
               <div className="space-y-3 rounded-xl border border-emerald-200 bg-emerald-50 p-4">

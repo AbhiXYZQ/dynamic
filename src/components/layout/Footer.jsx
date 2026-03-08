@@ -85,7 +85,12 @@ const Footer = () => {
             <div className="space-y-4">
               <div className="flex items-center gap-3">
                 <span className="interactive-card flex h-11 w-11 items-center justify-center overflow-hidden rounded-2xl border border-white/25 bg-white shadow-lg shadow-emerald-900/30">
-                  <img src="/school-logo.png" alt="Dynamic Campus logo" className="h-full w-full object-cover" loading="eager" />
+                  <img
+                    src="/images/dynamic_school-logo.jpeg"
+                    alt="Dynamic Campus logo"
+                    className="h-full w-full object-cover"
+                    loading="eager"
+                  />
                 </span>
                 <div>
                   <h3 className="text-base font-bold text-white">Dynamic Campus</h3>
@@ -155,8 +160,8 @@ const Footer = () => {
                 </li>
                 <li className="flex items-center gap-2">
                   <Phone size={16} className="text-emerald-400" />
-                  <a href="tel:+919876543210" className="interactive-link inline-flex hover:text-emerald-300">
-                    +91 98765 43210
+                  <a href="tel:+919630020827" className="interactive-link inline-flex hover:text-emerald-300">
+                    +91 96300 20827
                   </a>
                 </li>
                 <li className="flex items-center gap-2">

@@ -60,7 +60,7 @@ const PrivacyPolicyPage = () => {
           <div>
             <h2 className="text-base font-semibold text-slate-900">6. Contact for Privacy Requests</h2>
             <p className="mt-1">
-              Email: info@dynamiccampus.in | Phone: +91 98765 43210
+              Email: info@dynamiccampus.in | Phone: +91 96300 20827
             </p>
           </div>
         </div>

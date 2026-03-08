@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   BookOpen,
@@ -14,12 +14,34 @@ import {
   Smartphone,
   Trophy,
 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 
 const tabs = [
   { id: "school", label: "Dynamic Public School", icon: School2 },
   { id: "coaching", label: "Dynamic Coaching Centre", icon: GraduationCap },
 ];
+
+const logoByTab = {
+  school: "/images/dynamic_school-logo.jpeg",
+  coaching: "/images/dynamic_coaching-logo.jpeg",
+};
+
+const directorsByWing = {
+  school: {
+    name: "Director, Dynamic Public School",
+    title: "School Wing Director",
+    subtitle: "Dynamic Public School",
+    message: "Leading foundational learning with discipline, values, and joyful classroom experiences.",
+    image: "/images/director_school.jpeg",
+  },
+  coaching: {
+    name: "Director, Dynamic Coaching Centre",
+    title: "Coaching Wing Director",
+    subtitle: "Dynamic Coaching Centre",
+    message: "Driving board-focused excellence with data-backed practice and strong academic mentoring.",
+    image: "/images/director_coaching.jpeg",
+  },
+};
 
 const subjectIcons = [BookOpen, Microscope, Calculator, Trophy];
 
@@ -90,7 +112,16 @@ const tabContentVariants = {
 };
 
 const AcademicsPage = () => {
-  const [activeTab, setActiveTab] = useState("school");
+  const [searchParams] = useSearchParams();
+  const wingParam = searchParams.get("wing");
+  const initialTab = wingParam === "coaching" ? "coaching" : "school";
+  const [activeTab, setActiveTab] = useState(initialTab);
+
+  useEffect(() => {
+    if (wingParam === "school" || wingParam === "coaching") {
+      setActiveTab(wingParam);
+    }
+  }, [wingParam]);
 
   const isSchool = activeTab === "school";
 
@@ -126,6 +157,16 @@ const AcademicsPage = () => {
           <p className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wide ${accents.softBg} ${accents.text}`}>
             Academic Wing
           </p>
+          <div className="mt-3 flex justify-center">
+            <span className="inline-flex h-14 w-14 items-center justify-center overflow-hidden rounded-2xl border border-white/70 bg-white shadow-md">
+              <img
+                src={logoByTab[activeTab]}
+                alt={activeTab === "school" ? "Dynamic Public School logo" : "Dynamic Coaching Centre logo"}
+                className="h-full w-full object-cover"
+                loading="lazy"
+              />
+            </span>
+          </div>
           <h1 className={`mt-3 text-3xl font-bold tracking-tight sm:text-4xl ${accents.heading}`}>Academic Excellence</h1>
           <p className="mt-2 text-sm text-slate-600 sm:text-base">
             From Playgroup Foundation to Board Success
@@ -248,6 +289,39 @@ const AcademicsPage = () => {
                     </div>
                   ))}
                 </div>
+
+                <div className="grid gap-6 rounded-3xl border border-cyan-100 bg-white p-6 shadow-xl shadow-cyan-900/10 lg:grid-cols-2 lg:p-8">
+                  <motion.div
+                    animate={{ y: [0, -8, 0] }}
+                    transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
+                    className="overflow-hidden rounded-3xl border border-cyan-100 bg-gradient-to-br from-cyan-50 to-white p-4 shadow-lg shadow-cyan-900/10"
+                  >
+                    <div className="relative h-[320px] overflow-hidden rounded-2xl">
+                      <img
+                        src={directorsByWing.school.image}
+                        alt="Dynamic Public School director"
+                        className="h-full w-full object-cover"
+                        loading="lazy"
+                      />
+                      <div className="absolute inset-x-4 bottom-4 rounded-2xl border border-white/35 bg-slate-900/45 p-3 text-white backdrop-blur-md">
+                        <p className="text-sm font-semibold">{directorsByWing.school.name}</p>
+                        <p className="mt-0.5 text-xs text-slate-100">{directorsByWing.school.subtitle}</p>
+                      </div>
+                    </div>
+                  </motion.div>
+
+                  <div className="flex flex-col justify-center">
+                    <p className="text-sm font-semibold text-cyan-700">Director&apos;s Message</p>
+                    <h3 className="mt-2 text-3xl font-bold text-slate-900">{directorsByWing.school.title}</h3>
+                    <p className="mt-1 text-sm font-medium text-cyan-700">{directorsByWing.school.subtitle}</p>
+                    <p className="mt-4 text-sm leading-relaxed text-slate-600 md:text-base">
+                      {directorsByWing.school.message}
+                    </p>
+                    <p className="mt-4 text-sm leading-relaxed text-slate-600 md:text-base">
+                      We ensure every child receives individual attention, activity-based engagement, and value-driven guidance to grow with confidence.
+                    </p>
+                  </div>
+                </div>
               </motion.div>
             ) : (
               <motion.div
@@ -297,6 +371,39 @@ const AcademicsPage = () => {
                         {item}
                       </div>
                     ))}
+                  </div>
+                </div>
+
+                <div className="grid gap-6 rounded-3xl border border-blue-100 bg-white p-6 shadow-xl shadow-blue-950/10 lg:grid-cols-2 lg:p-8">
+                  <motion.div
+                    animate={{ y: [0, -8, 0] }}
+                    transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
+                    className="overflow-hidden rounded-3xl border border-blue-100 bg-gradient-to-br from-blue-50 to-white p-4 shadow-lg shadow-blue-950/10"
+                  >
+                    <div className="relative h-[320px] overflow-hidden rounded-2xl">
+                      <img
+                        src={directorsByWing.coaching.image}
+                        alt="Dynamic Coaching Centre director"
+                        className="h-full w-full object-cover"
+                        loading="lazy"
+                      />
+                      <div className="absolute inset-x-4 bottom-4 rounded-2xl border border-white/35 bg-slate-900/45 p-3 text-white backdrop-blur-md">
+                        <p className="text-sm font-semibold">{directorsByWing.coaching.name}</p>
+                        <p className="mt-0.5 text-xs text-slate-100">{directorsByWing.coaching.subtitle}</p>
+                      </div>
+                    </div>
+                  </motion.div>
+
+                  <div className="flex flex-col justify-center">
+                    <p className="text-sm font-semibold text-blue-800">Director&apos;s Message</p>
+                    <h3 className="mt-2 text-3xl font-bold text-slate-900">{directorsByWing.coaching.title}</h3>
+                    <p className="mt-1 text-sm font-medium text-blue-800">{directorsByWing.coaching.subtitle}</p>
+                    <p className="mt-4 text-sm leading-relaxed text-slate-600 md:text-base">
+                      {directorsByWing.coaching.message}
+                    </p>
+                    <p className="mt-4 text-sm leading-relaxed text-slate-600 md:text-base">
+                      Our focus remains on board outcomes, regular test analysis, and structured mentorship that helps students improve consistently.
+                    </p>
                   </div>
                 </div>
               </motion.div>
