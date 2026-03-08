@@ -27,7 +27,7 @@ const PrivacyPolicy = () => {
               <h2 className={sectionHeadingClass}>Information We Collect</h2>
               <p className={`${paragraphClass} mt-3`}>
                 We may collect personal details submitted through enquiry forms, including student or parent name,
-                phone number, and email address. This information is voluntarily provided by users who seek admission
+                phone number and email address. This information is voluntarily provided by users who seek admission
                 guidance or institutional communication.
               </p>
             </section>
@@ -36,7 +36,7 @@ const PrivacyPolicy = () => {
               <h2 className={sectionHeadingClass}>How We Use Your Info</h2>
               <p className={`${paragraphClass} mt-3`}>
                 Your information is used to contact you for admission counselling, answer academic queries, provide
-                enrollment updates, and share relevant notices related to school and coaching programs.
+                enrollment updates and share relevant notices related to school and coaching programs.
               </p>
             </section>
 
@@ -53,7 +53,7 @@ const PrivacyPolicy = () => {
               <h2 className={sectionHeadingClass}>Cookies Policy</h2>
               <p className={`${paragraphClass} mt-3`}>
                 This website may use essential cookies or similar technologies to improve browsing experience,
-                performance, and basic analytics. You can manage cookie preferences through browser settings. Disabling
+                performance and basic analytics. You can manage cookie preferences through browser settings. Disabling
                 some cookies may affect certain website features.
               </p>
             </section>

@@ -99,7 +99,7 @@ const Footer = () => {
               </div>
               <p className="text-sm leading-relaxed text-slate-400">
                 Building confident learners from early childhood to competitive excellence through
-                values, discipline, and modern teaching pedagogy.
+                values, discipline and modern teaching pedagogy.
               </p>
               <div className="flex items-center gap-2">
                 {socials.map((item) => (
@@ -166,8 +166,8 @@ const Footer = () => {
                 </li>
                 <li className="flex items-center gap-2">
                   <Mail size={16} className="text-emerald-400" />
-                  <a href="mailto:info@dynamiccampus.in" className="interactive-link inline-flex hover:text-emerald-300">
-                    info@dynamiccampus.in
+                  <a href="mailto:dynamichjp@gmail.com" className="interactive-link inline-flex hover:text-emerald-300">
+                    dynamichjp@gmail.com
                   </a>
                 </li>
               </ul>

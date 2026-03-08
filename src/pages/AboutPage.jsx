@@ -17,19 +17,19 @@ const missionVisionValues = [
   {
     title: "Our Mission",
     description:
-      "To nurture curious minds through disciplined learning systems, modern pedagogy, and deep conceptual clarity from foundation to competitive readiness.",
+      "To nurture curious minds through disciplined learning systems, modern pedagogy and deep conceptual clarity from foundation to competitive readiness.",
     icon: Target,
   },
   {
     title: "Our Vision",
     description:
-      "To become the most trusted educational ecosystem in Bihar where every learner receives quality mentorship, confidence, and direction for long-term success.",
+      "To become the most trusted educational ecosystem in Bihar where every learner receives quality mentorship, confidence and direction for long-term success.",
     icon: Eye,
   },
   {
     title: "Our Values",
     description:
-      "Integrity, consistency, student-first mentorship, and holistic development are at the core of every classroom practice and institutional decision.",
+      "Integrity, consistency, student-first mentorship and holistic development are at the core of every classroom practice and institutional decision.",
     icon: Shield,
   },
 ];
@@ -39,7 +39,7 @@ const legacyItems = [
     year: "2011",
     title: "Strengthening Core Academic Model",
     description:
-      "Structured pedagogy, daily discipline, and concept-first teaching started shaping consistent board outcomes.",
+      "Structured pedagogy, daily discipline and concept-first teaching started shaping consistent board outcomes.",
   },
   {
     year: "2014",
@@ -63,7 +63,7 @@ const legacyItems = [
     year: "2023",
     title: "Advanced Mentorship & Doubt Clinics",
     description:
-      "Dedicated doubt counters, micro-batch mentoring, and focused revision blocks improved rank conversion.",
+      "Dedicated doubt counters, micro-batch mentoring and focused revision blocks improved rank conversion.",
   },
   {
     year: "2026",
@@ -113,7 +113,7 @@ const facultyMembers = [
     subjects: ["🧬 Biology", "📝 Exam Strategy"],
     image: "/images/dynamic_coaching-logo.jpeg",
     team: "coaching",
-    quote: "Understand life, and Biology becomes beautifully logical.",
+    quote: "Understand life and Biology becomes beautifully logical.",
     linkedin: "#",
     email: "nisha.verma@dynamiccampus.edu",
   },
@@ -190,7 +190,7 @@ const AboutPage = () => {
           <h1 className="mt-5 text-4xl font-bold leading-tight md:text-5xl">27 Years of Excellence in Education</h1>
           <p className="mt-4 max-w-3xl text-sm leading-relaxed text-slate-200 md:text-base">
             Since 1999, Dynamic Campus has consistently delivered academic growth through disciplined systems,
-            dedicated mentorship, and a learning culture that balances strong values with modern outcomes.
+            dedicated mentorship and a learning culture that balances strong values with modern outcomes.
           </p>
         </motion.div>
         <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-indigo-400/25 blur-3xl" />
@@ -233,16 +233,16 @@ const AboutPage = () => {
           className="flex flex-col justify-center"
         >
           <p className="text-sm font-semibold text-indigo-700">Director&apos;s Message</p>
-          <h2 className="mt-2 text-3xl font-bold text-slate-900">Discipline, Direction, and Distinction</h2>
+          <h2 className="mt-2 text-3xl font-bold text-slate-900">Discipline, Direction and Distinction</h2>
           <p className="mt-4 text-sm leading-relaxed text-slate-600 md:text-base">
-            At Dynamic Campus, we believe true education is built on consistency, character, and clarity.
+            At Dynamic Campus, we believe true education is built on consistency, character and clarity.
             Our classrooms are designed to cultivate strong academic fundamentals while nurturing confidence,
-            communication, and values. Every student is guided with structured planning, regular assessment,
+            communication and values. Every student is guided with structured planning, regular assessment,
             and personalized mentorship so that learning is not only exam-focused, but life-enriching.
           </p>
           <p className="mt-4 text-sm leading-relaxed text-slate-600 md:text-base">
             Over the years, our commitment to disciplined systems and student-centered teaching has translated
-            into board achievements, competitive outcomes, and holistic growth. We remain dedicated to shaping
+            into board achievements, competitive outcomes and holistic growth. We remain dedicated to shaping
             responsible learners who are prepared for both opportunities and challenges ahead.
           </p>
           <p className="mt-6 text-lg italic text-slate-700">With best wishes,</p>
@@ -314,7 +314,7 @@ const AboutPage = () => {
             Milestone Journey
           </p>
           <h2 className="mt-3 text-3xl font-bold text-slate-900">27-Year Growth Timeline</h2>
-          <p className="mt-2 text-sm text-slate-600">A focused journey of innovation, trust, and measurable outcomes across 1999-2026.</p>
+          <p className="mt-2 text-sm text-slate-600">A focused journey of innovation, trust and measurable outcomes across 1999-2026.</p>
         </motion.div>
 
         <div className="relative mt-8">
@@ -514,7 +514,7 @@ const AboutPage = () => {
         >
           <BookOpen size={18} className="text-slate-800" />
           <p className="text-sm font-semibold text-slate-900 md:text-base">
-            Dynamic Campus continues to build a future-ready generation with discipline, excellence, and purpose.
+            Dynamic Campus continues to build a future-ready generation with discipline, excellence and purpose.
           </p>
         </motion.div>
       </section>

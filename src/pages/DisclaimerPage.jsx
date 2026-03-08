@@ -21,7 +21,7 @@ const DisclaimerPage = () => {
           <div>
             <h2 className="text-base font-semibold text-slate-900">1. No Guaranteed Results</h2>
             <p className="mt-1">
-              Academic outcomes depend on student effort, attendance, and multiple external factors. Past
+              Academic outcomes depend on student effort, attendance and multiple external factors. Past
               performance or testimonials do not guarantee future results.
             </p>
           </div>
@@ -38,14 +38,14 @@ const DisclaimerPage = () => {
             <h2 className="text-base font-semibold text-slate-900">3. Accuracy of Information</h2>
             <p className="mt-1">
               While we aim to keep all details accurate and updated, we make no warranties about completeness,
-              reliability, or timeliness of information.
+              reliability  or timeliness of information.
             </p>
           </div>
 
           <div>
             <h2 className="text-base font-semibold text-slate-900">4. Professional Advice</h2>
             <p className="mt-1">
-              Website content should not be treated as legal, financial, or official policy advice. For confirmed
+              Website content should not be treated as legal, financial  or official policy advice. For confirmed
               institute decisions, contact our office directly.
             </p>
           </div>

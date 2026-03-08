@@ -42,19 +42,19 @@ const heroSlides = [
   {
     title: "Dynamic Public School - Nurturing the Future",
     subtitle:
-      "A joyful and caring learning space where young minds build confidence, values, and strong academic foundations.",
+      "A joyful and caring learning space where young minds build confidence, values and strong academic foundations.",
     image: "/images/dynamic_school-logo.jpeg",
   },
   {
     title: "Dynamic Coaching Centre - Rank Makers of Bihar",
     subtitle:
-      "Structured classes, personalized mentorship, and data-driven practice that transforms effort into top ranks.",
+      "Structured classes, personalized mentorship and data-driven practice that transforms effort into top ranks.",
     image: "/images/dynamic_coaching-logo.jpeg",
   },
   {
     title: "State-of-the-Art Infrastructure",
     subtitle:
-      "Smart classrooms, hi-tech labs, and a focused campus ecosystem designed for modern, result-oriented education.",
+      "Smart classrooms, hi-tech labs and a focused campus ecosystem designed for modern, result-oriented education.",
     image: "/images/dynamic_school-logo.jpeg",
   },
 ];
@@ -64,7 +64,7 @@ const testimonials = [
     name: "Priya Kumari",
     role: "Parent, Dynamic Public School",
     quote:
-      "The school has created a nurturing environment where my child has become confident, expressive, and academically stronger every term.",
+      "The school has created a nurturing environment where my child has become confident, expressive and academically stronger every term.",
   },
   {
     name: "Rahul Singh",
@@ -76,7 +76,7 @@ const testimonials = [
     name: "Neha Sinha",
     role: "Parent, Class 12 Student",
     quote:
-      "What stands out is discipline with personal attention. Teachers are approachable, and progress reports are transparent and actionable.",
+      "What stands out is discipline with personal attention. Teachers are approachable and progress reports are transparent and actionable.",
   },
 ];
 
@@ -87,7 +87,7 @@ const wings = [
     logo: "/images/dynamic_school-logo.jpeg",
     subtitle: "Playgroup to Class 6",
     description:
-      "A joyful foundation with activity-based learning, life skills, values, communication building, and strong conceptual clarity from the early years.",
+      "A joyful foundation with activity-based learning, life skills, values, communication building and strong conceptual clarity from the early years.",
     points: ["Safe and caring campus", "Activity and project learning", "Foundation in English, Math, EVS"],
     cta: "Explore School Wing",
   },
@@ -97,7 +97,7 @@ const wings = [
     logo: "/images/dynamic_coaching-logo.jpeg",
     subtitle: "Class 7 to 12, Board & Foundation",
     description:
-      "Result-oriented academics with a competitive ecosystem, chapter-wise testing, doubt solving clinics, and focused mentorship for board and entrance exams.",
+      "Result-oriented academics with a competitive ecosystem, chapter-wise testing, doubt solving clinics and focused mentorship for board and entrance exams.",
     points: ["Regular tests and analytics", "Dedicated board-focused modules", "Performance tracking with mentorship"],
     cta: "Explore Coaching Wing",
   },
@@ -467,7 +467,7 @@ const Home = () => {
           </h2>
           <p className="mt-4 max-w-xl text-sm leading-relaxed text-slate-600 sm:text-base md:text-lg">
             From early childhood care to competitive exam mastery, Dynamic Campus empowers learners with
-            strong concepts, disciplined practice, and mentorship that drives measurable academic growth.
+            strong concepts, disciplined practice and mentorship that drives measurable academic growth.
           </p>
 
           <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
@@ -510,7 +510,7 @@ const Home = () => {
               <div className="rounded-2xl bg-gradient-to-br from-white to-emerald-50 p-4 sm:col-span-2">
                 <p className="text-xs font-semibold uppercase tracking-wide text-emerald-700">Result-Driven Culture</p>
                 <p className="mt-2 text-sm text-slate-600">
-                  Daily discipline, chapter-wise practice, and mentor-driven feedback loops for long-term success.
+                  Daily discipline, chapter-wise practice and mentor-driven feedback loops for long-term success.
                 </p>
               </div>
             </div>

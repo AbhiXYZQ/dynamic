@@ -14,22 +14,22 @@ const cardAnim = {
 const otherAchievements = [
   {
     title: "Olympiad Milestones",
-    summary: "State and national-level recognition in Maths, Science, and English Olympiads.",
+    summary: "State and national-level recognition in Maths, Science and English Olympiads.",
     highlights: ["42 District Merit Certificates", "11 State Rank Holders", "3 National Final Qualifiers"],
   },
   {
     title: "Sports Excellence",
-    summary: "Consistent podium finishes across athletics, kabaddi, and inter-school championships.",
+    summary: "Consistent podium finishes across athletics, kabaddi and inter-school championships.",
     highlights: ["6 District Gold Medals", "Inter-school Football Runner-up", "Annual Sports Meet Champions"],
   },
   {
     title: "Cultural & Co-curricular",
-    summary: "Outstanding student performances in debate, quiz, art, and stage events.",
+    summary: "Outstanding student performances in debate, quiz, art and stage events.",
     highlights: ["Debate League Winners", "Quiz Bowl Top 3", "Fine Arts Special Jury Award"],
   },
   {
     title: "Discipline & Attendance",
-    summary: "A strong culture of consistency, punctuality, and academic commitment.",
+    summary: "A strong culture of consistency, punctuality and academic commitment.",
     highlights: ["95%+ Attendance Club", "Best House Discipline Award", "Weekly Mentoring Excellence"],
   },
 ];
@@ -132,7 +132,7 @@ const Toppers = () => {
           <h2 className="text-2xl font-bold text-amber-100">Other Achievements</h2>
         </div>
         <p className="mt-2 text-sm text-slate-300">
-          Beyond board excellence, our learners continue to shine in competitive, cultural, and discipline-oriented milestones.
+          Beyond board excellence, our learners continue to shine in competitive, cultural and discipline-oriented milestones.
         </p>
 
         <div className="mt-6 grid gap-5 md:grid-cols-2">

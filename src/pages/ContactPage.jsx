@@ -132,7 +132,7 @@ const ContactPage = () => {
       >
         <h1 className="text-4xl font-bold tracking-tight md:text-5xl">Get in Touch</h1>
         <p className="mt-4 max-w-3xl text-sm text-slate-200 md:text-base">
-          We&apos;d love to hear from you. Reach out for admissions, queries, or just to say hello.
+          We&apos;d love to hear from you. Reach out for admissions, queries  or just to say hello.
         </p>
       </motion.div>
 
@@ -389,7 +389,7 @@ const ContactPage = () => {
         <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-lg shadow-slate-900/8">
           <h3 className="text-2xl font-bold text-slate-900">Connect With Us</h3>
           <p className="mt-2 text-sm text-slate-600">
-            Follow our latest updates, results, and admission notices on social platforms.
+            Follow our latest updates, results and admission notices on social platforms.
           </p>
 
           <div className="mt-5 flex flex-wrap gap-3">
@@ -421,7 +421,7 @@ const ContactPage = () => {
         <div className="rounded-3xl border border-blue-100 bg-blue-50/50 p-6 shadow-lg shadow-blue-900/8">
           <h3 className="text-2xl font-bold text-slate-900">Support & Timings</h3>
           <p className="mt-2 text-sm text-slate-600">
-            Dedicated assistance for admissions, class selection, and onboarding.
+            Dedicated assistance for admissions, class selection and onboarding.
           </p>
 
           <div className="mt-5 space-y-3">

@@ -28,14 +28,14 @@ const logoByTab = {
 
 const directorsByWing = {
   school: {
-    name: "Director, Dynamic Public School",
+    name: "Er. Ritesh Kumar",
     title: "School Wing Director",
     subtitle: "Dynamic Public School",
-    message: "Leading foundational learning with discipline, values, and joyful classroom experiences.",
+    message: "Leading foundational learning with discipline, values and joyful classroom experiences.",
     image: "/images/director_school.jpeg",
   },
   coaching: {
-    name: "Director, Dynamic Coaching Centre",
+    name: "Dr. Tarkeshwar Thakur",
     title: "Coaching Wing Director",
     subtitle: "Dynamic Coaching Centre",
     message: "Driving board-focused excellence with data-backed practice and strong academic mentoring.",
@@ -59,14 +59,14 @@ const schoolCurriculum = [
 const schoolFeatures = [
   { title: "No Bag Day", subtitle: "Hands-on, activity-focused school day", icon: CalendarDays },
   { title: "Smart Class", subtitle: "Visual and interactive classroom sessions", icon: MonitorPlay },
-  { title: "Parents App", subtitle: "Attendance, homework, and updates in one place", icon: Smartphone },
+  { title: "Parents App", subtitle: "Attendance, homework and updates in one place", icon: Smartphone },
 ];
 
 const coachingBatches = [
   {
     title: "Foundation (7-10)",
     focus: "NTSE/Olympiad focus",
-    detail: "Strong concepts, habit building, and analytical thinking.",
+    detail: "Strong concepts, habit building and analytical thinking.",
   },
   {
     title: "Target (11-12)",
@@ -76,7 +76,7 @@ const coachingBatches = [
   {
     title: "Achiever (Droppers)",
     focus: "Rank booster",
-    detail: "High-intensity revision, advanced tests, and mentoring.",
+    detail: "High-intensity revision, advanced tests and mentoring.",
   },
 ];
 
@@ -318,7 +318,7 @@ const AcademicsPage = () => {
                       {directorsByWing.school.message}
                     </p>
                     <p className="mt-4 text-sm leading-relaxed text-slate-600 md:text-base">
-                      We ensure every child receives individual attention, activity-based engagement, and value-driven guidance to grow with confidence.
+                      We ensure every child receives individual attention, activity-based engagement and value-driven guidance to grow with confidence.
                     </p>
                   </div>
                 </div>
@@ -402,7 +402,7 @@ const AcademicsPage = () => {
                       {directorsByWing.coaching.message}
                     </p>
                     <p className="mt-4 text-sm leading-relaxed text-slate-600 md:text-base">
-                      Our focus remains on board outcomes, regular test analysis, and structured mentorship that helps students improve consistently.
+                      Our focus remains on board outcomes, regular test analysis and structured mentorship that helps students improve consistently.
                     </p>
                   </div>
                 </div>

@@ -55,7 +55,7 @@ const seoConfig = {
   "/contact": {
     title: "Contact Dynamic Campus Hajipur | Admission Enquiry",
     description:
-      "Contact Dynamic Campus Hajipur for school and coaching admissions, fee details, and counselling support.",
+      "Contact Dynamic Campus Hajipur for school and coaching admissions, fee details and counselling support.",
     keywords:
       "Dynamic Campus Hajipur fee structure, school admission contact Hajipur, coaching enquiry in Hajipur",
     path: "/contact",
@@ -72,7 +72,7 @@ const seoConfig = {
   },
   "/privacy-policy": {
     title: "Privacy Policy | Dynamic Campus",
-    description: "Read how Dynamic Campus collects, uses, and protects your information.",
+    description: "Read how Dynamic Campus collects, uses and protects your information.",
     path: "/privacy-policy",
     robots: "index, follow"
   },

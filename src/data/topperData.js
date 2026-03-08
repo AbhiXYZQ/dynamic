@@ -109,7 +109,7 @@ export const topperGroups = [
   },
   {
     title: "CBSE Class 12 Toppers",
-    description: "CBSE Class 12 board achievers across Science, Commerce, and Humanities.",
+    description: "CBSE Class 12 board achievers across Science, Commerce and Humanities.",
     students: [
       {
         name: "Aditya Raj",

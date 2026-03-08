@@ -10,7 +10,7 @@ const notices = [
     title: "Class 10 Pre-Board Exam Schedule Released",
     date: "2026-03-15",
     category: "Exams",
-    description: "Check subject-wise dates, reporting timings, and exam hall guidelines for Class 10.",
+    description: "Check subject-wise dates, reporting timings and exam hall guidelines for Class 10.",
     isNew: true,
     downloadLink: "#",
   },
@@ -136,7 +136,7 @@ const NoticeBoard = () => {
       >
         <h1 className="text-3xl font-bold tracking-tight md:text-4xl">Notice Board & Updates</h1>
         <p className="mt-3 max-w-3xl text-sm text-slate-200 md:text-base">
-          Stay updated with the latest announcements, schedules, and downloads.
+          Stay updated with the latest announcements, schedules and downloads.
         </p>
       </motion.div>
 

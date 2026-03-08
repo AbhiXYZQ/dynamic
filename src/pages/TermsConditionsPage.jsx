@@ -29,7 +29,7 @@ const TermsConditionsPage = () => {
           <div>
             <h2 className="text-base font-semibold text-slate-900">2. Admission & Programme Information</h2>
             <p className="mt-1">
-              Course details, schedules, and eligibility shown online are indicative. Final admission decisions and
+              Course details, schedules and eligibility shown online are indicative. Final admission decisions and
               policies are governed by institute rules and official communication.
             </p>
           </div>
@@ -37,7 +37,7 @@ const TermsConditionsPage = () => {
           <div>
             <h2 className="text-base font-semibold text-slate-900">3. User Conduct</h2>
             <p className="mt-1">
-              Users must not misuse forms, submit false information, attempt unauthorized access, or disrupt
+              Users must not misuse forms, submit false information, attempt unauthorized access  or disrupt
               website functionality.
             </p>
           </div>
@@ -45,7 +45,7 @@ const TermsConditionsPage = () => {
           <div>
             <h2 className="text-base font-semibold text-slate-900">4. Intellectual Property</h2>
             <p className="mt-1">
-              Logos, design elements, text, and media on this site are the property of Dynamic Campus unless
+              Logos, design elements, text and media on this site are the property of Dynamic Campus unless
               otherwise stated. Unauthorized reproduction is prohibited.
             </p>
           </div>

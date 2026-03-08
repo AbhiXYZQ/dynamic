@@ -11,7 +11,7 @@ const GrievancePage = () => {
         className="rounded-3xl border border-slate-200 bg-white p-6 shadow-lg shadow-slate-900/5 sm:p-8"
       >
         <h1 className="text-3xl font-bold text-slate-900">Contact & Grievance Redressal</h1>
-        <p className="mt-2 text-sm text-slate-500">For legal notice, grievance, and complaint submissions</p>
+        <p className="mt-2 text-sm text-slate-500">For legal notice, grievance and complaint submissions</p>
 
         <div className="mt-6 grid gap-4 sm:grid-cols-2">
           <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
@@ -36,14 +36,14 @@ const GrievancePage = () => {
           </div>
           <div className="flex items-center gap-2 rounded-xl border border-slate-200 p-3">
             <Mail className="h-4 w-4 text-slate-700" />
-            <a href="mailto:info@dynamiccampus.in" className="hover:text-blue-700">info@dynamiccampus.in</a>
+            <a href="mailto:dynamichjp@gmail.com" className="hover:text-blue-700">dynamichjp@gmail.com</a>
           </div>
         </div>
 
         <div className="mt-6 rounded-2xl border border-blue-100 bg-blue-50/70 p-4 text-sm text-blue-900">
           <p className="font-semibold">Submission Note</p>
           <p className="mt-1">
-            Please include your full name, contact number, student details (if applicable), and relevant
+            Please include your full name, contact number, student details (if applicable) and relevant
             documents while raising a grievance or legal notice to ensure timely resolution.
           </p>
         </div>

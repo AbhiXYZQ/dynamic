@@ -15,13 +15,13 @@ const PrivacyPolicyPage = () => {
         <div className="mt-6 space-y-5 text-sm leading-relaxed text-slate-700">
           <p>
             Dynamic Campus ("we", "our", "us") respects your privacy. This policy explains how we collect,
-            use, store, and protect personal information shared through this website and admission enquiry forms.
+            use, store and protect personal information shared through this website and admission enquiry forms.
           </p>
 
           <div>
             <h2 className="text-base font-semibold text-slate-900">1. Information We Collect</h2>
             <p className="mt-1">
-              We may collect student name, parent name, phone number, class/program preference, and query details
+              We may collect student name, parent name, phone number, class/program preference and query details
               submitted through contact/enquiry forms.
             </p>
           </div>
@@ -60,7 +60,7 @@ const PrivacyPolicyPage = () => {
           <div>
             <h2 className="text-base font-semibold text-slate-900">6. Contact for Privacy Requests</h2>
             <p className="mt-1">
-              Email: info@dynamiccampus.in | Phone: +91 96300 20827
+              Email: dynamichjp@gmail.com | Phone: +91 96300 20827
             </p>
           </div>
         </div>

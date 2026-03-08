@@ -104,7 +104,7 @@ const GalleryPage = () => {
       >
         <h1 className="text-4xl font-bold tracking-tight md:text-5xl">Our Gallery</h1>
         <p className="mt-4 max-w-3xl text-sm text-slate-200 md:text-base">
-          Glimpses of life, learning, and massive success at Dynamic Campus.
+          Glimpses of life, learning and massive success at Dynamic Campus.
         </p>
       </motion.div>
 
