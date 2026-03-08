@@ -42,7 +42,7 @@ const eventImageSources = [
     ],
   },
   {
-    event: "Independence Day Event",
+    event: "Republic Day Event",
     folder: "independence-day_event",
     files: [
       "WhatsApp Image 2026-03-08 at 11.44.19 AM.jpeg",
