@@ -86,7 +86,7 @@ const Footer = () => {
               <div className="flex items-center gap-3">
                 <span className="interactive-card flex h-11 w-11 items-center justify-center overflow-hidden rounded-2xl border border-white/25 bg-white shadow-lg shadow-emerald-900/30">
                   <img
-                    src="/images/dynamic_school-logo.jpeg"
+                    src="/images/main_logo.png"
                     alt="Dynamic Campus logo"
                     className="h-full w-full object-cover"
                     loading="eager"
