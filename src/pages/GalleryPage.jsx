@@ -2,96 +2,141 @@ import { useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 
-const filters = ["All", "Campus", "Achievements", "Events"];
-
-const galleryImages = [
+const eventImageSources = [
   {
-    id: 1,
-    category: "Campus",
-    src: "/school-logo.png",
-    alt: "Modern campus building",
-    title: "Flagship Campus Block",
+    event: "Exam Prep Event",
+    folder: "exam-prep_event",
+    files: [
+      "WhatsApp Image 2026-03-08 at 11.42.41 AM (1).jpeg",
+      "WhatsApp Image 2026-03-08 at 11.42.41 AM.jpeg",
+      "WhatsApp Image 2026-03-08 at 11.42.42 AM (1).jpeg",
+      "WhatsApp Image 2026-03-08 at 11.42.42 AM.jpeg",
+      "WhatsApp Image 2026-03-08 at 11.42.43 AM (1).jpeg",
+      "WhatsApp Image 2026-03-08 at 11.42.43 AM.jpeg",
+      "WhatsApp Image 2026-03-08 at 11.42.44 AM.jpeg",
+    ],
   },
   {
-    id: 2,
-    category: "Achievements",
-    src: "/school-logo.png",
-    alt: "Students with medals",
-    title: "National Merit Recognition",
+    event: "Farewell Event",
+    folder: "farewell_event",
+    files: [
+      "WhatsApp Image 2026-03-08 at 11.40.23 AM.jpeg",
+      "WhatsApp Image 2026-03-08 at 11.40.24 AM.jpeg",
+      "WhatsApp Image 2026-03-08 at 11.40.25 AM (1).jpeg",
+      "WhatsApp Image 2026-03-08 at 11.40.25 AM.jpeg",
+      "WhatsApp Image 2026-03-08 at 11.40.26 AM (1).jpeg",
+      "WhatsApp Image 2026-03-08 at 11.40.26 AM (2).jpeg",
+      "WhatsApp Image 2026-03-08 at 11.40.26 AM.jpeg",
+    ],
   },
   {
-    id: 3,
-    category: "Events",
-    src: "/school-logo.png",
-    alt: "Classroom seminar session",
-    title: "Interactive Seminar Day",
+    event: "Holi Event",
+    folder: "holi_event",
+    files: [
+      "WhatsApp Image 2026-03-08 at 11.39.19 AM (1).jpeg",
+      "WhatsApp Image 2026-03-08 at 11.39.19 AM.jpeg",
+      "WhatsApp Image 2026-03-08 at 11.39.20 AM (1).jpeg",
+      "WhatsApp Image 2026-03-08 at 11.39.20 AM.jpeg",
+      "WhatsApp Image 2026-03-08 at 11.39.21 AM (1).jpeg",
+      "WhatsApp Image 2026-03-08 at 11.39.21 AM.jpeg",
+    ],
   },
   {
-    id: 4,
-    category: "Campus",
-    src: "/school-logo.png",
-    alt: "Students on campus lawn",
-    title: "Campus Life & Collaboration",
+    event: "Independence Day Event",
+    folder: "independence-day_event",
+    files: [
+      "WhatsApp Image 2026-03-08 at 11.44.19 AM.jpeg",
+      "WhatsApp Image 2026-03-08 at 11.44.20 AM (1).jpeg",
+      "WhatsApp Image 2026-03-08 at 11.44.20 AM (2).jpeg",
+      "WhatsApp Image 2026-03-08 at 11.44.20 AM.jpeg",
+      "WhatsApp Image 2026-03-08 at 11.44.21 AM (1).jpeg",
+      "WhatsApp Image 2026-03-08 at 11.44.21 AM (2).jpeg",
+      "WhatsApp Image 2026-03-08 at 11.44.21 AM.jpeg",
+      "WhatsApp Image 2026-03-08 at 11.44.22 AM.jpeg",
+      "WhatsApp Image 2026-03-08 at 11.44.23 AM (1).jpeg",
+      "WhatsApp Image 2026-03-08 at 11.44.23 AM.jpeg",
+      "WhatsApp Image 2026-03-08 at 11.44.24 AM (1).jpeg",
+      "WhatsApp Image 2026-03-08 at 11.44.24 AM.jpeg",
+      "WhatsApp Image 2026-03-08 at 11.44.25 AM.jpeg",
+      "WhatsApp Image 2026-03-08 at 11.44.26 AM.jpeg",
+      "WhatsApp Image 2026-03-08 at 11.44.28 AM (1).jpeg",
+      "WhatsApp Image 2026-03-08 at 11.44.28 AM.jpeg",
+      "WhatsApp Image 2026-03-08 at 11.44.29 AM (1).jpeg",
+      "WhatsApp Image 2026-03-08 at 11.44.29 AM (2).jpeg",
+      "WhatsApp Image 2026-03-08 at 11.44.29 AM.jpeg",
+      "WhatsApp Image 2026-03-08 at 11.44.30 AM (1).jpeg",
+      "WhatsApp Image 2026-03-08 at 11.44.30 AM.jpeg",
+    ],
   },
   {
-    id: 5,
-    category: "Events",
-    src: "/school-logo.png",
-    alt: "Annual event audience",
-    title: "Annual Celebration Moments",
-  },
-  {
-    id: 6,
-    category: "Achievements",
-    src: "/school-logo.png",
-    alt: "Award ceremony stage",
-    title: "Topper Felicitation Ceremony",
-  },
-  {
-    id: 7,
-    category: "Campus",
-    src: "/school-logo.png",
-    alt: "Academic block corridor",
-    title: "Premium Learning Infrastructure",
-  },
-  {
-    id: 8,
-    category: "Events",
-    src: "/school-logo.png",
-    alt: "Students performing on stage",
-    title: "Cultural Showcase Highlights",
-  },
-  {
-    id: 9,
-    category: "Achievements",
-    src: "/school-logo.png",
-    alt: "Graduation success visual",
-    title: "Massive Success Milestones",
+    event: "Sports Day Event",
+    folder: "Sports-day_event",
+    files: [
+      "WhatsApp Image 2026-03-08 at 11.41.56 AM (1).jpeg",
+      "WhatsApp Image 2026-03-08 at 11.41.56 AM.jpeg",
+      "WhatsApp Image 2026-03-08 at 11.41.57 AM (1).jpeg",
+      "WhatsApp Image 2026-03-08 at 11.41.57 AM.jpeg",
+      "WhatsApp Image 2026-03-08 at 11.41.59 AM (1).jpeg",
+      "WhatsApp Image 2026-03-08 at 11.41.59 AM.jpeg",
+      "WhatsApp Image 2026-03-08 at 11.42.00 AM (1).jpeg",
+      "WhatsApp Image 2026-03-08 at 11.42.00 AM.jpeg",
+      "WhatsApp Image 2026-03-08 at 11.42.01 AM (1).jpeg",
+      "WhatsApp Image 2026-03-08 at 11.42.01 AM.jpeg",
+      "WhatsApp Video 2026-03-08 at 11.42.00 AM.mp4",
+      "WhatsApp Video 2026-03-08 at 11.42.01 AM.mp4",
+    ],
   },
 ];
 
+const galleryImages = eventImageSources.flatMap((source) =>
+  source.files
+    .filter((file) => /\.(jpg|jpeg|png|webp|gif|avif)$/i.test(file))
+    .map((file, fileIndex) => ({
+      id: `${source.folder}-${fileIndex + 1}`,
+      event: source.event,
+      category: "Event",
+      src: encodeURI(`/images/${source.folder}/${file}`),
+      alt: `${source.event} photo ${fileIndex + 1}`,
+      title: `${source.event} - Photo ${fileIndex + 1}`,
+    }))
+);
+
 const GalleryPage = () => {
-  const [activeFilter, setActiveFilter] = useState("All");
+  const [selectedEvent, setSelectedEvent] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
 
-  const filteredImages = useMemo(() => {
-    if (activeFilter === "All") return galleryImages;
-    return galleryImages.filter((image) => image.category === activeFilter);
-  }, [activeFilter]);
+  const groupedByEvent = useMemo(() => {
+    return galleryImages.reduce((groups, image) => {
+      if (!groups[image.event]) {
+        groups[image.event] = [];
+      }
+      groups[image.event].push(image);
+      return groups;
+    }, {});
+  }, []);
 
-  const selectedIndex = filteredImages.findIndex((image) => image.id === selectedImage);
-  const selectedImageData = selectedIndex >= 0 ? filteredImages[selectedIndex] : null;
+  const eventSections = useMemo(() => {
+    return Object.entries(groupedByEvent).map(([event, images]) => ({ event, images }));
+  }, [groupedByEvent]);
+
+  const selectedEventImages = useMemo(() => {
+    if (!selectedEvent || !groupedByEvent[selectedEvent]) return [];
+    return groupedByEvent[selectedEvent];
+  }, [selectedEvent, groupedByEvent]);
+
+  const selectedIndex = selectedEventImages.findIndex((image) => image.id === selectedImage);
+  const selectedImageData = selectedIndex >= 0 ? selectedEventImages[selectedIndex] : null;
 
   const handlePrev = () => {
-    if (!filteredImages.length || selectedIndex < 0) return;
-    const nextIndex = (selectedIndex - 1 + filteredImages.length) % filteredImages.length;
-    setSelectedImage(filteredImages[nextIndex].id);
+    if (!selectedEventImages.length || selectedIndex < 0) return;
+    const nextIndex = (selectedIndex - 1 + selectedEventImages.length) % selectedEventImages.length;
+    setSelectedImage(selectedEventImages[nextIndex].id);
   };
 
   const handleNext = () => {
-    if (!filteredImages.length || selectedIndex < 0) return;
-    const nextIndex = (selectedIndex + 1) % filteredImages.length;
-    setSelectedImage(filteredImages[nextIndex].id);
+    if (!selectedEventImages.length || selectedIndex < 0) return;
+    const nextIndex = (selectedIndex + 1) % selectedEventImages.length;
+    setSelectedImage(selectedEventImages[nextIndex].id);
   };
 
   return (
@@ -104,98 +149,60 @@ const GalleryPage = () => {
       >
         <h1 className="text-4xl font-bold tracking-tight md:text-5xl">Our Gallery</h1>
         <p className="mt-4 max-w-3xl text-sm text-slate-200 md:text-base">
-          Glimpses of life, learning and massive success at Dynamic Campus.
+          Explore all major events in separate sections for easy browsing.
         </p>
       </motion.div>
 
-      <div className="mt-8 flex flex-wrap items-center justify-center gap-2">
-        {filters.map((filter) => (
-          <button
-            key={filter}
-            type="button"
-            onClick={() => setActiveFilter(filter)}
-            className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
-              activeFilter === filter
-                ? "bg-blue-600 text-white shadow-lg shadow-blue-900/25"
-                : "bg-slate-100 text-slate-600 hover:bg-slate-200"
-            }`}
+      <div className="mt-8 space-y-10">
+        {eventSections.map((section, sectionIndex) => (
+          <motion.div
+            key={section.event}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.15 }}
+            transition={{ duration: 0.55, delay: sectionIndex * 0.04 }}
+            className="rounded-3xl border border-slate-200 bg-white p-4 shadow-md shadow-slate-900/5 sm:p-6"
           >
-            {filter}
-          </button>
+            <div className="mb-4 flex items-center justify-between gap-3">
+              <h2 className="text-xl font-bold text-slate-900 sm:text-2xl">{section.event}</h2>
+              <span className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-600 sm:text-sm">
+                {section.images.length} Photos
+              </span>
+            </div>
+
+            <motion.div layout className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 lg:grid-cols-4">
+              <AnimatePresence mode="popLayout">
+                {section.images.map((image) => (
+                  <motion.button
+                    key={`gallery-${image.id}`}
+                    layout
+                    initial={{ opacity: 0, scale: 0.94, y: 10 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.94, y: -8 }}
+                    transition={{ duration: 0.28 }}
+                    type="button"
+                    onClick={() => {
+                      setSelectedEvent(section.event);
+                      setSelectedImage(image.id);
+                    }}
+                    aria-label={`Open ${image.title}`}
+                    className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white text-left shadow-sm shadow-slate-900/10"
+                  >
+                    <div className="relative aspect-[4/5] overflow-hidden bg-slate-100 sm:aspect-[4/3]">
+                      <img
+                        src={image.src}
+                        alt={image.alt}
+                        loading="lazy"
+                        className="h-full w-full object-cover transition duration-700 group-hover:scale-110"
+                      />
+                    </div>
+                  </motion.button>
+                ))}
+              </AnimatePresence>
+            </motion.div>
+          </motion.div>
         ))}
       </div>
-
-      <motion.div layout className="mt-8 sm:hidden">
-        <div className="mb-3 flex items-center justify-between px-1">
-          <p className="text-sm font-semibold text-slate-700">Mobile Gallery View</p>
-          <p className="text-xs text-slate-500">Tap any photo to open</p>
-        </div>
-
-        <div className="space-y-4">
-          <AnimatePresence mode="popLayout">
-            {filteredImages.map((image) => (
-              <motion.button
-                key={`mobile-${image.id}`}
-                layout
-                initial={{ opacity: 0, scale: 0.92, y: 14 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.92, y: -10 }}
-                transition={{ duration: 0.3 }}
-                type="button"
-                onClick={() => setSelectedImage(image.id)}
-                className="group relative w-full overflow-hidden rounded-3xl border border-slate-200 bg-white text-left shadow-md shadow-slate-900/8"
-              >
-                <div className="relative overflow-hidden bg-slate-100">
-                  <img
-                    src={image.src}
-                    alt={image.alt}
-                    loading="lazy"
-                    className="h-auto w-full object-contain transition duration-700 group-hover:scale-105"
-                  />
-                </div>
-
-                <div className="absolute inset-x-3 bottom-3 rounded-2xl border border-white/30 bg-white/20 p-3 text-white backdrop-blur-md">
-                  <p className="text-sm font-semibold leading-snug">{image.title}</p>
-                  <p className="mt-0.5 text-xs text-white/90">{image.category}</p>
-                </div>
-              </motion.button>
-            ))}
-          </AnimatePresence>
-        </div>
-      </motion.div>
-
-      <motion.div layout className="mt-8 hidden grid-cols-2 gap-6 sm:grid md:grid-cols-3 lg:grid-cols-4">
-        <AnimatePresence mode="popLayout">
-          {filteredImages.map((image) => (
-            <motion.button
-              key={`desktop-${image.id}`}
-              layout
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.8 }}
-              transition={{ duration: 0.3 }}
-              type="button"
-              onClick={() => setSelectedImage(image.id)}
-              aria-label={`Open ${image.title}`}
-              className="group relative overflow-hidden rounded-3xl border border-slate-200 bg-white text-left shadow-md shadow-slate-900/8"
-            >
-              <div className="relative aspect-[4/3] overflow-hidden bg-slate-100">
-                <img
-                  src={image.src}
-                  alt={image.alt}
-                  loading="lazy"
-                  className="h-full w-full object-contain transition duration-700 group-hover:scale-110"
-                />
-              </div>
-
-              <div className="pointer-events-none absolute inset-x-3 bottom-3 translate-y-[120%] rounded-2xl border border-white/30 bg-white/20 p-3 text-white opacity-0 backdrop-blur-md transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
-                <p className="text-sm font-semibold">{image.title}</p>
-                <p className="mt-0.5 text-xs text-white/90">{image.category}</p>
-              </div>
-            </motion.button>
-          ))}
-        </AnimatePresence>
-      </motion.div>
 
       <AnimatePresence>
         {selectedImageData && (
@@ -239,10 +246,6 @@ const GalleryPage = () => {
                 alt={selectedImageData.alt}
                 className="max-h-[80vh] w-full object-contain"
               />
-              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/75 via-black/40 to-transparent p-5 text-white">
-                <p className="text-base font-semibold sm:text-lg">{selectedImageData.title}</p>
-                <p className="text-xs text-white/85 sm:text-sm">{selectedImageData.category}</p>
-              </div>
             </motion.div>
 
             <button
