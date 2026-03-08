@@ -43,19 +43,19 @@ const heroSlides = [
     title: "Dynamic Public School - Nurturing the Future",
     subtitle:
       "A joyful and caring learning space where young minds build confidence, values and strong academic foundations.",
-    image: "/images/dynamic_school-logo.jpeg",
+    image: "/images/cover1.png",
   },
   {
     title: "Dynamic Coaching Centre - Rank Makers of Bihar",
     subtitle:
       "Structured classes, personalized mentorship and data-driven practice that transforms effort into top ranks.",
-    image: "/images/dynamic_coaching-logo.jpeg",
+    image: "/images/cover2.png",
   },
   {
     title: "State-of-the-Art Infrastructure",
     subtitle:
       "Smart classrooms, hi-tech labs and a focused campus ecosystem designed for modern, result-oriented education.",
-    image: "/images/dynamic_school-logo.jpeg",
+    image: "/images/cover3.png",
   },
 ];
 
