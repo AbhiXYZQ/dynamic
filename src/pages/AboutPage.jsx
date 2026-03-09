@@ -210,7 +210,7 @@ const AboutPage = () => {
             transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
             className="overflow-hidden rounded-3xl border border-slate-200 bg-gradient-to-br from-slate-100 to-stone-100 p-4 shadow-lg shadow-slate-900/10"
           >
-            <div className="relative h-[350px] overflow-hidden rounded-2xl">
+            <div className="relative aspect-square overflow-hidden rounded-2xl">
               <img
                 src={directorProfile.image}
                 alt={directorProfile.name}

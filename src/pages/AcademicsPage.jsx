@@ -296,7 +296,7 @@ const AcademicsPage = () => {
                     transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
                     className="overflow-hidden rounded-3xl border border-cyan-100 bg-gradient-to-br from-cyan-50 to-white p-4 shadow-lg shadow-cyan-900/10"
                   >
-                    <div className="relative h-[320px] overflow-hidden rounded-2xl">
+                    <div className="relative aspect-square overflow-hidden rounded-2xl">
                       <img
                         src={directorsByWing.school.image}
                         alt="Dynamic Public School director"
@@ -380,7 +380,7 @@ const AcademicsPage = () => {
                     transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
                     className="overflow-hidden rounded-3xl border border-blue-100 bg-gradient-to-br from-blue-50 to-white p-4 shadow-lg shadow-blue-950/10"
                   >
-                    <div className="relative h-[320px] overflow-hidden rounded-2xl">
+                    <div className="relative aspect-square overflow-hidden rounded-2xl">
                       <img
                         src={directorsByWing.coaching.image}
                         alt="Dynamic Coaching Centre director"

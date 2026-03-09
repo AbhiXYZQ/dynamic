@@ -101,6 +101,48 @@ const galleryImages = eventImageSources.flatMap((source) =>
     }))
 );
 
+const eventHeadlineMeta = {
+  "Republic Day Event": {
+    badge: "Patriotic Spirit",
+    title: "Republic Day Pride Parade",
+    subtitle: "A tribute to our Constitution through performances, discipline, and unity.",
+  },
+  "Independence Day Event": {
+    badge: "National Celebration",
+    title: "Independence Day Glory Moments",
+    subtitle: "Flag hoisting, cultural pride, and heartfelt salutes to the nation.",
+  },
+  "Sports Day Event": {
+    badge: "Energy & Teamwork",
+    title: "Sports Day Champions Arena",
+    subtitle: "Speed, stamina, and sportsmanship captured in every frame.",
+  },
+  "Holi Event": {
+    badge: "Colors & Joy",
+    title: "Holi Happiness Highlights",
+    subtitle: "Vibrant colors, laughter, and unforgettable festive memories.",
+  },
+  "Farewell Event": {
+    badge: "Goodbye & Gratitude",
+    title: "Farewell Golden Memories",
+    subtitle: "Emotional moments, smiles, and blessings for the next chapter.",
+  },
+  "Exam Prep Event": {
+    badge: "Focus & Growth",
+    title: "Exam Prep Success Sessions",
+    subtitle: "Dedicated guidance, smart learning, and confidence-building moments.",
+  },
+};
+
+const eventOrder = [
+  "Republic Day Event",
+  "Independence Day Event",
+  "Sports Day Event",
+  "Holi Event",
+  "Farewell Event",
+  "Exam Prep Event",
+];
+
 const GalleryPage = () => {
   const [selectedEvent, setSelectedEvent] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
@@ -116,7 +158,15 @@ const GalleryPage = () => {
   }, []);
 
   const eventSections = useMemo(() => {
-    return Object.entries(groupedByEvent).map(([event, images]) => ({ event, images }));
+    return Object.entries(groupedByEvent)
+      .map(([event, images]) => ({ event, images }))
+      .sort((first, second) => {
+        const firstIndex = eventOrder.indexOf(first.event);
+        const secondIndex = eventOrder.indexOf(second.event);
+        const safeFirstIndex = firstIndex === -1 ? Number.MAX_SAFE_INTEGER : firstIndex;
+        const safeSecondIndex = secondIndex === -1 ? Number.MAX_SAFE_INTEGER : secondIndex;
+        return safeFirstIndex - safeSecondIndex;
+      });
   }, [groupedByEvent]);
 
   const selectedEventImages = useMemo(() => {
@@ -155,6 +205,14 @@ const GalleryPage = () => {
 
       <div className="mt-8 space-y-10">
         {eventSections.map((section, sectionIndex) => (
+          (() => {
+            const headline = eventHeadlineMeta[section.event] ?? {
+              badge: "Campus Event",
+              title: section.event,
+              subtitle: "Memories from this special event celebration.",
+            };
+
+            return (
           <motion.div
             key={section.event}
             initial={{ opacity: 0, y: 20 }}
@@ -163,8 +221,14 @@ const GalleryPage = () => {
             transition={{ duration: 0.55, delay: sectionIndex * 0.04 }}
             className="rounded-3xl border border-slate-200 bg-white p-4 shadow-md shadow-slate-900/5 sm:p-6"
           >
-            <div className="mb-4 flex items-center justify-between gap-3">
-              <h2 className="text-xl font-bold text-slate-900 sm:text-2xl">{section.event}</h2>
+            <div className="mb-4 flex items-start justify-between gap-3">
+              <div>
+                <span className="inline-flex rounded-full border border-blue-100 bg-blue-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-blue-700 sm:text-xs">
+                  {headline.badge}
+                </span>
+                <h2 className="mt-2 text-xl font-bold text-slate-900 sm:text-2xl">{headline.title}</h2>
+                <p className="mt-1 text-xs text-slate-600 sm:text-sm">{headline.subtitle}</p>
+              </div>
               <span className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-600 sm:text-sm">
                 {section.images.length} Photos
               </span>
@@ -188,7 +252,7 @@ const GalleryPage = () => {
                     aria-label={`Open ${image.title}`}
                     className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white text-left shadow-sm shadow-slate-900/10"
                   >
-                    <div className="relative aspect-[4/5] overflow-hidden bg-slate-100 sm:aspect-[4/3]">
+                    <div className="relative aspect-[4/3] overflow-hidden bg-slate-100">
                       <img
                         src={image.src}
                         alt={image.alt}
@@ -201,6 +265,8 @@ const GalleryPage = () => {
               </AnimatePresence>
             </motion.div>
           </motion.div>
+            );
+          })()
         ))}
       </div>
 
