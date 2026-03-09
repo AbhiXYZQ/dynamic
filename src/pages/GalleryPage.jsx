@@ -104,8 +104,8 @@ const galleryImages = eventImageSources.flatMap((source) =>
 const eventHeadlineMeta = {
   "Republic Day Event": {
     badge: "Patriotic Spirit",
-    title: "Republic Day Pride Parade",
-    subtitle: "A tribute to our Constitution through performances, discipline, and unity.",
+    title: "Republic Day Event",
+    subtitle: "A tribute to our Constitution through performances, discipline and unity.",
   },
   "Independence Day Event": {
     badge: "National Celebration",
@@ -114,23 +114,23 @@ const eventHeadlineMeta = {
   },
   "Sports Day Event": {
     badge: "Energy & Teamwork",
-    title: "Sports Day Champions Arena",
-    subtitle: "Speed, stamina, and sportsmanship captured in every frame.",
+    title: "Sports Day Highlights",
+    subtitle: "Speed, stamina and sportsmanship captured in every frame.",
   },
   "Holi Event": {
     badge: "Colors & Joy",
     title: "Holi Happiness Highlights",
-    subtitle: "Vibrant colors, laughter, and unforgettable festive memories.",
+    subtitle: "Vibrant colors, laughter and unforgettable festive memories.",
   },
   "Farewell Event": {
     badge: "Goodbye & Gratitude",
     title: "Farewell Golden Memories",
-    subtitle: "Emotional moments, smiles, and blessings for the next chapter.",
+    subtitle: "Emotional moments, smiles and blessings for the next chapter.",
   },
   "Exam Prep Event": {
     badge: "Focus & Growth",
-    title: "Exam Prep Success Sessions",
-    subtitle: "Dedicated guidance, smart learning, and confidence-building moments.",
+    title: "Exam Prep Sessions",
+    subtitle: "Dedicated guidance, smart learning and confidence-building moments.",
   },
 };
 
