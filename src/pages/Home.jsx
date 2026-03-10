@@ -137,20 +137,28 @@ const Home = () => {
     []
   );
 
+  const currentWingNotices = useMemo(
+    () => allNotices.filter((item) => item.targetWing === activeNoticeWing || item.targetWing === "all"),
+    [activeNoticeWing, allNotices]
+  );
+
+  // Show only a few (e.g., 3) notices on the home page
+  const MAX_HOME_NOTICES = 3;
   const activeNoticeList = useMemo(() => {
-    const wingNotices = allNotices.filter((item) => item.targetWing === activeNoticeWing || item.targetWing === "all");
-    if (activeNoticeCategory === "All") return wingNotices;
-    return wingNotices.filter((item) => item.category === activeNoticeCategory);
-  }, [activeNoticeCategory, activeNoticeWing, allNotices]);
+    let filtered = activeNoticeCategory === "All"
+      ? currentWingNotices
+      : currentWingNotices.filter((item) => item.category === activeNoticeCategory);
+    return filtered.slice(0, MAX_HOME_NOTICES);
+  }, [activeNoticeCategory, currentWingNotices]);
 
   const activeNoticeData = activeNoticeList[activeNotice];
   const newNoticeCount = useMemo(
     () =>
-      allNotices.filter(
-        (item) => (item.targetWing === activeNoticeWing || item.targetWing === "all") && item.isNew
-      ).length,
-    [activeNoticeWing, allNotices]
+      currentWingNotices.filter((item) => item.isNew).length,
+    [currentWingNotices]
   );
+
+  const noticeBoardCount = currentWingNotices.length;
 
   useEffect(() => {
     setActiveNotice(0);
@@ -300,46 +308,48 @@ const Home = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-            className="flex min-h-[260px] flex-col overflow-hidden rounded-3xl border border-emerald-100 bg-white p-4 shadow-xl shadow-emerald-900/10 md:h-[520px]"
+            className="flex min-h-[260px] flex-col overflow-hidden rounded-3xl border border-emerald-100 bg-gradient-to-b from-white to-emerald-50/30 p-4 shadow-xl shadow-emerald-900/10 md:h-[520px]"
           >
             <div className="flex items-center justify-between gap-2">
               <div className="flex items-center gap-2">
-                <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700">
+                <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-emerald-200 bg-emerald-100 text-emerald-700 shadow-sm">
                   <BellRing size={16} />
                 </span>
                 <div>
-                  <p className="text-sm font-semibold text-emerald-900">Notice Board</p>
-                  <p className="text-[11px] text-slate-500">Live admin updates</p>
+                  <p className="text-sm font-semibold text-emerald-900">{activeNoticeWing === "school" ? "School" : "Coaching"} Notice Board</p>
+                  <p className="text-[11px] text-slate-500">Live admin updates · {noticeBoardCount} total</p>
                 </div>
               </div>
-              <span className="inline-flex items-center rounded-full bg-red-500/90 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white animate-pulse">
-                {newNoticeCount} New
+              <span className="inline-flex items-center gap-1 rounded-full border border-rose-200 bg-rose-50 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-rose-700">
+                <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-rose-500" /> {newNoticeCount} New
               </span>
             </div>
 
             <div className="mt-3 grid grid-cols-2 gap-2">
               {[{ key: "school", label: "School" }, { key: "coaching", label: "Coaching" }].map((wing) => (
-                <button
+                <motion.button
                   key={wing.key}
                   type="button"
                   onClick={() => setActiveNoticeWing(wing.key)}
+                  whileTap={{ scale: 0.98 }}
                   className={`rounded-xl px-3 py-2 text-xs font-semibold transition ${
                     activeNoticeWing === wing.key
-                      ? "bg-indigo-600 text-white shadow-md shadow-indigo-900/20"
+                      ? "bg-indigo-600 text-white shadow-lg shadow-indigo-900/25"
                       : "bg-indigo-50 text-indigo-700 hover:bg-indigo-100"
                   }`}
                 >
                   {wing.label} Board
-                </button>
+                </motion.button>
               ))}
             </div>
 
-            <div className="mt-4 flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:grid lg:grid-cols-1 lg:overflow-visible lg:pb-0">
+            <div className="mt-4 flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:grid lg:grid-cols-2 lg:overflow-visible lg:pb-0">
               {noticeCategories.map((item) => (
-                <button
+                <motion.button
                   key={item}
                   type="button"
                   onClick={() => setActiveNoticeCategory(item)}
+                  whileTap={{ scale: 0.97 }}
                   className={`shrink-0 rounded-xl px-3 py-2 text-left text-xs font-semibold transition lg:shrink ${
                     activeNoticeCategory === item
                       ? "bg-emerald-600 text-white shadow-md shadow-emerald-900/20"
@@ -347,7 +357,7 @@ const Home = () => {
                   }`}
                 >
                   {item}
-                </button>
+                </motion.button>
               ))}
             </div>
 
@@ -363,29 +373,32 @@ const Home = () => {
                 </span>
               </div>
 
-              <div className="max-h-40 space-y-2 overflow-y-auto pr-1 [scrollbar-width:thin] [scrollbar-color:rgb(16_185_129)_transparent] md:min-h-0 md:flex-1 md:max-h-none [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-emerald-400 [&::-webkit-scrollbar-track]:bg-transparent">
+              <motion.div layout className="max-h-40 space-y-2 overflow-y-auto pr-1 [scrollbar-width:thin] [scrollbar-color:rgb(16_185_129)_transparent] md:min-h-0 md:flex-1 md:max-h-none [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-emerald-400 [&::-webkit-scrollbar-track]:bg-transparent">
                 {activeNoticeList.map((item, index) => (
-                  <button
+                  <motion.button
                     key={item.id}
                     type="button"
                     onClick={() => setActiveNotice(index)}
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.25, delay: index * 0.03 }}
                     className={`w-full rounded-xl border px-3 py-2 text-left text-[11px] font-medium leading-relaxed transition sm:text-xs ${
                       activeNotice === index
                         ? "border-emerald-300 bg-white text-emerald-900 shadow-sm"
                         : "border-transparent bg-emerald-100/60 text-slate-700 hover:bg-emerald-100"
                     }`}
                   >
-                    {item.title}
-                  </button>
+                    <span className="line-clamp-2">{item.title}</span>
+                  </motion.button>
                 ))}
                 {activeNoticeList.length === 0 && (
                   <p className="rounded-xl border border-dashed border-emerald-200 bg-white/70 px-3 py-4 text-center text-xs text-slate-500">
                     No notices in this category right now.
                   </p>
                 )}
-              </div>
+              </motion.div>
 
-              <div className="mt-3 shrink-0 rounded-xl border border-emerald-100 bg-white px-3 py-2">
+              <div className="mt-3 shrink-0 rounded-xl border border-emerald-100 bg-white px-3 py-2.5 shadow-sm">
                 <p className="text-[11px] font-semibold uppercase tracking-wide text-emerald-700">Selected Notice</p>
                 <AnimatePresence mode="wait">
                   <motion.p
