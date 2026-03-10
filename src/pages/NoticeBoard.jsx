@@ -1,83 +1,7 @@
 import { useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowRight, CalendarDays, Download, Search } from "lucide-react";
-
-const filters = ["All", "Exams", "Holidays", "General", "Downloads"];
-
-const notices = [
-  {
-    id: 1,
-    title: "Class 10 Pre-Board Exam Schedule Released",
-    date: "2026-03-15",
-    category: "Exams",
-    description: "Check subject-wise dates, reporting timings and exam hall guidelines for Class 10.",
-    isNew: true,
-    downloadLink: "#",
-  },
-  {
-    id: 2,
-    title: "Holi Break Notification",
-    date: "2026-03-10",
-    category: "Holidays",
-    description: "Campus remains closed from 14 Mar to 16 Mar. Regular classes resume from 17 Mar.",
-    isNew: false,
-    downloadLink: "",
-  },
-  {
-    id: 3,
-    title: "New Foundation Batch (Class 7-10) Registration",
-    date: "2026-03-08",
-    category: "General",
-    description: "Admissions open for new Foundation batch with NTSE/Olympiad integrated curriculum.",
-    isNew: true,
-    downloadLink: "",
-  },
-  {
-    id: 4,
-    title: "Board Weekly Test Paper - Set 07",
-    date: "2026-03-05",
-    category: "Downloads",
-    description: "Download this week’s practice paper and answer key for rank improvement review.",
-    isNew: true,
-    downloadLink: "#",
-  },
-  {
-    id: 5,
-    title: "Parent-Teacher Meeting Circular",
-    date: "2026-03-02",
-    category: "General",
-    description: "PTM for classes 1-8 scheduled on Sunday. Time slot details shared section-wise.",
-    isNew: false,
-    downloadLink: "#",
-  },
-  {
-    id: 6,
-    title: "Class 12 Practical Examination Dates",
-    date: "2026-02-28",
-    category: "Exams",
-    description: "Physics, Chemistry, Biology and Computer practical schedule with lab batch allocations.",
-    isNew: false,
-    downloadLink: "#",
-  },
-  {
-    id: 7,
-    title: "Holiday List (April to June 2026)",
-    date: "2026-02-24",
-    category: "Holidays",
-    description: "Updated holiday calendar for both school and coaching wings is now available.",
-    isNew: false,
-    downloadLink: "#",
-  },
-  {
-    id: 8,
-    title: "Physics Formula Handbook PDF",
-    date: "2026-02-20",
-    category: "Downloads",
-    description: "Chapter-wise quick revision formula handbook for Class 11-12 board aspirants.",
-    isNew: false,
-    downloadLink: "#",
-  },
-];
+import { CalendarDays, Download, Search } from "lucide-react";
+import { getStoredNotices, noticeFilters } from "../data/noticesData";
 
 const listVariants = {
   hidden: {},
@@ -109,12 +33,15 @@ const isValidDownloadLink = (url) => typeof url === "string" && url.length > 0 &
 
 const NoticeBoard = () => {
   const [searchText, setSearchText] = useState("");
+  const [activeWing, setActiveWing] = useState("school");
   const [activeFilter, setActiveFilter] = useState("All");
+  const notices = useMemo(() => getStoredNotices(), []);
 
   const filteredNotices = useMemo(() => {
     const query = searchText.trim().toLowerCase();
 
     return notices.filter((notice) => {
+      const wingMatch = notice.targetWing === activeWing || notice.targetWing === "all";
       const categoryMatch = activeFilter === "All" || notice.category === activeFilter;
       const queryMatch =
         query.length === 0 ||
@@ -122,9 +49,9 @@ const NoticeBoard = () => {
         notice.description.toLowerCase().includes(query) ||
         notice.category.toLowerCase().includes(query);
 
-      return categoryMatch && queryMatch;
+      return wingMatch && categoryMatch && queryMatch;
     });
-  }, [activeFilter, searchText]);
+  }, [activeFilter, activeWing, searchText, notices]);
 
   return (
     <section className="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
@@ -141,6 +68,26 @@ const NoticeBoard = () => {
       </motion.div>
 
       <div className="sticky top-20 z-20 mt-6 rounded-2xl border border-slate-200 bg-slate-50/95 p-4 shadow-sm backdrop-blur md:top-24">
+        <div className="mb-3 flex flex-wrap gap-2">
+          {[
+            { key: "school", label: "School Notice Board" },
+            { key: "coaching", label: "Coaching Notice Board" },
+          ].map((wing) => (
+            <button
+              key={wing.key}
+              type="button"
+              onClick={() => setActiveWing(wing.key)}
+              className={`rounded-full px-4 py-1.5 text-sm font-semibold transition ${
+                activeWing === wing.key
+                  ? "bg-indigo-600 text-white shadow-md shadow-indigo-900/20"
+                  : "bg-slate-100 text-slate-700 hover:bg-slate-200"
+              }`}
+            >
+              {wing.label}
+            </button>
+          ))}
+        </div>
+
         <div className="relative">
           <Search className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
           <input
@@ -153,7 +100,7 @@ const NoticeBoard = () => {
         </div>
 
         <div className="mt-3 flex flex-wrap gap-2">
-          {filters.map((filter) => (
+          {noticeFilters.map((filter) => (
             <button
               key={filter}
               type="button"
@@ -199,8 +146,8 @@ const NoticeBoard = () => {
                         <div className="flex flex-wrap items-center gap-2">
                           <h3 className="text-base font-bold text-slate-800 sm:text-lg">{notice.title}</h3>
                           {notice.isNew && (
-                            <span className="animate-pulse rounded-full bg-red-100 px-2 py-0.5 text-xs font-bold text-red-700">
-                              🔴 NEW
+                            <span className="inline-flex items-center rounded-full border border-amber-200 bg-gradient-to-r from-amber-50 via-yellow-50 to-orange-50 px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wide text-amber-800 shadow-sm shadow-amber-200/40">
+                              ✦ New Update
                             </span>
                           )}
                         </div>
@@ -211,20 +158,14 @@ const NoticeBoard = () => {
                       </div>
                     </div>
 
-                    {isValidDownloadLink(notice.downloadLink) ? (
+                    {isValidDownloadLink(notice.downloadLink) && (
                       <a
                         href={notice.downloadLink}
+                        download={notice.downloadFileName || undefined}
                         className="interactive-button inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-700"
                       >
                         <Download className="h-4 w-4" /> Download PDF
                       </a>
-                    ) : (
-                      <button
-                        type="button"
-                        className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-slate-100 px-4 py-2.5 text-sm font-semibold text-slate-500"
-                      >
-                        Available Soon <ArrowRight className="h-4 w-4" />
-                      </button>
                     )}
                   </div>
                 </motion.article>

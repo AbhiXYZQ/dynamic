@@ -1,19 +1,24 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   Bell,
+  CalendarDays,
   Eye,
   GraduationCap,
   Image,
   LayoutDashboard,
   LogOut,
   Menu,
+  Pencil,
   Plus,
   Search,
+  Trash2,
   Trophy,
   Users,
   X,
 } from "lucide-react";
+import { getStoredNotices, noticeFilters, saveStoredNotices } from "../data/noticesData";
+import { uploadNoticePdf } from "../utils/noticePdfUpload";
 
 const DashboardTab = () => (
   <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
@@ -577,12 +582,641 @@ const TeachersTab = () => (
   </div>
 );
 
-const NoticesTab = () => (
-  <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-    <h2 className="text-2xl font-bold text-slate-900">Notice Board</h2>
-    <p className="mt-2 text-slate-600">Notice Management Coming Soon...</p>
-  </div>
-);
+const emptyNoticeForm = {
+  title: "",
+  targetWing: "school",
+  category: "General",
+  description: "",
+  hasPdf: false,
+  downloadLink: "",
+  downloadFileName: "",
+  isNew: true,
+  autoDeleteIn30Days: false,
+};
+
+const getTodayDate = () => new Date().toISOString().slice(0, 10);
+
+const NoticesTab = () => {
+  const [notices, setNotices] = useState(() => getStoredNotices());
+  const [activeWingFilter, setActiveWingFilter] = useState("all");
+  const [searchText, setSearchText] = useState("");
+  const [activeFilter, setActiveFilter] = useState("All");
+  const [sortOrder, setSortOrder] = useState("latest");
+  const [editingNoticeId, setEditingNoticeId] = useState(null);
+  const [selectedNoticeIds, setSelectedNoticeIds] = useState([]);
+  const [deleteTargetIds, setDeleteTargetIds] = useState([]);
+  const [noticeForm, setNoticeForm] = useState(emptyNoticeForm);
+  const [uploadStatus, setUploadStatus] = useState({ loading: false, message: "" });
+
+  useEffect(() => {
+    saveStoredNotices(notices);
+  }, [notices]);
+
+  const filteredNotices = useMemo(() => {
+    const query = searchText.trim().toLowerCase();
+
+    return notices
+      .filter((notice) => {
+        const wingMatch = activeWingFilter === "all" || notice.targetWing === activeWingFilter || notice.targetWing === "all";
+        const categoryMatch = activeFilter === "All" || notice.category === activeFilter;
+        const queryMatch =
+          !query ||
+          notice.title.toLowerCase().includes(query) ||
+          notice.description.toLowerCase().includes(query) ||
+          notice.category.toLowerCase().includes(query);
+
+        return wingMatch && categoryMatch && queryMatch;
+      })
+      .sort((first, second) => {
+        const firstTime = new Date(first.date).getTime();
+        const secondTime = new Date(second.date).getTime();
+        return sortOrder === "oldest" ? firstTime - secondTime : secondTime - firstTime;
+      });
+  }, [activeFilter, activeWingFilter, notices, searchText, sortOrder]);
+
+  const filteredNoticeIds = useMemo(() => filteredNotices.map((notice) => notice.id), [filteredNotices]);
+  const allVisibleSelected = filteredNoticeIds.length > 0 && filteredNoticeIds.every((id) => selectedNoticeIds.includes(id));
+
+  useEffect(() => {
+    setSelectedNoticeIds((prev) => prev.filter((id) => notices.some((notice) => notice.id === id)));
+  }, [notices]);
+
+  const resetForm = () => {
+    setEditingNoticeId(null);
+    setNoticeForm(emptyNoticeForm);
+  };
+
+  const handleSubmitNotice = (event) => {
+    event.preventDefault();
+
+    const title = noticeForm.title.trim();
+    const description = noticeForm.description.trim();
+    const hasPdf = noticeForm.hasPdf;
+    const downloadLink = hasPdf ? noticeForm.downloadLink.trim() : "";
+    const downloadFileName = hasPdf ? noticeForm.downloadFileName.trim() : "";
+    if (!title || !description) return;
+
+    const autoDate = getTodayDate();
+
+    if (editingNoticeId) {
+      setNotices((prev) =>
+        prev.map((item) =>
+          item.id === editingNoticeId
+            ? {
+                ...item,
+                title,
+                date: autoDate,
+                targetWing: noticeForm.targetWing,
+                category: noticeForm.category,
+                description,
+                hasPdf,
+                downloadLink,
+                downloadFileName,
+                isNew: noticeForm.isNew,
+                autoDeleteIn30Days: noticeForm.autoDeleteIn30Days,
+              }
+            : item
+        )
+      );
+      resetForm();
+      return;
+    }
+
+    const nextNotice = {
+      id: Date.now(),
+      title,
+      date: autoDate,
+      targetWing: noticeForm.targetWing,
+      category: noticeForm.category,
+      description,
+      hasPdf,
+      downloadLink,
+      downloadFileName,
+      isNew: noticeForm.isNew,
+      autoDeleteIn30Days: noticeForm.autoDeleteIn30Days,
+    };
+
+    setNotices((prev) => [nextNotice, ...prev]);
+    resetForm();
+  };
+
+  const handleEditNotice = (notice) => {
+    setEditingNoticeId(notice.id);
+    setNoticeForm({
+      title: notice.title,
+      targetWing: notice.targetWing ?? "all",
+      category: notice.category,
+      description: notice.description,
+      hasPdf: Boolean(notice.hasPdf || notice.downloadLink),
+      downloadLink: notice.downloadLink ?? "",
+      downloadFileName: notice.downloadFileName ?? "",
+      isNew: Boolean(notice.isNew),
+      autoDeleteIn30Days: Boolean(notice.autoDeleteIn30Days),
+    });
+  };
+
+  const handlePdfUpload = async (event) => {
+    const uploadedFile = event.target.files?.[0];
+    if (!uploadedFile) return;
+
+    if (uploadedFile.type !== "application/pdf") {
+      setUploadStatus({ loading: false, message: "Please upload PDF file only." });
+      event.target.value = "";
+      return;
+    }
+
+    const maxFileSize = 10 * 1024 * 1024;
+    if (uploadedFile.size > maxFileSize) {
+      setUploadStatus({ loading: false, message: "PDF size should be up to 10MB." });
+      event.target.value = "";
+      return;
+    }
+
+    setUploadStatus({ loading: true, message: "Uploading PDF..." });
+
+    try {
+      const uploadResult = await uploadNoticePdf(uploadedFile);
+      setNoticeForm((prev) => ({
+        ...prev,
+        downloadLink: uploadResult.url,
+        downloadFileName: uploadResult.fileName,
+      }));
+      setUploadStatus({
+        loading: false,
+        message:
+          uploadResult.storageMode === "cloud"
+            ? "PDF uploaded to cloud successfully."
+            : "PDF attached successfully (local mode).",
+      });
+    } catch {
+      setUploadStatus({ loading: false, message: "Upload failed. Please try again." });
+    } finally {
+      event.target.value = "";
+    }
+  };
+
+  const clearUploadedPdf = () => {
+    setNoticeForm((prev) => ({
+      ...prev,
+      downloadLink: "",
+      downloadFileName: "",
+    }));
+    setUploadStatus({ loading: false, message: "" });
+  };
+
+  const togglePdfAttachment = (checked) => {
+    setNoticeForm((prev) => ({
+      ...prev,
+      hasPdf: checked,
+      downloadLink: checked ? prev.downloadLink : "",
+      downloadFileName: checked ? prev.downloadFileName : "",
+    }));
+    if (!checked) {
+      setUploadStatus({ loading: false, message: "" });
+    }
+  };
+
+  const handleDeleteNotice = (noticeId) => {
+    handleDeleteNotices([noticeId]);
+  };
+
+  const handleDeleteNotices = (noticeIds) => {
+    if (!noticeIds.length) return;
+
+    const deleteSet = new Set(noticeIds);
+    setNotices((prev) => prev.filter((notice) => !deleteSet.has(notice.id)));
+
+    if (editingNoticeId && deleteSet.has(editingNoticeId)) {
+      resetForm();
+    }
+
+    setSelectedNoticeIds((prev) => prev.filter((id) => !deleteSet.has(id)));
+    setDeleteTargetIds([]);
+  };
+
+  const toggleNoticeSelection = (noticeId) => {
+    setSelectedNoticeIds((prev) =>
+      prev.includes(noticeId) ? prev.filter((id) => id !== noticeId) : [...prev, noticeId]
+    );
+  };
+
+  const handleSelectAllVisible = () => {
+    if (allVisibleSelected) {
+      setSelectedNoticeIds((prev) => prev.filter((id) => !filteredNoticeIds.includes(id)));
+      return;
+    }
+
+    setSelectedNoticeIds((prev) => Array.from(new Set([...prev, ...filteredNoticeIds])));
+  };
+
+  const handleBulkNewStatus = (nextStatus) => {
+    if (!selectedNoticeIds.length) return;
+
+    const selectedSet = new Set(selectedNoticeIds);
+    setNotices((prev) =>
+      prev.map((notice) =>
+        selectedSet.has(notice.id)
+          ? {
+              ...notice,
+              isNew: nextStatus,
+            }
+          : notice
+      )
+    );
+  };
+
+  return (
+    <div className="space-y-6">
+      <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+        <h2 className="text-2xl font-bold text-slate-900">Notice Board Management</h2>
+        <p className="mt-2 text-slate-600">Add, edit, and remove notices shown on the public Notice Board page.</p>
+      </div>
+
+      <form
+        onSubmit={handleSubmitNotice}
+        className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"
+      >
+        <div className="flex items-center justify-between gap-4">
+          <h3 className="text-lg font-bold text-slate-900">
+            {editingNoticeId ? "Edit Notice" : "Add New Notice"}
+          </h3>
+          {editingNoticeId && (
+            <button
+              type="button"
+              onClick={resetForm}
+              className="rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-600 hover:bg-slate-50"
+            >
+              Cancel Edit
+            </button>
+          )}
+        </div>
+
+        <div className="mt-4 grid gap-4 md:grid-cols-2">
+          <div className="md:col-span-2">
+            <label className="mb-1 block text-sm font-semibold text-slate-700">Title</label>
+            <input
+              type="text"
+              required
+              value={noticeForm.title}
+              onChange={(event) => setNoticeForm((prev) => ({ ...prev, title: event.target.value }))}
+              className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-800 outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
+              placeholder="Enter notice title"
+            />
+          </div>
+
+          <div>
+            <label className="mb-1 block text-sm font-semibold text-slate-700">Notice Date</label>
+            <div className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm font-medium text-slate-700">
+              Auto fetch: {getTodayDate()}
+            </div>
+          </div>
+
+          <div>
+            <label className="mb-1 block text-sm font-semibold text-slate-700">Target Notice Board</label>
+            <select
+              value={noticeForm.targetWing}
+              onChange={(event) => setNoticeForm((prev) => ({ ...prev, targetWing: event.target.value }))}
+              className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-800 outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
+            >
+              <option value="school">School Notice Board</option>
+              <option value="coaching">Coaching Notice Board</option>
+              <option value="all">Common (Both Boards)</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="mb-1 block text-sm font-semibold text-slate-700">Category</label>
+            <select
+              value={noticeForm.category}
+              onChange={(event) => setNoticeForm((prev) => ({ ...prev, category: event.target.value }))}
+              className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-800 outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
+            >
+              {noticeFilters.filter((item) => item !== "All").map((item) => (
+                <option key={item} value={item}>
+                  {item}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="md:col-span-2">
+            <label className="mb-1 block text-sm font-semibold text-slate-700">Description</label>
+            <textarea
+              rows={3}
+              required
+              value={noticeForm.description}
+              onChange={(event) => setNoticeForm((prev) => ({ ...prev, description: event.target.value }))}
+              className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-800 outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
+              placeholder="Enter notice details"
+            />
+          </div>
+
+          <div>
+            <label className="inline-flex items-center gap-2 rounded-xl border border-slate-200 px-3 py-2.5 text-sm font-medium text-slate-700">
+              <input
+                type="checkbox"
+                checked={noticeForm.hasPdf}
+                onChange={(event) => togglePdfAttachment(event.target.checked)}
+                className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+              />
+              Attach PDF with this notice
+            </label>
+
+            {noticeForm.hasPdf && (
+              <div className="mt-2">
+                <label className="mb-1 block text-sm font-semibold text-slate-700">Upload PDF</label>
+                <input
+                  type="file"
+                  accept="application/pdf"
+                  disabled={uploadStatus.loading}
+                  onChange={handlePdfUpload}
+                  className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-800 file:mr-3 file:rounded-lg file:border-0 file:bg-blue-50 file:px-3 file:py-1.5 file:text-xs file:font-semibold file:text-blue-700"
+                />
+                {uploadStatus.message && (
+                  <p className={`mt-2 text-xs font-medium ${uploadStatus.loading ? "text-blue-700" : "text-slate-600"}`}>
+                    {uploadStatus.message}
+                  </p>
+                )}
+                {noticeForm.downloadFileName && (
+                  <div className="mt-2 flex items-center justify-between gap-3 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2">
+                    <p className="truncate text-xs font-medium text-slate-700">{noticeForm.downloadFileName}</p>
+                    <button
+                      type="button"
+                      onClick={clearUploadedPdf}
+                      className="shrink-0 rounded-md border border-slate-200 px-2 py-1 text-[11px] font-semibold text-slate-600 hover:bg-white"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+
+          <div className="flex items-end">
+            <label className="inline-flex items-center gap-2 rounded-xl border border-slate-200 px-3 py-2.5 text-sm font-medium text-slate-700">
+              <input
+                type="checkbox"
+                checked={noticeForm.isNew}
+                onChange={(event) => setNoticeForm((prev) => ({ ...prev, isNew: event.target.checked }))}
+                className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+              />
+              Mark as NEW
+            </label>
+          </div>
+
+          <div className="md:col-span-2">
+            <label className="inline-flex items-center gap-2 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2.5 text-sm font-medium text-amber-800">
+              <input
+                type="checkbox"
+                checked={noticeForm.autoDeleteIn30Days}
+                onChange={(event) =>
+                  setNoticeForm((prev) => ({
+                    ...prev,
+                    autoDeleteIn30Days: event.target.checked,
+                  }))
+                }
+                className="h-4 w-4 rounded border-amber-300 text-amber-600 focus:ring-amber-500"
+              />
+              Auto delete this notice after 30 days
+            </label>
+          </div>
+        </div>
+
+        <div className="mt-5 flex justify-end">
+          <button
+            type="submit"
+            className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700"
+          >
+            <Plus size={16} /> {editingNoticeId ? "Update Notice" : "Add Notice"}
+          </button>
+        </div>
+      </form>
+
+      <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+        <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+          <div className="flex w-full flex-col gap-3 lg:max-w-2xl lg:flex-row">
+            <div className="flex gap-2">
+              {[{ key: "all", label: "All Boards" }, { key: "school", label: "School" }, { key: "coaching", label: "Coaching" }].map((wing) => (
+                <button
+                  key={wing.key}
+                  type="button"
+                  onClick={() => setActiveWingFilter(wing.key)}
+                  className={`rounded-full px-3 py-1.5 text-xs font-semibold transition ${
+                    activeWingFilter === wing.key
+                      ? "bg-indigo-600 text-white"
+                      : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                  }`}
+                >
+                  {wing.label}
+                </button>
+              ))}
+            </div>
+
+            <div className="relative w-full lg:max-w-md">
+              <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+              <input
+                type="text"
+                value={searchText}
+                onChange={(event) => setSearchText(event.target.value)}
+                placeholder="Search notices..."
+                className="w-full rounded-xl border border-slate-200 bg-white py-2.5 pl-9 pr-3 text-sm text-slate-800 outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
+              />
+            </div>
+
+            <select
+              value={sortOrder}
+              onChange={(event) => setSortOrder(event.target.value)}
+              className="rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm font-medium text-slate-700 outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
+            >
+              <option value="latest">Sort: Latest First</option>
+              <option value="oldest">Sort: Oldest First</option>
+            </select>
+          </div>
+
+          <div className="flex flex-wrap gap-2">
+            {noticeFilters.map((filter) => (
+              <button
+                key={filter}
+                type="button"
+                onClick={() => setActiveFilter(filter)}
+                className={`rounded-full px-3 py-1.5 text-xs font-semibold transition ${
+                  activeFilter === filter
+                    ? "bg-blue-600 text-white"
+                    : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                }`}
+              >
+                {filter}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="mt-5 overflow-hidden rounded-xl border border-slate-200">
+          <div className="flex items-center justify-between border-b border-slate-200 bg-slate-50 px-4 py-2.5">
+            <div className="flex items-center gap-3">
+              <label className="inline-flex items-center gap-2 text-xs font-semibold text-slate-700">
+                <input
+                  type="checkbox"
+                  checked={allVisibleSelected}
+                  onChange={handleSelectAllVisible}
+                  className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                />
+                Select all visible
+              </label>
+              {selectedNoticeIds.length > 0 && (
+                <span className="text-xs font-semibold text-blue-700">{selectedNoticeIds.length} selected</span>
+              )}
+            </div>
+
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                disabled={selectedNoticeIds.length === 0}
+                onClick={() => handleBulkNewStatus(true)}
+                className="rounded-lg border border-slate-200 px-2.5 py-1.5 text-xs font-semibold text-slate-700 disabled:cursor-not-allowed disabled:opacity-40 hover:bg-slate-100"
+              >
+                Mark NEW
+              </button>
+              <button
+                type="button"
+                disabled={selectedNoticeIds.length === 0}
+                onClick={() => handleBulkNewStatus(false)}
+                className="rounded-lg border border-slate-200 px-2.5 py-1.5 text-xs font-semibold text-slate-700 disabled:cursor-not-allowed disabled:opacity-40 hover:bg-slate-100"
+              >
+                Mark Not New
+              </button>
+              <button
+                type="button"
+                disabled={selectedNoticeIds.length === 0}
+                onClick={() => setDeleteTargetIds(selectedNoticeIds)}
+                className="rounded-lg border border-red-200 px-2.5 py-1.5 text-xs font-semibold text-red-600 disabled:cursor-not-allowed disabled:opacity-40 hover:bg-red-50"
+              >
+                Delete Selected
+              </button>
+            </div>
+          </div>
+
+          <div className="hidden bg-slate-100 px-4 py-3 text-xs font-semibold uppercase tracking-wide text-slate-600 md:grid md:grid-cols-[42px_130px_1fr_120px_110px_110px] md:gap-3">
+            <span>Select</span>
+            <span>Date</span>
+            <span>Notice</span>
+            <span>Category / Board</span>
+            <span>New</span>
+            <span>Actions</span>
+          </div>
+
+          {filteredNotices.length > 0 ? (
+            <div className="divide-y divide-slate-200">
+              {filteredNotices.map((notice) => (
+                <div key={notice.id} className="grid gap-3 px-4 py-4 md:grid-cols-[42px_130px_1fr_120px_110px_110px] md:items-center">
+                  <div className="flex items-center md:justify-center">
+                    <input
+                      type="checkbox"
+                      checked={selectedNoticeIds.includes(notice.id)}
+                      onChange={() => toggleNoticeSelection(notice.id)}
+                      className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                    />
+                  </div>
+
+                  <p className="inline-flex items-center gap-2 text-sm font-medium text-slate-700">
+                    <CalendarDays size={15} className="text-blue-600" />
+                    {notice.date}
+                  </p>
+
+                  <div>
+                    <p className="text-sm font-semibold text-slate-900">{notice.title}</p>
+                    <p className="mt-1 line-clamp-2 text-xs text-slate-600">{notice.description}</p>
+                    {notice.autoDeleteIn30Days && (
+                      <span className="mt-1 inline-flex rounded-full bg-amber-100 px-2 py-0.5 text-[11px] font-semibold text-amber-700">
+                        Auto delete in 30 days
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="space-y-1">
+                    <p className="text-xs font-semibold text-slate-700">{notice.category}</p>
+                    <span className="inline-flex rounded-full bg-indigo-50 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-indigo-700">
+                      {notice.targetWing === "school"
+                        ? "School"
+                        : notice.targetWing === "coaching"
+                          ? "Coaching"
+                          : "Both"}
+                    </span>
+                  </div>
+
+                  <p className={`text-xs font-semibold ${notice.isNew ? "text-red-600" : "text-slate-500"}`}>
+                    {notice.isNew ? "NEW" : "No"}
+                  </p>
+
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => handleEditNotice(notice)}
+                      className="inline-flex items-center gap-1 rounded-lg border border-slate-200 px-2.5 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50"
+                    >
+                      <Pencil size={13} /> Edit
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setDeleteTargetIds([notice.id])}
+                      className="inline-flex items-center gap-1 rounded-lg border border-red-200 px-2.5 py-1.5 text-xs font-semibold text-red-600 hover:bg-red-50"
+                    >
+                      <Trash2 size={13} /> Delete
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="px-4 py-8 text-center text-sm text-slate-500">No notices found for this filter/search.</div>
+          )}
+        </div>
+      </div>
+
+      <AnimatePresence>
+        {deleteTargetIds.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[90] flex items-center justify-center bg-slate-950/60 p-4"
+          >
+            <motion.div
+              initial={{ opacity: 0, y: 18, scale: 0.96 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 10, scale: 0.96 }}
+              transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+              className="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-6 shadow-2xl"
+            >
+              <h4 className="text-lg font-bold text-slate-900">Delete Notice{deleteTargetIds.length > 1 ? "s" : ""}?</h4>
+              <p className="mt-2 text-sm text-slate-600">
+                This action will permanently remove {deleteTargetIds.length} notice{deleteTargetIds.length > 1 ? "s" : ""} from admin and public notice board.
+              </p>
+
+              <div className="mt-5 flex justify-end gap-3">
+                <button
+                  type="button"
+                  onClick={() => setDeleteTargetIds([])}
+                  className="rounded-xl border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-50"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleDeleteNotices(deleteTargetIds)}
+                  className="rounded-xl bg-red-600 px-4 py-2 text-sm font-semibold text-white hover:bg-red-700"
+                >
+                  Yes, Delete
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
 
 const GalleryTab = () => (
   <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">

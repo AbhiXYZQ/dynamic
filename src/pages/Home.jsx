@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { spotlightToppers } from "../data/topperData";
+import { getStoredNotices, noticeFilters } from "../data/noticesData";
 
 const stats = [
   { label: "Years of Academic Legacy", value: 27, suffix: "+", icon: BookOpen },
@@ -19,24 +20,6 @@ const stats = [
   { label: "Board & Competitive Toppers", value: 380, suffix: "+", icon: Trophy },
   { label: "Expert Faculty Members", value: 65, suffix: "+", icon: GraduationCap },
 ];
-
-const noticeByClass = {
-  "Class 1-6": [
-    "📢 Admissions Open for Playgroup to Class 6 (Session 2026-27)",
-    "🎨 Activity Week for Classes 3-6 starts from Monday",
-    "👨‍👩‍👧 Parent Orientation Program this Sunday at 11:00 AM",
-  ],
-  "Class 7-10": [
-    "📝 Scholarship Test for Class 7-10 on 15th March",
-    "📚 New Foundation Batch for Class 9-10 starts next week",
-    "📊 Monthly Progress Meeting for Class 10 on Saturday",
-  ],
-  "Class 11-12 (Boards)": [
-    "🏆 Congratulations to our Class 12 Board Toppers",
-    "🧪 Senior Board Revision Batch admissions now live",
-    "⏰ Board Focused Combined Test Series starts this month",
-  ],
-};
 
 const heroSlides = [
   {
@@ -140,18 +123,44 @@ const AnimatedCounter = ({ value, suffix }) => {
 };
 
 const Home = () => {
-  const noticeClasses = useMemo(() => Object.keys(noticeByClass), []);
-  const [activeNoticeClass, setActiveNoticeClass] = useState(noticeClasses[0]);
+  const noticeCategories = useMemo(() => noticeFilters, []);
+  const [activeNoticeWing, setActiveNoticeWing] = useState("school");
+  const [activeNoticeCategory, setActiveNoticeCategory] = useState("All");
   const [activeNotice, setActiveNotice] = useState(0);
   const [activeSlide, setActiveSlide] = useState(0);
   const [slideDirection, setSlideDirection] = useState(1);
   const [activeTestimonial, setActiveTestimonial] = useState(0);
 
-  const activeNoticeList = noticeByClass[activeNoticeClass] ?? [];
+  const allNotices = useMemo(
+    () =>
+      getStoredNotices().sort((first, second) => new Date(second.date).getTime() - new Date(first.date).getTime()),
+    []
+  );
+
+  const activeNoticeList = useMemo(() => {
+    const wingNotices = allNotices.filter((item) => item.targetWing === activeNoticeWing || item.targetWing === "all");
+    if (activeNoticeCategory === "All") return wingNotices;
+    return wingNotices.filter((item) => item.category === activeNoticeCategory);
+  }, [activeNoticeCategory, activeNoticeWing, allNotices]);
+
+  const activeNoticeData = activeNoticeList[activeNotice];
+  const newNoticeCount = useMemo(
+    () =>
+      allNotices.filter(
+        (item) => (item.targetWing === activeNoticeWing || item.targetWing === "all") && item.isNew
+      ).length,
+    [activeNoticeWing, allNotices]
+  );
 
   useEffect(() => {
     setActiveNotice(0);
-  }, [activeNoticeClass]);
+  }, [activeNoticeCategory]);
+
+  useEffect(() => {
+    if (activeNotice >= activeNoticeList.length) {
+      setActiveNotice(0);
+    }
+  }, [activeNotice, activeNoticeList.length]);
 
   useEffect(() => {
     const sliderTimer = setInterval(() => {
@@ -300,22 +309,39 @@ const Home = () => {
                 </span>
                 <div>
                   <p className="text-sm font-semibold text-emerald-900">Notice Board</p>
-                  <p className="text-[11px] text-slate-500">Class-wise updates</p>
+                  <p className="text-[11px] text-slate-500">Live admin updates</p>
                 </div>
               </div>
               <span className="inline-flex items-center rounded-full bg-red-500/90 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white animate-pulse">
-                New
+                {newNoticeCount} New
               </span>
             </div>
 
+            <div className="mt-3 grid grid-cols-2 gap-2">
+              {[{ key: "school", label: "School" }, { key: "coaching", label: "Coaching" }].map((wing) => (
+                <button
+                  key={wing.key}
+                  type="button"
+                  onClick={() => setActiveNoticeWing(wing.key)}
+                  className={`rounded-xl px-3 py-2 text-xs font-semibold transition ${
+                    activeNoticeWing === wing.key
+                      ? "bg-indigo-600 text-white shadow-md shadow-indigo-900/20"
+                      : "bg-indigo-50 text-indigo-700 hover:bg-indigo-100"
+                  }`}
+                >
+                  {wing.label} Board
+                </button>
+              ))}
+            </div>
+
             <div className="mt-4 flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:grid lg:grid-cols-1 lg:overflow-visible lg:pb-0">
-              {noticeClasses.map((item) => (
+              {noticeCategories.map((item) => (
                 <button
                   key={item}
                   type="button"
-                  onClick={() => setActiveNoticeClass(item)}
+                  onClick={() => setActiveNoticeCategory(item)}
                   className={`shrink-0 rounded-xl px-3 py-2 text-left text-xs font-semibold transition lg:shrink ${
-                    activeNoticeClass === item
+                    activeNoticeCategory === item
                       ? "bg-emerald-600 text-white shadow-md shadow-emerald-900/20"
                       : "bg-emerald-50 text-emerald-800 hover:bg-emerald-100"
                   }`}
@@ -327,16 +353,20 @@ const Home = () => {
 
             <div className="mt-4 flex flex-1 flex-col rounded-2xl border border-emerald-100 bg-emerald-50/40 p-3 md:min-h-0">
               <div className="mb-2 flex items-center justify-between text-[11px] font-medium text-slate-500">
-                <span>{activeNoticeClass}</span>
                 <span>
-                  {String(activeNotice + 1).padStart(2, "0")} / {String(activeNoticeList.length).padStart(2, "0")}
+                  {activeNoticeWing === "school" ? "School" : "Coaching"} · {activeNoticeCategory}
+                </span>
+                <span>
+                  {activeNoticeList.length > 0
+                    ? `${String(activeNotice + 1).padStart(2, "0")} / ${String(activeNoticeList.length).padStart(2, "0")}`
+                    : "00 / 00"}
                 </span>
               </div>
 
               <div className="max-h-40 space-y-2 overflow-y-auto pr-1 [scrollbar-width:thin] [scrollbar-color:rgb(16_185_129)_transparent] md:min-h-0 md:flex-1 md:max-h-none [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-emerald-400 [&::-webkit-scrollbar-track]:bg-transparent">
                 {activeNoticeList.map((item, index) => (
                   <button
-                    key={`${activeNoticeClass}-${index}`}
+                    key={item.id}
                     type="button"
                     onClick={() => setActiveNotice(index)}
                     className={`w-full rounded-xl border px-3 py-2 text-left text-[11px] font-medium leading-relaxed transition sm:text-xs ${
@@ -345,23 +375,30 @@ const Home = () => {
                         : "border-transparent bg-emerald-100/60 text-slate-700 hover:bg-emerald-100"
                     }`}
                   >
-                    {item}
+                    {item.title}
                   </button>
                 ))}
+                {activeNoticeList.length === 0 && (
+                  <p className="rounded-xl border border-dashed border-emerald-200 bg-white/70 px-3 py-4 text-center text-xs text-slate-500">
+                    No notices in this category right now.
+                  </p>
+                )}
               </div>
 
               <div className="mt-3 shrink-0 rounded-xl border border-emerald-100 bg-white px-3 py-2">
                 <p className="text-[11px] font-semibold uppercase tracking-wide text-emerald-700">Selected Notice</p>
                 <AnimatePresence mode="wait">
                   <motion.p
-                    key={`${activeNoticeClass}-selected-${activeNotice}`}
+                    key={`${activeNoticeCategory}-selected-${activeNotice}`}
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
                     transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
                     className="mt-1 text-sm font-medium leading-relaxed text-slate-700"
                   >
-                    {activeNoticeList[activeNotice]}
+                    {activeNoticeData
+                      ? `${activeNoticeData.title} — ${activeNoticeData.description}`
+                      : "Please select a notice to view details."}
                   </motion.p>
                 </AnimatePresence>
               </div>
