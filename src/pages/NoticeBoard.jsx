@@ -1,7 +1,8 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { CalendarDays, Download, Search } from "lucide-react";
-import { getStoredNotices, noticeFilters } from "../data/noticesData";
+import { noticeFilters } from "../data/noticesData";
+import { fetchNoticesFromDb } from "../services/noticeService";
 
 const listVariants = {
   hidden: {},
@@ -35,7 +36,18 @@ const NoticeBoard = () => {
   const [searchText, setSearchText] = useState("");
   const [activeWing, setActiveWing] = useState("school");
   const [activeFilter, setActiveFilter] = useState("All");
-  const notices = useMemo(() => getStoredNotices(), []);
+  const [notices, setNotices] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadNotices = async () => {
+      setLoading(true);
+      const data = await fetchNoticesFromDb();
+      setNotices(data);
+      setLoading(false);
+    };
+    loadNotices();
+  }, []);
 
   const filteredNotices = useMemo(() => {
     const query = searchText.trim().toLowerCase();
@@ -119,7 +131,17 @@ const NoticeBoard = () => {
 
       <motion.div variants={listVariants} initial="hidden" animate="visible" className="mt-6 space-y-4">
         <AnimatePresence mode="popLayout">
-          {filteredNotices.length > 0 ? (
+          {loading ? (
+            <motion.div
+              key="loading-state"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="rounded-2xl border border-slate-200 bg-white p-8 text-center text-sm font-medium text-slate-500"
+            >
+              Loading notices from cloud...
+            </motion.div>
+          ) : filteredNotices.length > 0 ? (
             filteredNotices.map((notice) => {
               const { day, month } = formatDate(notice.date);
 

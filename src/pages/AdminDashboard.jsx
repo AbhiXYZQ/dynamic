@@ -17,7 +17,8 @@ import {
   Users,
   X,
 } from "lucide-react";
-import { getStoredNotices, noticeFilters, saveStoredNotices } from "../data/noticesData";
+import { noticeFilters } from "../data/noticesData";
+import { fetchNoticesFromDb, addNoticeToDb, updateNoticeInDb, deleteNoticeFromDb } from "../services/noticeService";
 import { uploadNoticePdf } from "../utils/noticePdfUpload";
 
 const DashboardTab = () => (
@@ -597,7 +598,8 @@ const emptyNoticeForm = {
 const getTodayDate = () => new Date().toISOString().slice(0, 10);
 
 const NoticesTab = () => {
-  const [notices, setNotices] = useState(() => getStoredNotices());
+  const [notices, setNotices] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [activeWingFilter, setActiveWingFilter] = useState("all");
   const [searchText, setSearchText] = useState("");
   const [activeFilter, setActiveFilter] = useState("All");
@@ -607,10 +609,17 @@ const NoticesTab = () => {
   const [deleteTargetIds, setDeleteTargetIds] = useState([]);
   const [noticeForm, setNoticeForm] = useState(emptyNoticeForm);
   const [uploadStatus, setUploadStatus] = useState({ loading: false, message: "" });
+  const [formSubmitting, setFormSubmitting] = useState(false);
 
   useEffect(() => {
-    saveStoredNotices(notices);
-  }, [notices]);
+    const loadData = async () => {
+      setLoading(true);
+      const data = await fetchNoticesFromDb();
+      setNotices(data);
+      setLoading(false);
+    };
+    loadData();
+  }, []);
 
   const filteredNotices = useMemo(() => {
     const query = searchText.trim().toLowerCase();
@@ -646,8 +655,9 @@ const NoticesTab = () => {
     setNoticeForm(emptyNoticeForm);
   };
 
-  const handleSubmitNotice = (event) => {
+  const handleSubmitNotice = async (event) => {
     event.preventDefault();
+    if (formSubmitting) return;
 
     const title = noticeForm.title.trim();
     const description = noticeForm.description.trim();
@@ -657,33 +667,9 @@ const NoticesTab = () => {
     if (!title || !description) return;
 
     const autoDate = getTodayDate();
+    setFormSubmitting(true);
 
-    if (editingNoticeId) {
-      setNotices((prev) =>
-        prev.map((item) =>
-          item.id === editingNoticeId
-            ? {
-                ...item,
-                title,
-                date: autoDate,
-                targetWing: noticeForm.targetWing,
-                category: noticeForm.category,
-                description,
-                hasPdf,
-                downloadLink,
-                downloadFileName,
-                isNew: noticeForm.isNew,
-                autoDeleteIn30Days: noticeForm.autoDeleteIn30Days,
-              }
-            : item
-        )
-      );
-      resetForm();
-      return;
-    }
-
-    const nextNotice = {
-      id: Date.now(),
+    const noticePayload = {
       title,
       date: autoDate,
       targetWing: noticeForm.targetWing,
@@ -696,8 +682,22 @@ const NoticesTab = () => {
       autoDeleteIn30Days: noticeForm.autoDeleteIn30Days,
     };
 
-    setNotices((prev) => [nextNotice, ...prev]);
-    resetForm();
+    try {
+      if (editingNoticeId) {
+        await updateNoticeInDb(editingNoticeId, noticePayload);
+        setNotices((prev) =>
+          prev.map((item) => (item.id === editingNoticeId ? { id: editingNoticeId, ...noticePayload } : item))
+        );
+      } else {
+        const newId = await addNoticeToDb(noticePayload);
+        setNotices((prev) => [{ id: newId, ...noticePayload }, ...prev]);
+      }
+      resetForm();
+    } catch (error) {
+      alert("Error saving notice. Please try again.");
+    } finally {
+      setFormSubmitting(false);
+    }
   };
 
   const handleEditNotice = (notice) => {
@@ -780,18 +780,24 @@ const NoticesTab = () => {
     handleDeleteNotices([noticeId]);
   };
 
-  const handleDeleteNotices = (noticeIds) => {
+  const handleDeleteNotices = async (noticeIds) => {
     if (!noticeIds.length) return;
 
-    const deleteSet = new Set(noticeIds);
-    setNotices((prev) => prev.filter((notice) => !deleteSet.has(notice.id)));
+    try {
+      await Promise.all(noticeIds.map(id => deleteNoticeFromDb(id)));
+      const deleteSet = new Set(noticeIds);
+      setNotices((prev) => prev.filter((notice) => !deleteSet.has(notice.id)));
 
-    if (editingNoticeId && deleteSet.has(editingNoticeId)) {
-      resetForm();
+      if (editingNoticeId && deleteSet.has(editingNoticeId)) {
+        resetForm();
+      }
+
+      setSelectedNoticeIds((prev) => prev.filter((id) => !deleteSet.has(id)));
+    } catch (error) {
+       alert("Error deleting notes. Please try again.");
+    } finally {
+      setDeleteTargetIds([]);
     }
-
-    setSelectedNoticeIds((prev) => prev.filter((id) => !deleteSet.has(id)));
-    setDeleteTargetIds([]);
   };
 
   const toggleNoticeSelection = (noticeId) => {
@@ -809,20 +815,26 @@ const NoticesTab = () => {
     setSelectedNoticeIds((prev) => Array.from(new Set([...prev, ...filteredNoticeIds])));
   };
 
-  const handleBulkNewStatus = (nextStatus) => {
+  const handleBulkNewStatus = async (nextStatus) => {
     if (!selectedNoticeIds.length) return;
 
     const selectedSet = new Set(selectedNoticeIds);
-    setNotices((prev) =>
-      prev.map((notice) =>
-        selectedSet.has(notice.id)
-          ? {
-              ...notice,
-              isNew: nextStatus,
-            }
-          : notice
-      )
-    );
+    try {
+      await Promise.all(
+        selectedNoticeIds.map((id) =>
+          updateNoticeInDb(id, { isNew: nextStatus })
+        )
+      );
+      setNotices((prev) =>
+        prev.map((notice) =>
+          selectedSet.has(notice.id)
+            ? { ...notice, isNew: nextStatus }
+            : notice
+        )
+      );
+    } catch (error) {
+      alert("Error updating status.");
+    }
   };
 
   return (
@@ -986,7 +998,8 @@ const NoticesTab = () => {
         <div className="mt-5 flex justify-end">
           <button
             type="submit"
-            className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700"
+            disabled={formSubmitting}
+            className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:opacity-50"
           >
             <Plus size={16} /> {editingNoticeId ? "Update Notice" : "Add Notice"}
           </button>
