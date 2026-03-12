@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../lib/firebase";
 import { AnimatePresence, motion } from "framer-motion";
@@ -11,6 +12,7 @@ const roleTabs = [
 
 const LoginPage = () => {
   const [activeTab, setActiveTab] = useState("student");
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -44,6 +46,7 @@ const LoginPage = () => {
     try {
       setIsSubmitting(true);
       await signInWithEmailAndPassword(auth, normalizedEmail, normalizedPassword);
+      navigate("/admin");
     } catch (error) {
       setErrorMessage(error && error.message ? error.message : "Unable to login right now.");
     } finally {
