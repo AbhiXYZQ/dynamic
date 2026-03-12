@@ -5,6 +5,7 @@ import Footer from "./components/layout/Footer";
 import Navbar from "./components/layout/Navbar";
 import SeoManager from "./components/seo/SeoManager";
 import AdminDashboard from "./pages/AdminDashboard";
+import AdminRoute from "./components/AdminRoute";
 import AcademicsPage from "./pages/AcademicsPage";
 import AboutPage from "./pages/AboutPage";
 import ContactPage from "./pages/ContactPage";
@@ -75,8 +76,8 @@ const App = () => {
         {!isAdminRoute && <Navbar />}
         <main className={isAdminRoute ? "" : "pt-24 sm:pt-28"}>
           <Routes>
-            <Route path="/admin" element={<AdminDashboard />} />
-            <Route path="/AdminDashboard" element={<AdminDashboard />} />
+            <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
+            <Route path="/AdminDashboard" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/toppers" element={<Toppers />} />

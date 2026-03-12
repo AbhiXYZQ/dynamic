@@ -1,4 +1,6 @@
 import { useMemo, useState } from "react";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../lib/firebase";
 import { AnimatePresence, motion } from "framer-motion";
 import { Eye, EyeOff, Lock, Mail } from "lucide-react";
 
@@ -41,9 +43,9 @@ const LoginPage = () => {
 
     try {
       setIsSubmitting(true);
-      await Promise.resolve(loginPayload);
+      await signInWithEmailAndPassword(auth, normalizedEmail, normalizedPassword);
     } catch (error) {
-      setErrorMessage(error instanceof Error ? error.message : "Unable to login right now.");
+      setErrorMessage(error && error.message ? error.message : "Unable to login right now.");
     } finally {
       setIsSubmitting(false);
     }
