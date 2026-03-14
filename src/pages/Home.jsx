@@ -12,7 +12,8 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { spotlightToppers } from "../data/topperData";
-import { getStoredNotices, noticeFilters } from "../data/noticesData";
+import { fetchNoticesFromDb } from "../services/noticeService";
+// ...existing code...
 
 const stats = [
   { label: "Years of Academic Legacy", value: 27, suffix: "+", icon: BookOpen },
@@ -123,7 +124,7 @@ const AnimatedCounter = ({ value, suffix }) => {
 };
 
 const Home = () => {
-  const noticeCategories = useMemo(() => noticeFilters, []);
+  const noticeCategories = useMemo(() => ["All", "General", "Exam", "Event", "Holiday"], []);
   const [activeNoticeWing, setActiveNoticeWing] = useState("school");
   const [activeNoticeCategory, setActiveNoticeCategory] = useState("All");
   const [activeNotice, setActiveNotice] = useState(0);
@@ -131,11 +132,14 @@ const Home = () => {
   const [slideDirection, setSlideDirection] = useState(1);
   const [activeTestimonial, setActiveTestimonial] = useState(0);
 
-  const allNotices = useMemo(
-    () =>
-      getStoredNotices().sort((first, second) => new Date(second.date).getTime() - new Date(first.date).getTime()),
-    []
-  );
+  const [allNotices, setAllNotices] = useState([]);
+  useEffect(() => {
+    async function loadNotices() {
+      const data = await fetchNoticesFromDb();
+      setAllNotices(data);
+    }
+    loadNotices();
+  }, []);
 
   const currentWingNotices = useMemo(
     () => allNotices.filter((item) => item.targetWing === activeNoticeWing || item.targetWing === "all"),

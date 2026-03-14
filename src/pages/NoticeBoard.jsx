@@ -1,7 +1,7 @@
 import { useMemo, useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { CalendarDays, Download, Search } from "lucide-react";
-import { noticeFilters } from "../data/noticesData";
+// ...existing code...
 import { fetchNoticesFromDb } from "../services/noticeService";
 
 const listVariants = {
@@ -38,6 +38,7 @@ const NoticeBoard = () => {
   const [activeFilter, setActiveFilter] = useState("All");
   const [notices, setNotices] = useState([]);
   const [loading, setLoading] = useState(true);
+  const noticeFilters = ["All", "General", "Exam", "Event", "Holiday"];
 
   useEffect(() => {
     const loadNotices = async () => {

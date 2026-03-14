@@ -17,7 +17,7 @@ import {
   Users,
   X,
 } from "lucide-react";
-import { noticeFilters } from "../data/noticesData";
+// ...existing code...
 import { fetchNoticesFromDb, addNoticeToDb, updateNoticeInDb, deleteNoticeFromDb } from "../services/noticeService";
 import { uploadNoticePdf } from "../utils/noticePdfUpload";
 
@@ -576,12 +576,202 @@ const StudentsTab = () => {
   );
 };
 
-const TeachersTab = () => (
-  <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-    <h2 className="text-2xl font-bold text-slate-900">Manage Teachers</h2>
-    <p className="mt-2 text-slate-600">Teachers Management Coming Soon...</p>
-  </div>
-);
+
+import {
+  fetchTeachers,
+  addTeacher,
+  updateTeacher,
+  deleteTeacher,
+} from "../services/teacherService";
+
+const initialTeacher = {
+  name: "",
+  experience: "",
+  subject: "",
+  description: "",
+  email: "",
+  linkedin: "",
+  phone: "",
+  photoUrl: "",
+  team: "school", // Default team
+};
+
+const TeachersTab = () => {
+  const [teachers, setTeachers] = useState([]);
+  const [form, setForm] = useState(initialTeacher);
+  const [editingId, setEditingId] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [activeFilter, setActiveFilter] = useState("All");
+  const [searchText, setSearchText] = useState("");
+  const [sortOrder, setSortOrder] = useState("latest");
+  const teacherFilters = ["All", "Math", "Science", "English", "Social", "Other"];
+
+  const loadTeachers = async () => {
+    setLoading(true);
+    try {
+      const data = await fetchTeachers();
+      setTeachers(data);
+    } catch (e) {
+      setError("Failed to load teachers.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadTeachers();
+  }, []);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
+    try {
+      if (editingId) {
+        await updateTeacher(editingId, form);
+      } else {
+        await addTeacher(form);
+      }
+      setForm(initialTeacher);
+      setEditingId(null);
+      await loadTeachers();
+    } catch (e) {
+      setError("Failed to save teacher.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleEdit = (teacher) => {
+    setForm(teacher);
+    setEditingId(teacher.id);
+  };
+
+  const handleDelete = async (id) => {
+    if (!window.confirm("Delete this teacher?")) return;
+    setLoading(true);
+    try {
+      await deleteTeacher(id);
+      await loadTeachers();
+    } catch (e) {
+      setError("Failed to delete teacher.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+      <h2 className="text-2xl font-bold text-slate-900 mb-4">Manage Teachers</h2>
+      <form className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6" onSubmit={handleSubmit}>
+        <input name="name" value={form.name} onChange={handleChange} placeholder="Name" className="border p-2 rounded" required />
+        <input name="experience" value={form.experience} onChange={handleChange} placeholder="Experience (years)" className="border p-2 rounded" required />
+        <input name="subject" value={form.subject} onChange={handleChange} placeholder="Subject" className="border p-2 rounded" required />
+        <input name="email" value={form.email} onChange={handleChange} placeholder="Email" className="border p-2 rounded" required />
+        <input name="linkedin" value={form.linkedin} onChange={handleChange} placeholder="LinkedIn (optional)" className="border p-2 rounded" />
+        <input name="phone" value={form.phone} onChange={handleChange} placeholder="Phone (optional)" className="border p-2 rounded" />
+        <input name="photoUrl" value={form.photoUrl} onChange={handleChange} placeholder="Profile Photo URL" className="border p-2 rounded" required />
+        <textarea name="description" value={form.description} onChange={handleChange} placeholder="Description/Bio" className="border p-2 rounded col-span-1 md:col-span-2" required />
+        <select name="team" value={form.team} onChange={handleChange} className="border p-2 rounded col-span-1 md:col-span-2" required>
+          <option value="school">Dynamic Public School Team</option>
+          <option value="coaching">Dynamic Coaching Centre Team</option>
+        </select>
+        <div className="col-span-1 md:col-span-2 flex gap-2">
+          <button type="submit" className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:opacity-50" disabled={loading}>
+            {editingId ? "Update" : "Add"} Teacher
+          </button>
+          {editingId && (
+            <button type="button" className="inline-flex items-center gap-2 rounded-xl bg-gray-300 px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-gray-400" onClick={() => { setForm(initialTeacher); setEditingId(null); }}>
+              Cancel
+            </button>
+          )}
+        </div>
+      </form>
+      {!loading && error && <p className="text-red-500 mb-2">{error}</p>}
+      <div className="flex flex-wrap gap-2 mb-4">
+        {teacherFilters.map((filter) => (
+          <button
+            key={filter}
+            type="button"
+            onClick={() => setActiveFilter(filter)}
+            className={`rounded-full px-3 py-1.5 text-xs font-semibold transition ${activeFilter === filter ? "bg-blue-600 text-white" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}`}
+          >
+            {filter}
+          </button>
+        ))}
+      </div>
+      <div className="flex gap-3 mb-4">
+        <input
+          type="text"
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
+          placeholder="Search teachers by name, subject..."
+          className="w-full rounded-xl border border-slate-200 bg-white py-2.5 px-4 text-sm text-slate-800 outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
+        />
+        <select
+          value={sortOrder}
+          onChange={(e) => setSortOrder(e.target.value)}
+          className="rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm font-medium text-slate-700 outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
+        >
+          <option value="latest">Sort: Latest Added</option>
+          <option value="name">Sort: Name</option>
+          <option value="experience">Sort: Experience</option>
+        </select>
+      </div>
+      <div className="overflow-x-auto">
+        <table className="min-w-full border text-sm">
+          <thead>
+            <tr className="bg-slate-100">
+              <th className="p-2 border">Photo</th>
+              <th className="p-2 border">Name</th>
+              <th className="p-2 border">Experience</th>
+              <th className="p-2 border">Subject</th>
+              <th className="p-2 border">Email</th>
+              <th className="p-2 border">LinkedIn</th>
+              <th className="p-2 border">Phone</th>
+              <th className="p-2 border">Bio</th>
+              <th className="p-2 border">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {teachers
+              .filter((t) =>
+                (activeFilter === "All" || t.subject === activeFilter) &&
+                (t.name.toLowerCase().includes(searchText.toLowerCase()) || t.subject.toLowerCase().includes(searchText.toLowerCase()))
+              )
+              .sort((a, b) => {
+                if (sortOrder === "name") return a.name.localeCompare(b.name);
+                if (sortOrder === "experience") return b.experience - a.experience;
+                return 0;
+              })
+              .map((t) => (
+                <tr key={t.id} className="hover:bg-slate-50">
+                  <td className="p-2 border"><img src={t.photoUrl} alt={t.name} className="h-10 w-10 rounded-full object-cover" /></td>
+                  <td className="p-2 border">{t.name}</td>
+                  <td className="p-2 border">{t.experience}</td>
+                  <td className="p-2 border">{t.subject}</td>
+                  <td className="p-2 border">{t.email}</td>
+                  <td className="p-2 border">{t.linkedin && <a href={t.linkedin} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">Link</a>}</td>
+                  <td className="p-2 border">{t.phone}</td>
+                  <td className="p-2 border max-w-xs truncate" title={t.description}>{t.description}</td>
+                  <td className="p-2 border flex gap-2">
+                    <button onClick={() => handleEdit(t)} className="text-blue-600 hover:underline">Edit</button>
+                    <button onClick={() => handleDelete(t.id)} className="text-red-600 hover:underline">Delete</button>
+                  </td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+};
 
 const emptyNoticeForm = {
   title: "",
@@ -598,6 +788,7 @@ const emptyNoticeForm = {
 const getTodayDate = () => new Date().toISOString().slice(0, 10);
 
 const NoticesTab = () => {
+    const noticeFilters = ["All", "General", "Exam", "Event", "Holiday"];
   const [notices, setNotices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeWingFilter, setActiveWingFilter] = useState("all");

@@ -96,71 +96,9 @@ const facilities = [
   },
 ];
 
-const facultyMembers = [
-  {
-    name: "Aarav Singh",
-    tagline: "B.Tech IIT Kanpur | 10+ Yrs Exp",
-    subjects: ["⚛️ Physics", "📘 Applied Mechanics"],
-    image: "/images/dynamic_coaching-logo.jpeg",
-    team: "coaching",
-    quote: "Consistency beats intensity when guided with the right strategy.",
-    linkedin: "#",
-    email: "aarav.singh@dynamiccampus.edu",
-  },
-  {
-    name: "Dr. Nisha Verma",
-    tagline: "MBBS, MD | Senior Biology Mentor",
-    subjects: ["🧬 Biology", "📝 Exam Strategy"],
-    image: "/images/dynamic_coaching-logo.jpeg",
-    team: "coaching",
-    quote: "Understand life and Biology becomes beautifully logical.",
-    linkedin: "#",
-    email: "nisha.verma@dynamiccampus.edu",
-  },
-  {
-    name: "Ritika Sinha",
-    tagline: "M.A. English | 9+ Yrs Classroom Excellence",
-    subjects: ["📚 English", "🗣️ Communication"],
-    image: "/images/dynamic_school-logo.jpeg",
-    team: "school",
-    quote: "Language is confidence in action—inside and outside exams.",
-    linkedin: "#",
-    email: "ritika.sinha@dynamiccampus.edu",
-  },
-  {
-    name: "Kunal Raj",
-    tagline: "M.Sc. Chemistry | 11+ Yrs Board Excellence",
-    subjects: ["🧪 Chemistry", "📊 Test Analysis"],
-    image: "/images/dynamic_coaching-logo.jpeg",
-    team: "coaching",
-    quote: "Smart revision and error logs can transform your final score.",
-    linkedin: "#",
-    email: "kunal.raj@dynamiccampus.edu",
-  },
-  {
-    name: "Pooja Mehta",
-    tagline: "M.Ed. | 8+ Yrs Foundation Pedagogy",
-    subjects: ["✏️ Maths Foundation", "🎯 NTSE Basics"],
-    image: "/images/dynamic_school-logo.jpeg",
-    team: "school",
-    quote: "Strong basics in middle school create top performers later.",
-    linkedin: "#",
-    email: "pooja.mehta@dynamiccampus.edu",
-  },
-  {
-    name: "Aditya Prakash",
-    tagline: "B.Tech NIT | 7+ Yrs Quant Mentorship",
-    subjects: ["➗ Mathematics", "🧠 Problem Solving"],
-    image: "/images/dynamic_coaching-logo.jpeg",
-    team: "coaching",
-    quote: "Great ranks come from daily precision, not last-minute pressure.",
-    linkedin: "#",
-    email: "aditya.prakash@dynamiccampus.edu",
-  },
-];
+import { useEffect, useState } from "react";
+import { fetchTeachers } from "../services/teacherService";
 
-const schoolFacultyMembers = facultyMembers.filter((member) => member.team === "school");
-const coachingFacultyMembers = facultyMembers.filter((member) => member.team === "coaching");
 
 const directorProfile = {
   name: "Dr. Tarkeshwar Thakur, Ph.D.",
@@ -171,6 +109,29 @@ const directorProfile = {
 const isValidExternalLink = (url) => typeof url === "string" && url.startsWith("http");
 
 const AboutPage = () => {
+  const [teachers, setTeachers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    async function loadTeachers() {
+      const data = await fetchTeachers();
+      // Map Firestore fields to UI fields
+      const mapped = data.map((t) => ({
+        name: t.name || "",
+        team: t.team || "school", // Default to school if missing
+        image: t.photoUrl || "", // Use photoUrl as image
+        tagline: t.description || "",
+        quote: t.experience ? `Experience: ${t.experience} years` : "",
+        subjects: Array.isArray(t.subjects) ? t.subjects : [t.subject || ""],
+        linkedin: t.linkedin || "",
+        email: t.email || "",
+      }));
+      setTeachers(mapped);
+      setLoading(false);
+    }
+    loadTeachers();
+  }, []);
+  const schoolFacultyMembers = teachers.filter((member) => member.team === "school");
+  const coachingFacultyMembers = teachers.filter((member) => member.team === "coaching");
   return (
     <div className="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
       <section className="relative overflow-hidden rounded-3xl border border-slate-200 bg-gradient-to-br from-slate-900 via-slate-800 to-indigo-950 px-6 py-16 text-white shadow-xl shadow-slate-900/25 sm:px-10">
@@ -522,4 +483,4 @@ const AboutPage = () => {
   );
 };
 
-export default AboutPage; 
+export default AboutPage;
